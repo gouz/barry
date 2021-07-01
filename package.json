@@ -1,0 +1,33 @@
+{
+  "name": "barry",
+  "version": "1.0.0",
+  "description": "Calc barycenter",
+  "scripts": {
+    "preparcel": "rm -rf dist .parcel-cache",
+    "parcel": "parcel $RUN src/index.pug --open",
+    "build": "RUN=build npm run parcel -- --no-cache --no-source-maps",
+    "watch": "RUN=watch npm run parcel",
+    "dev": "RUN=serve npm run parcel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gouz/barry.git"
+  },
+  "author": "Sylvain Gougouzian",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/reporter-dev-server": "^2.0.0-nightly.748",
+    "@parcel/transformer-less": "^2.0.0-beta.3.1",
+    "@parcel/transformer-pug": "^2.0.0-beta.3.1",
+    "@prettier/plugin-pug": "^1.15.3",
+    "autoprefixer": "^10.2.6",
+    "parcel": "^2.0.0-beta.3.1",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
+  },
+  "dependencies": {
+    "geoportal-access-lib": "^2.1.8",
+    "nominatim-geocoder": "^0.1.4",
+    "ol": "^6.5.0"
+  }
+}
