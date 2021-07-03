@@ -107,10 +107,11 @@ document.querySelector("#calc").addEventListener(
           prms.push(calcPath(places[i], places[j], i + "_" + j));
       Promise.all(prms).then((values) => {
         let maxDist = 0;
+        let maxTime = 0;
         let keep = "";
         let route = [];
         for (let i = 0; i < values.length; i++) {
-          if (values[i].path.totalDistance > maxDist) {
+          if (values[i].path.totalTime > maxTime) {
             maxDist = values[i].path.totalDistance;
             maxTime = values[i].path.totalTime;
             keep = values[i].key;
