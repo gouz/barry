@@ -63,6 +63,7 @@ const calcPath = (start, end, key) => {
       endPoint: { x: end[0], y: end[1] },
       graph: "Voiture",
       distanceUnit: "m",
+      routePreference: "fastest",
       onSuccess: function (result) {
         resolve({ key: key, path: result });
       },
@@ -111,18 +112,30 @@ document.querySelector("#calc").addEventListener(
         for (let i = 0; i < values.length; i++) {
           if (values[i].path.totalDistance > maxDist) {
             maxDist = values[i].path.totalDistance;
+            maxTime = values[i].path.totalTime;
             keep = values[i].key;
             route = values[i].path.routeGeometry.coordinates;
           }
         }
         let points = keep.split("_");
+        for (let i = 0; i < route.length; i += 100)
+          addPoint(route[i][0], route[i][1], "yellow");
         Gp.Services.isoCurve({
           apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
           position: { x: places[points[0]][0], y: places[points[0]][1] },
-          method: "distance",
+          method: "time",
           distance: Math.ceil(maxDist / 2),
+          time: Math.ceil(maxTime / 2),
           graph: "Voiture",
           onSuccess: function (result) {
+            /*
+            for (let i = 0; i < result.geometry.coordinates[0].length; i += 100)
+              addPoint(
+                result.geometry.coordinates[0][i][0],
+                result.geometry.coordinates[0][i][1],
+                "yellow"
+              );
+              */
             search: for (
               let i = 0;
               i < result.geometry.coordinates[0].length;
@@ -144,6 +157,24 @@ document.querySelector("#calc").addEventListener(
                 }
           },
         });
+        /*
+        Gp.Services.isoCurve({
+          apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
+          position: { x: places[points[1]][0], y: places[points[1]][1] },
+          method: "time",
+          distance: Math.ceil(maxDist / 2),
+          time: Math.ceil(maxTime / 2),
+          graph: "Voiture",
+          onSuccess: function (result) {
+            for (let i = 0; i < result.geometry.coordinates[0].length; i += 100)
+              addPoint(
+                result.geometry.coordinates[0][i][0],
+                result.geometry.coordinates[0][i][1],
+                "orange"
+              );
+          },
+        });
+        */
       });
     }
   },
