@@ -63,7 +63,7 @@ const calcPath = (start, end, key) => {
       endPoint: { x: end[0], y: end[1] },
       graph: "Voiture",
       distanceUnit: "m",
-      routePreference: "fastest",
+      routePreference: "fastest", // shortest
       onSuccess: function (result) {
         resolve({ key: key, path: result });
       },
@@ -93,8 +93,8 @@ const getPlace = (address) => {
   }
 };
 
-const round2decimals = (num) => {
-  return Math.round((num + Number.EPSILON) * 100) / 100;
+const roundCoord = (num) => {
+  return Math.round((num + Number.EPSILON) * 1000) / 1000;
 };
 
 document.querySelector("#calc").addEventListener(
@@ -112,6 +112,7 @@ document.querySelector("#calc").addEventListener(
         let route = [];
         for (let i = 0; i < values.length; i++) {
           if (values[i].path.totalTime > maxTime) {
+            //if (values[i].path.totalDistance > maxDist) {
             maxDist = values[i].path.totalDistance;
             maxTime = values[i].path.totalTime;
             keep = values[i].key;
@@ -129,14 +130,6 @@ document.querySelector("#calc").addEventListener(
           time: Math.ceil(maxTime / 2),
           graph: "Voiture",
           onSuccess: function (result) {
-            /*
-            for (let i = 0; i < result.geometry.coordinates[0].length; i += 100)
-              addPoint(
-                result.geometry.coordinates[0][i][0],
-                result.geometry.coordinates[0][i][1],
-                "yellow"
-              );
-              */
             search: for (
               let i = 0;
               i < result.geometry.coordinates[0].length;
@@ -144,10 +137,10 @@ document.querySelector("#calc").addEventListener(
             )
               for (let j = 0; j < route.length; j++)
                 if (
-                  round2decimals(result.geometry.coordinates[0][i][0]) ==
-                    round2decimals(route[j][0]) &&
-                  round2decimals(result.geometry.coordinates[0][i][1]) ==
-                    round2decimals(route[j][1])
+                  roundCoord(result.geometry.coordinates[0][i][0]) ==
+                    roundCoord(route[j][0]) &&
+                  roundCoord(result.geometry.coordinates[0][i][1]) ==
+                    roundCoord(route[j][1])
                 ) {
                   addPoint(
                     result.geometry.coordinates[0][i][0],
@@ -158,24 +151,6 @@ document.querySelector("#calc").addEventListener(
                 }
           },
         });
-        /*
-        Gp.Services.isoCurve({
-          apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
-          position: { x: places[points[1]][0], y: places[points[1]][1] },
-          method: "time",
-          distance: Math.ceil(maxDist / 2),
-          time: Math.ceil(maxTime / 2),
-          graph: "Voiture",
-          onSuccess: function (result) {
-            for (let i = 0; i < result.geometry.coordinates[0].length; i += 100)
-              addPoint(
-                result.geometry.coordinates[0][i][0],
-                result.geometry.coordinates[0][i][1],
-                "orange"
-              );
-          },
-        });
-        */
       });
     }
   },
