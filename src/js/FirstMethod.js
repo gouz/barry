@@ -6,31 +6,34 @@ export function calcMiddle() {
     const keys = Object.keys(window.places);
     for (let i = 0; i < keys.length; i++)
       for (let j = i + 1; j < keys.length; j++)
-        prms.push(
-          calcPath(
-            window.places[keys[i]],
-            window.places[keys[j]],
-            keys[i] + ";" + keys[j],
-            true
-          )
-        );
+        if (keys[i].startsWith("place") && keys[j].startsWith("place"))
+          prms.push(
+            calcPath(
+              window.places[keys[i]],
+              window.places[keys[j]],
+              keys[i] + ";" + keys[j],
+              true
+            )
+          );
     Promise.all(prms).then((values) => {
       let maxDist = 0;
       let maxTime = 0;
       let keep = "";
       let route = [];
       for (let i = 0; i < values.length; i++) {
+        const t = parseFloat(values[i].path.durationSeconds);
+        const d = parseFloat(values[i].path.distanceMeters);
         if (
-          (calcMode == "time" && values[i].path.durationSeconds > maxTime) ||
-          (calcMode == "distance" && values[i].path.distanceMeters > maxDist)
+          (calcMode == "time" && t > maxTime) ||
+          (calcMode == "distance" && d > maxDist)
         ) {
-          maxDist = values[i].path.distanceMeters;
-          maxTime = values[i].path.durationSeconds;
+          maxDist = d;
+          maxTime = t;
           keep = values[i].key;
         }
       }
       let points = keep.split(";");
-      //console.log("find : ", points);
+      console.log("find : ", points);
       if (points.length > 1)
         calcPath(places[points[0]], places[points[1]], "", false).then(
           (res) => {

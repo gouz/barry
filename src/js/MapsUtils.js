@@ -36,7 +36,7 @@ export const addPoint = (lon, lat, color, id) => {
   let place = [lon, lat];
   if (typeof window.layers[id] != undefined)
     window.map.removeLayer(window.layers[id]);
-  window.places[id] = place;
+  if (id.startsWith("place")) window.places[id] = place;
   let point = new Point(place);
   const layer = new VectorLayer({
     source: new VectorSource({
