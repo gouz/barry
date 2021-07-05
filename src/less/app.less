@@ -8,10 +8,18 @@ body {
 }
 
 #address {
-  @apply absolute top-0 left-0 my-8 mx-12 w-96;
+  @apply absolute top-0 left-0 my-8 mx-12;
+
+  .flex {
+    @apply items-stretch;
+
+    div {
+      @apply px-2 py-4 bg-white bg-opacity-40 whitespace-nowrap rounded-lg;
+    }
+  }
 
   input {
-    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+    @apply shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight;
 
     &:focus {
       @apply outline-none;
@@ -35,6 +43,14 @@ body {
 
     &.disabled {
       @apply opacity-50 cursor-not-allowed;
+    }
+
+    &#clean {
+      @apply bg-green-500;
+
+      &:hover {
+        @apply bg-green-700;
+      }
     }
   }
 

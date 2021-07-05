@@ -15,6 +15,8 @@ import { Feature, Map, View } from "ol/index";
 import * as Gp from "geoportal-access-lib/dist/GpServices";
 import { Nominatim } from "nominatim-geocoder";
 
+const calcMode = "distance";
+
 const geocoder = new Nominatim();
 useGeographic();
 
@@ -55,7 +57,7 @@ const addPoint = (lon, lat, color) => {
   map.addLayer(layer);
 };
 
-const calcPath = (start, end, key) => {
+const calcPath = (start, end, key, full) => {
   return new Promise((resolve) => {
     Gp.Services.route({
       apiKey: "jhyvi0fgmnuxvfv0zjzorvdn", // api key found on npmjs
@@ -63,7 +65,9 @@ const calcPath = (start, end, key) => {
       endPoint: { x: end[0], y: end[1] },
       graph: "Voiture",
       distanceUnit: "m",
-      routePreference: "fastest", // shortest
+      routePreference: calcMode == "time" ? "fastest" : "shortest",
+      geometryInInstructions: false,
+      rawResponse: full,
       onSuccess: function (result) {
         resolve({ key: key, path: result });
       },
@@ -94,7 +98,7 @@ const getPlace = (address) => {
 };
 
 const roundCoord = (num) => {
-  return Math.round((num + Number.EPSILON) * 1000) / 1000;
+  return Math.round((num + Number.EPSILON) * 100) / 100;
 };
 
 document.querySelector("#calc").addEventListener(
@@ -104,53 +108,80 @@ document.querySelector("#calc").addEventListener(
       let prms = [];
       for (let i = 0; i < places.length; i++)
         for (let j = i + 1; j < places.length; j++)
-          prms.push(calcPath(places[i], places[j], i + "_" + j));
+          prms.push(calcPath(places[i], places[j], i + "_" + j, true));
       Promise.all(prms).then((values) => {
         let maxDist = 0;
         let maxTime = 0;
         let keep = "";
         let route = [];
         for (let i = 0; i < values.length; i++) {
-          if (values[i].path.totalTime > maxTime) {
-            //if (values[i].path.totalDistance > maxDist) {
-            maxDist = values[i].path.totalDistance;
-            maxTime = values[i].path.totalTime;
+          if (
+            (calcMode == "time" && values[i].path.durationSeconds > maxTime) ||
+            (calcMode == "distance" && values[i].path.distanceMeters > maxDist)
+          ) {
+            maxDist = values[i].path.distanceMeters;
+            maxTime = values[i].path.durationSeconds;
             keep = values[i].key;
-            route = values[i].path.routeGeometry.coordinates;
           }
         }
         let points = keep.split("_");
-        for (let i = 0; i < route.length; i += 100)
-          addPoint(route[i][0], route[i][1], "yellow");
-        Gp.Services.isoCurve({
-          apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
-          position: { x: places[points[0]][0], y: places[points[0]][1] },
-          method: "time",
-          distance: Math.ceil(maxDist / 2),
-          time: Math.ceil(maxTime / 2),
-          graph: "Voiture",
-          onSuccess: function (result) {
-            search: for (
-              let i = 0;
-              i < result.geometry.coordinates[0].length;
-              i++
-            )
-              for (let j = 0; j < route.length; j++)
-                if (
-                  roundCoord(result.geometry.coordinates[0][i][0]) ==
-                    roundCoord(route[j][0]) &&
-                  roundCoord(result.geometry.coordinates[0][i][1]) ==
-                    roundCoord(route[j][1])
-                ) {
-                  addPoint(
-                    result.geometry.coordinates[0][i][0],
-                    result.geometry.coordinates[0][i][1],
-                    "green"
-                  );
-                  break search;
-                }
-          },
-        });
+        console.log("find : ", points);
+        if (points.length > 1)
+          calcPath(places[points[0]], places[points[1]], "", false).then(
+            (res) => {
+              route = res.path.routeGeometry.coordinates;
+              // for (let i = 0; i < route.length; i += 100)
+              //   addPoint(route[i][0], route[i][1], "yellow");
+              Gp.Services.isoCurve({
+                apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
+                position: { x: places[points[0]][0], y: places[points[0]][1] },
+                method: calcMode,
+                distance: Math.ceil(maxDist / 2),
+                time: Math.ceil(maxTime / 2),
+                graph: "Voiture",
+                onSuccess: function (result) {
+                  let found = false;
+                  search: for (
+                    let i = 0;
+                    i < result.geometry.coordinates[0].length;
+                    i++
+                  )
+                    for (let j = 0; j < route.length; j++)
+                      if (
+                        roundCoord(result.geometry.coordinates[0][i][0]) ==
+                          roundCoord(route[j][0]) &&
+                        roundCoord(result.geometry.coordinates[0][i][1]) ==
+                          roundCoord(route[j][1])
+                      ) {
+                        found = true;
+                        console.log(
+                          "found ",
+                          result.geometry.coordinates[0][i][0]
+                        );
+                        addPoint(
+                          result.geometry.coordinates[0][i][0],
+                          result.geometry.coordinates[0][i][1],
+                          "green"
+                        );
+                        for (let k = 0; k < places.length; k++)
+                          calcPath(
+                            places[k],
+                            result.geometry.coordinates[0][i],
+                            k,
+                            true
+                          ).then((res) => {
+                            document.querySelector(
+                              "#res_" + res.key
+                            ).innerText =
+                              res.path.duration + " / " + res.path.distance;
+                          });
+                        break search;
+                      }
+                  if (!found) console.log("not found");
+                },
+              });
+            }
+          );
       });
     }
   },
@@ -162,7 +193,7 @@ window.newAddress = () => {
   const div = document.createElement("div");
   div.classList.add("flex");
   div.innerHTML = `
-        <input id="address_${address_count++}"type="text" placeholder="Adresse postale" onblur="window.placePoint(this.value);" />
+        <input id="address_${address_count}"type="text" placeholder="Adresse postale" onblur="window.placePoint(this.value);" />
         <button class="minus" onclick="window.removeAddress(this)">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /> 
@@ -173,8 +204,10 @@ window.newAddress = () => {
                 <path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
         </button>
+        <div id="res_${address_count}"></div>
     `;
   document.querySelector("#address #wrapper").appendChild(div);
+  address_count++;
 };
 newAddress();
 
@@ -184,4 +217,12 @@ window.removeAddress = (element) => {
 
 window.placePoint = (address) => {
   getPlace(address);
+};
+
+window.clear = () => {
+  layers.map((l) => {
+    map.removeLayer(l);
+  });
+  layers = [];
+  places = [];
 };
