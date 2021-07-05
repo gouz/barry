@@ -1,5 +1,3 @@
-import { addPoint } from "./MapsUtils";
-
 export function calcMiddle() {
   return new Promise((resolve) => {
     const keys = Object.keys(window.places);

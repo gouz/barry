@@ -20,6 +20,7 @@ export function windowInit() {
           <div id="res_${window.address_count}">
             <span class="first"></span>
             <span class="second"></span>
+            <span class="third"></span>
           </div>
       `;
     document.querySelector("#address #wrapper").appendChild(div);

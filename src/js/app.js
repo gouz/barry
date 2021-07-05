@@ -7,6 +7,7 @@ import { mapInit, drawMiddle } from "./MapsUtils";
 import { windowInit } from "./WindowUtils";
 import { calcMiddle as first } from "./FirstMethod";
 import { calcMiddle as second } from "./SecondMethod";
+import { calcMiddle as third } from "./ThirdMethod";
 
 mapInit();
 windowInit();
@@ -25,6 +26,9 @@ document.querySelector("#calc").addEventListener(
       });
       second().then((middle) => {
         drawMiddle(middle, "blue", "second");
+      });
+      third().then((middle) => {
+        drawMiddle(middle, "orange", "third");
       });
     }
   },
