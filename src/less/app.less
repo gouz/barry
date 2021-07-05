@@ -10,11 +10,18 @@ body {
 #address {
   @apply absolute top-0 left-0 my-8 mx-12;
 
-  .flex {
-    @apply items-stretch;
+  .wrap {
+    @apply items-stretch flex;
 
     div {
-      @apply px-2 py-4 bg-white bg-opacity-40 whitespace-nowrap rounded-lg;
+      @apply px-2 py-4 bg-white bg-opacity-70 whitespace-nowrap rounded-lg flex-col flex text-xs;
+
+      .first {
+        @apply text-green-500;
+      }
+      .second {
+        @apply text-blue-500;
+      }
     }
   }
 
@@ -54,7 +61,7 @@ body {
     }
   }
 
-  .flex:first-child .minus {
+  .wrap:first-child .minus {
     @apply hidden;
   }
 }
