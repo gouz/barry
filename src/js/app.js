@@ -11,7 +11,7 @@ import { calcMiddle as second } from "./SecondMethod";
 mapInit();
 windowInit();
 
-window.calcMode = "distance";
+window.calcMode = "time";
 
 window.can_calc = false;
 window.places = {};

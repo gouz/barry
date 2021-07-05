@@ -79,7 +79,7 @@ export const getPlace = (address, id) => {
       geocoder
         .search({ q: address })
         .then((response) => {
-          addPoint(response[0].lon, response[0].lat, "red", id);
+          addPoint(response[0].lon, response[0].lat, "black", id);
           if (Object.keys(window.places).length > 1) {
             window.can_calc = true;
             document.querySelector("#calc").classList.remove("disabled");
@@ -113,10 +113,11 @@ export const drawMiddle = (middle, color, dest) => {
   addPoint(middle[0], middle[1], color, dest);
   const keys = Object.keys(window.places);
   for (let k = 0; k < keys.length; k++)
-    calcPath(window.places[keys[k]], middle, k, true).then((res) => {
-      let e = document.querySelector("#res_" + res.key + " ." + dest);
-      if (e) {
-        e.innerText = res.path.duration + " / " + res.path.distance;
-      }
-    });
+    if (keys[k].startsWith("place"))
+      calcPath(window.places[keys[k]], middle, k, true).then((res) => {
+        let e = document.querySelector("#res_" + res.key + " ." + dest);
+        if (e) {
+          e.innerText = res.path.duration + " / " + res.path.distance;
+        }
+      });
 };

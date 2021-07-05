@@ -43,7 +43,6 @@ export function calcMiddle() {
               Math.round(maxTime / 2),
               calcMode
             ).then((result) => {
-              let found = false;
               for (let i = 0; i < result.geometry.coordinates[0].length; i++)
                 for (let j = 0; j < route.length; j++)
                   if (

@@ -6,8 +6,10 @@ export function calcMiddle() {
     let lons = 0;
     let lats = 0;
     for (let i = 0; i < keys.length; i++) {
-      lons += parseFloat(window.places[keys[i]][0]);
-      lats += parseFloat(window.places[keys[i]][1]);
+      if (keys[i].startsWith("place")) {
+        lons += parseFloat(window.places[keys[i]][0]);
+        lats += parseFloat(window.places[keys[i]][1]);
+      }
     }
     lons /= keys.length;
     lats /= keys.length;
