@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Calc barycenter",
   "scripts": {
-    "preparcel": "rm -rf dist .parcel-cache",
-    "parcel": "parcel $RUN src/index.pug --open",
-    "build": "RUN=build npm run parcel -- --no-cache --no-source-maps",
+    "preparcel": "rm -rf dist .parcel-cache  docs",
+    "parcel": "parcel $RUN src/index.pug",
+    "build": "RUN=build npm run parcel -- --no-cache --no-source-maps --dist-dir docs --public-url \"./\"",
     "watch": "RUN=watch npm run parcel",
-    "dev": "RUN=serve npm run parcel"
+    "dev": "RUN=serve npm run parcel -- --open"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,14 @@
     "geoportal-access-lib": "^2.1.8",
     "nominatim-geocoder": "^0.1.4",
     "ol": "^6.5.0"
+  },
+  "browserslist": [
+    "> 0.2%",
+    "not dead"
+  ],
+  "targets": {
+    "default": {
+      "includeNodeModules": true
+    }
   }
 }
