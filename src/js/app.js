@@ -29,7 +29,7 @@ document.querySelector("#calc").addEventListener(
         values.map((v, i) => {
           lon += v[0];
           lat += v[1];
-          //drawMiddle(v, colors[i], keys[i], false);
+          drawMiddle(v, colors[i], keys[i], false);
         });
         lon /= values.length;
         lat /= values.length;
