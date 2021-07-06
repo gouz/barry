@@ -12,7 +12,7 @@ import { Nominatim } from "nominatim-geocoder";
 
 export function mapInit() {
   window.layers = {};
-  window.geocoder = new Nominatim();
+  window.geocoder = new Nominatim({ secure: true });
   useGeographic();
   window.map = new Map({
     target: "map",
