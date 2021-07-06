@@ -21,14 +21,19 @@ document.querySelector("#calc").addEventListener(
   "click",
   () => {
     if (window.can_calc) {
-      first().then((middle) => {
-        drawMiddle(middle, "green", "first");
-      });
-      second().then((middle) => {
-        drawMiddle(middle, "blue", "second");
-      });
-      third().then((middle) => {
-        drawMiddle(middle, "orange", "third");
+      Promise.all([first(), second(), third()]).then((values) => {
+        let lon = 0;
+        let lat = 0;
+        const keys = ["first", "second", "third"];
+        const colors = ["green", "blue", "orange"];
+        values.map((v, i) => {
+          lon += v[0];
+          lat += v[1];
+          //drawMiddle(v, colors[i], keys[i], false);
+        });
+        lon /= values.length;
+        lat /= values.length;
+        drawMiddle([lon, lat], "red", "result", true);
       });
     }
   },

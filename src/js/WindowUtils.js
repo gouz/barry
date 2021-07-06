@@ -21,6 +21,7 @@ export function windowInit() {
             <span class="first"></span>
             <span class="second"></span>
             <span class="third"></span>
+            <span class="result"></span>
           </div>
       `;
     document.querySelector("#address #wrapper").appendChild(div);

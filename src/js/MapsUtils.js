@@ -109,15 +109,17 @@ export const getIsoCurve = (point, distance, time) => {
   });
 };
 
-export const drawMiddle = (middle, color, dest) => {
+export const drawMiddle = (middle, color, dest, withCalc) => {
   addPoint(middle[0], middle[1], color, dest);
-  const keys = Object.keys(window.places);
-  for (let k = 0; k < keys.length; k++)
-    if (keys[k].startsWith("place"))
-      calcPath(window.places[keys[k]], middle, k, true).then((res) => {
-        let e = document.querySelector("#res_" + res.key + " ." + dest);
-        if (e) {
-          e.innerText = res.path.duration + " / " + res.path.distance;
-        }
-      });
+  if (withCalc) {
+    const keys = Object.keys(window.places);
+    for (let k = 0; k < keys.length; k++)
+      if (keys[k].startsWith("place"))
+        calcPath(window.places[keys[k]], middle, k, true).then((res) => {
+          let e = document.querySelector("#res_" + res.key + " ." + dest);
+          if (e) {
+            e.innerText = res.path.duration + " / " + res.path.distance;
+          }
+        });
+  }
 };
