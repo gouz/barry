@@ -70,7 +70,7 @@ export const calcPath = (start, end, key, full) => {
       routePreference: window.calcMode == "time" ? "fastest" : "shortest",
       geometryInInstructions: false,
       rawResponse: full,
-      onSuccess: function (result) {
+      onSuccess: (result) => {
         resolve({ key: key, path: result });
       },
     });
@@ -108,7 +108,7 @@ export const getIsoCurve = (point, distance, time) => {
       distance: distance,
       time: time,
       graph: "Voiture",
-      onSuccess: function (result) {
+      onSuccess: (result) => {
         resolve(result);
       },
     });
@@ -126,13 +126,14 @@ export const drawMiddle = (middle, color, dest, withCalc) => {
             calcPath(window.places[keys[k]], middle, k, false).then((res) => {
               let e = document.querySelector(`#res_${res.key} .${dest}`);
               if (e) {
-                //let date = new Date();
-                //date.setSeconds(parseFloat(res.path.totalTime));
+                const seconds = res.path.totalTime;
+                const hours = Math.floor(seconds / 3600);
+                const mins = Math.floor((seconds / 60) % 60);
                 e.innerText = ` ${
                   Math.round(
                     (100 * parseFloat(res.path.totalDistance)) / 1000
                   ) / 100
-                } km`; // en ${date.toISOString().substr(11, 8)}
+                } km en ${hours}h${mins}`;
               }
               const route = res.path.routeGeometry.coordinates;
               for (let i = 0; i < route.length; i += 50)
@@ -157,4 +158,29 @@ export const drawMiddle = (middle, color, dest, withCalc) => {
   } else {
     addPoint(middle[0], middle[1], color, dest);
   }
+};
+
+export const detectNearCity = (point) => {
+  return new Promise((resolve) => {
+    Gp.Services.reverseGeocode({
+      apiKey: api_key,
+      position: { x: point[0], y: point[1] },
+      srs: "EPSG:4326",
+      filterOptions: {
+        type: ["PositionOfInterest"],
+      },
+      onSuccess: (result) => {
+        const nbResults = result.locations.length;
+        for (let i = 0; i < nbResults; i++) {
+          if ("City" == result.locations[i].matchType) {
+            resolve([
+              result.locations[i].position.y,
+              result.locations[i].position.x,
+            ]);
+            break;
+          }
+        }
+      },
+    });
+  });
 };

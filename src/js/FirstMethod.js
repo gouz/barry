@@ -23,15 +23,17 @@ export function calcMiddle() {
       for (let i = 0; i < values.length; i++) {
         const t = parseFloat(values[i].path.durationSeconds);
         const d = parseFloat(values[i].path.distanceMeters);
-        //let date = new Date();
-        //date.setSeconds(d);
+        const hours = Math.floor(t / 3600);
+        const mins = Math.floor((t / 60) % 60);
         let cities = values[i].key.split(";");
         window.log(
           `Entre "${
             document.querySelector(`input[data-city="${cities[0]}"]`).value
           }" et "${
             document.querySelector(`input[data-city="${cities[1]}"]`).value
-          }" il y a ${Math.round((100 * d) / 1000) / 100} km` //  en ${date.toISOString().substr(11, 8)}
+          }" il y a ${
+            Math.round((100 * d) / 1000) / 100
+          } km en ${hours}h${mins}`
         );
         if (
           (calcMode == "time" && t > maxTime) ||

@@ -3,7 +3,7 @@ import "../less/app.less";
 
 import "ol/ol.css";
 
-import { mapInit, drawMiddle } from "./MapsUtils";
+import { mapInit, drawMiddle, detectNearCity } from "./MapsUtils";
 import { windowInit } from "./WindowUtils";
 import { calcMiddle as first } from "./FirstMethod";
 import { calcMiddle as second } from "./SecondMethod";
@@ -39,7 +39,10 @@ document.querySelector("#calc").addEventListener(
         });
         lon /= values.length;
         lat /= values.length;
-        drawMiddle([lon, lat], "red", "result", true);
+        window.log("Je trouve la ville la plus proche du point.");
+        detectNearCity([lat, lon]).then((coord) => {
+          drawMiddle(coord, "red", "result", true);
+        });
       });
     }
   },
