@@ -40,4 +40,8 @@ export function windowInit() {
   window.log = (message) => {
     document.querySelector("#log").innerHTML += `<p>${message}</p>`;
   };
+
+  window.hideWIP = () => {
+    document.querySelector("#wip").style.display = "none";
+  };
 }

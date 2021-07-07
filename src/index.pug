@@ -16,7 +16,7 @@ html(lang="fr")
       button#calc.disabled Calculer
       //button#clean(on-click="window.clear()") Reset
 
-    #help
+    #help.overlay
       div
         button#help-close 
           svg(
@@ -58,7 +58,7 @@ html(lang="fr")
           span.bullet.red
           | qui correspond à une approximation du point le plus équitable pour les trajets de chacun.
 
-    #wip
+    #wip.overlay
       div
         #log
         .spinner

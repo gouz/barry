@@ -150,10 +150,10 @@ export const drawMiddle = (middle, color, dest, withCalc) => {
     window.log("Je calcule le trajet pour chaque ville.");
     Promise.all(prms).then(() => {
       addPoint(middle[0], middle[1], color, dest);
-      window.log("Fini, je ferme cette boîte dans 5 secondes");
-      setTimeout(() => {
-        document.querySelector("#wip").style.display = "none";
-      }, 5000);
+      document.querySelector(".spinner").style.display = "none";
+      window.log(
+        `<a href="#" onclick="window.hideWIP(); return false;">Voir les trajets</a>`
+      );
     });
   } else {
     addPoint(middle[0], middle[1], color, dest);
@@ -173,6 +173,9 @@ export const detectNearCity = (point) => {
         const nbResults = result.locations.length;
         for (let i = 0; i < nbResults; i++) {
           if ("City" == result.locations[i].matchType) {
+            window.log(
+              `On se retrouve donc à <b>${result.locations[i].placeAttributes.commune}</b>`
+            );
             resolve([
               result.locations[i].position.y,
               result.locations[i].position.x,
