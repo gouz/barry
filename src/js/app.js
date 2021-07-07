@@ -40,8 +40,17 @@ document.querySelector("#calc").addEventListener(
         lon /= values.length;
         lat /= values.length;
         window.log("Je trouve la ville la plus proche du point.");
+        drawMiddle([lon, lat], "red", "result", false);
         detectNearCity([lat, lon]).then((coord) => {
-          drawMiddle(coord, "red", "result", true);
+          if (coord[0] == coord[1] && coord[0] == 0) {
+            window.log(
+              "Pas de ville trouvée proche, je suis désolé mais va falloir le faire à la main."
+            );
+            document.querySelector(".spinner").style.display = "none";
+            window.log(
+              `<a href="#" onclick="window.hideWIP(); return false;">Fermer</a>`
+            );
+          } else drawMiddle(coord, "red", "result", true);
         });
       });
     }

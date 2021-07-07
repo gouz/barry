@@ -31,9 +31,9 @@ export function calcMiddle() {
             document.querySelector(`input[data-city="${cities[0]}"]`).value
           }" et "${
             document.querySelector(`input[data-city="${cities[1]}"]`).value
-          }" il y a ${
-            Math.round((100 * d) / 1000) / 100
-          } km en ${hours}h${mins}`
+          }" il y a ${Math.round((100 * d) / 1000) / 100} km en ${hours}h${
+            mins < 10 ? "0" + mins : mins
+          }`
         );
         if (
           (calcMode == "time" && t > maxTime) ||
@@ -57,8 +57,6 @@ export function calcMiddle() {
         calcPath(places[points[0]], places[points[1]], "", false).then(
           (res) => {
             const route = res.path.routeGeometry.coordinates;
-            // for (let i = 0; i < route.length; i += 100)
-            //   addPoint(route[i][0], route[i][1], "yellow");
             getIsoCurve(
               window.places[points[0]],
               Math.round(maxDist / 2),
@@ -68,9 +66,9 @@ export function calcMiddle() {
               search: for (
                 let i = 0;
                 i < result.geometry.coordinates[0].length;
-                i++
-              )
-                for (let j = 0; j < route.length; j++)
+                i += 50
+              ) {
+                for (let j = 0; j < route.length; j += 10)
                   if (
                     roundCoord(result.geometry.coordinates[0][i][0]) ==
                       roundCoord(route[j][0]) &&
@@ -81,6 +79,7 @@ export function calcMiddle() {
                     resolve(result.geometry.coordinates[0][i]);
                     break search;
                   }
+              }
               reject();
             });
           }

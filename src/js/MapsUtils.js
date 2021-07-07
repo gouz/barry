@@ -108,6 +108,7 @@ export const getIsoCurve = (point, distance, time) => {
       distance: distance,
       time: time,
       graph: "Voiture",
+      reverse: true,
       onSuccess: (result) => {
         resolve(result);
       },
@@ -133,7 +134,7 @@ export const drawMiddle = (middle, color, dest, withCalc) => {
                   Math.round(
                     (100 * parseFloat(res.path.totalDistance)) / 1000
                   ) / 100
-                } km en ${hours}h${mins}`;
+                } km en ${hours}h${mins < 10 ? "0" + mins : mins}`;
               }
               const route = res.path.routeGeometry.coordinates;
               for (let i = 0; i < route.length; i += 50)
@@ -171,6 +172,7 @@ export const detectNearCity = (point) => {
       },
       onSuccess: (result) => {
         const nbResults = result.locations.length;
+        if (nbResults == 0) resolve([0, 0]);
         for (let i = 0; i < nbResults; i++) {
           if ("City" == result.locations[i].matchType) {
             window.log(
