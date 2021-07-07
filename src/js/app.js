@@ -22,7 +22,12 @@ document.querySelector("#calc").addEventListener(
   () => {
     if (window.can_calc) {
       document.querySelector("#calc").style.display = "none";
+      document.querySelector("#wip").style.display = "flex";
+      window.log("C'est parti pour rechercher votre centre équitable");
       Promise.all([first(), second(), third()]).then((values) => {
+        window.log(
+          "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
+        );
         let lon = 0;
         let lat = 0;
         const keys = ["first", "second", "third"];
@@ -35,6 +40,10 @@ document.querySelector("#calc").addEventListener(
         lon /= values.length;
         lat /= values.length;
         drawMiddle([lon, lat], "red", "result", true);
+        setTimeout(() => {
+          window.log("Trouvé, je ferme cette boîte dans 2 secondes");
+          document.querySelector("#wip").style.display = "none";
+        }, 2000);
       });
     }
   },
@@ -48,3 +57,5 @@ document.querySelector("#help-close").addEventListener(
   },
   true
 );
+
+document.querySelector("#wip").style.display = "none";

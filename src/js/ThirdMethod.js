@@ -15,6 +15,9 @@ export const calcMiddle = () => {
         if (maxLat < la) maxLat = la;
       }
     }
+    window.log(
+      "Je détermine les latitudes et longitudes minimales et maximales pour définir un cadre et je calcule le centre du cadre."
+    );
     resolve([(maxLon + minLon) / 2, (maxLat + minLat) / 2]);
   });
 };

@@ -10,6 +10,10 @@ import { Feature, Map, View } from "ol/index";
 import * as Gp from "geoportal-access-lib/dist/GpServices";
 import { Nominatim } from "nominatim-geocoder";
 
+let api_key = "jhyvi0fgmnuxvfv0zjzorvdn";
+if (window.location.hostname == "gouz.github.io")
+  api_key = "34qcij6n2ecigthilez75ny1";
+
 export function mapInit() {
   window.layers = {};
   window.geocoder = new Nominatim({ secure: true });
@@ -56,7 +60,7 @@ export const addPoint = (lon, lat, color, id) => {
 export const calcPath = (start, end, key, full) => {
   return new Promise((resolve) => {
     Gp.Services.route({
-      apiKey: "jhyvi0fgmnuxvfv0zjzorvdn", // api key found on npmjs
+      apiKey: api_key,
       startPoint: { x: start[0], y: start[1] },
       endPoint: { x: end[0], y: end[1] },
       graph: "Voiture",
@@ -96,7 +100,7 @@ export const getPlace = (address, id) => {
 export const getIsoCurve = (point, distance, time) => {
   return new Promise((resolve) => {
     Gp.Services.isoCurve({
-      apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
+      apiKey: api_key,
       position: { x: point[0], y: point[1] },
       method: window.calcMode,
       distance: distance,

@@ -17,7 +17,7 @@ html(lang="fr")
       //button#clean(on-click="window.clear()") Reset
 
     #help
-      #help-content
+      div
         button#help-close 
           svg(
             width="24",
@@ -57,5 +57,18 @@ html(lang="fr")
           | Ainsi on arrive à la moyenne de ces trois points pour obtenir le point
           span.bullet.red
           | qui correspond à une approximation du point le plus équitable pour les trajets de chacun.
+
+    #wip
+      div
+        #log
+        .spinner
+          .item 
+          .item 
+          .item 
+          .item 
+          .item 
+          .item 
+          .item 
+          .item 
 
     script(src="./js/app.js", type="module")

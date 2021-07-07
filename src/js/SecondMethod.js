@@ -11,6 +11,7 @@ export function calcMiddle() {
     }
     lons /= keys.length;
     lats /= keys.length;
+    window.log("Je fais la moyenne des coordonnées des villes.");
     resolve([lons, lats]);
   });
 }
