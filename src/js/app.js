@@ -21,6 +21,7 @@ document.querySelector("#calc").addEventListener(
   "click",
   () => {
     if (window.can_calc) {
+      document.querySelector("#calc").style.display = "none";
       Promise.all([first(), second(), third()]).then((values) => {
         let lon = 0;
         let lat = 0;
@@ -36,6 +37,14 @@ document.querySelector("#calc").addEventListener(
         drawMiddle([lon, lat], "red", "result", true);
       });
     }
+  },
+  true
+);
+
+document.querySelector("#help-close").addEventListener(
+  "click",
+  () => {
+    document.querySelector("#help").style.display = "none";
   },
   true
 );

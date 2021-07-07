@@ -24,7 +24,7 @@ export function windowInit() {
             <span class="result"></span>
           </div>
       `;
-    document.querySelector("#address #wrapper").appendChild(div);
+    document.querySelector("#addresses #wrapper").appendChild(div);
     window.address_count++;
   };
   newAddress();
