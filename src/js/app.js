@@ -40,10 +40,6 @@ document.querySelector("#calc").addEventListener(
         lon /= values.length;
         lat /= values.length;
         drawMiddle([lon, lat], "red", "result", true);
-        setTimeout(() => {
-          window.log("Trouvé, je ferme cette boîte dans 10 secondes");
-          document.querySelector("#wip").style.display = "none";
-        }, 10000);
       });
     }
   },
@@ -57,5 +53,3 @@ document.querySelector("#help-close").addEventListener(
   },
   true
 );
-
-document.querySelector("#wip").style.display = "none";

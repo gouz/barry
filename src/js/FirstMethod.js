@@ -20,21 +20,18 @@ export function calcMiddle() {
       let maxDist = 0;
       let maxTime = 0;
       let keep = "";
-      let route = [];
       for (let i = 0; i < values.length; i++) {
         const t = parseFloat(values[i].path.durationSeconds);
         const d = parseFloat(values[i].path.distanceMeters);
-        let date = new Date();
-        date.setSeconds(d);
+        //let date = new Date();
+        //date.setSeconds(d);
         let cities = values[i].key.split(";");
         window.log(
           `Entre "${
-            document.querySelector('input[data-city="' + cities[0] + '"]').value
+            document.querySelector(`input[data-city="${cities[0]}"]`).value
           }" et "${
-            document.querySelector('input[data-city="' + cities[1] + '"]').value
-          }" il y a ${Math.round((100 * d) / 1000) / 100} km en ${date
-            .toISOString()
-            .substr(11, 8)}`
+            document.querySelector(`input[data-city="${cities[1]}"]`).value
+          }" il y a ${Math.round((100 * d) / 1000) / 100} km` //  en ${date.toISOString().substr(11, 8)}
         );
         if (
           (calcMode == "time" && t > maxTime) ||
@@ -48,16 +45,16 @@ export function calcMiddle() {
       let points = keep.split(";");
       window.log(
         `Le trajet le plus long est donc entre "${
-          document.querySelector('input[data-city="' + points[0] + '"]').value
+          document.querySelector(`input[data-city="${points[0]}"]`).value
         }" et "${
-          document.querySelector('input[data-city="' + points[1] + '"]').value
+          document.querySelector(`input[data-city="${points[1]}"]`).value
         }"`
       );
       window.log("Je calcule le point à mi-temps.");
       if (points.length > 1)
         calcPath(places[points[0]], places[points[1]], "", false).then(
           (res) => {
-            route = res.path.routeGeometry.coordinates;
+            const route = res.path.routeGeometry.coordinates;
             // for (let i = 0; i < route.length; i += 100)
             //   addPoint(route[i][0], route[i][1], "yellow");
             getIsoCurve(

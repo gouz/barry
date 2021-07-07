@@ -116,16 +116,45 @@ export const getIsoCurve = (point, distance, time) => {
 };
 
 export const drawMiddle = (middle, color, dest, withCalc) => {
-  addPoint(middle[0], middle[1], color, dest);
   if (withCalc) {
     const keys = Object.keys(window.places);
+    let prms = [];
     for (let k = 0; k < keys.length; k++)
       if (keys[k].startsWith("place"))
-        calcPath(window.places[keys[k]], middle, k, true).then((res) => {
-          let e = document.querySelector("#res_" + res.key + " ." + dest);
-          if (e) {
-            e.innerText = res.path.duration + " / " + res.path.distance;
-          }
-        });
+        prms.push(
+          new Promise((resolve) => {
+            calcPath(window.places[keys[k]], middle, k, false).then((res) => {
+              let e = document.querySelector(`#res_${res.key} .${dest}`);
+              if (e) {
+                //let date = new Date();
+                //date.setSeconds(parseFloat(res.path.totalTime));
+                e.innerText = ` ${
+                  Math.round(
+                    (100 * parseFloat(res.path.totalDistance)) / 1000
+                  ) / 100
+                } km`; // en ${date.toISOString().substr(11, 8)}
+              }
+              const route = res.path.routeGeometry.coordinates;
+              for (let i = 0; i < route.length; i += 50)
+                addPoint(
+                  route[i][0],
+                  route[i][1],
+                  "yellow",
+                  `route_${res.key}_${i}`
+                );
+              resolve();
+            });
+          })
+        );
+    window.log("Je calcule le trajet pour chaque ville.");
+    Promise.all(prms).then(() => {
+      addPoint(middle[0], middle[1], color, dest);
+      window.log("Fini, je ferme cette boîte dans 5 secondes");
+      setTimeout(() => {
+        document.querySelector("#wip").style.display = "none";
+      }, 5000);
+    });
+  } else {
+    addPoint(middle[0], middle[1], color, dest);
   }
 };
