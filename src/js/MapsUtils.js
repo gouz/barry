@@ -13,7 +13,7 @@ import { Nominatim } from "nominatim-geocoder";
 let api_key = "jhyvi0fgmnuxvfv0zjzorvdn";
 /*
 if (window.location.hostname == "gouz.github.io")
-  api_key = "34qcij6n2ecigthilez75ny1";
+  api_key = "34qcij6n2ecigthilez75ny1"; // only available for REFERER = gouz.github.io
 */
 
 export function mapInit() {
