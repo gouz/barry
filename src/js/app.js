@@ -41,9 +41,9 @@ document.querySelector("#calc").addEventListener(
         lat /= values.length;
         drawMiddle([lon, lat], "red", "result", true);
         setTimeout(() => {
-          window.log("Trouvé, je ferme cette boîte dans 2 secondes");
+          window.log("Trouvé, je ferme cette boîte dans 10 secondes");
           document.querySelector("#wip").style.display = "none";
-        }, 2000);
+        }, 10000);
       });
     }
   },
