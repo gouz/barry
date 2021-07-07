@@ -24,7 +24,10 @@ document.querySelector("#calc").addEventListener(
       document.querySelector("#calc").style.display = "none";
       document.querySelector("#wip").style.display = "flex";
       window.log("C'est parti pour rechercher votre centre équitable");
-      Promise.all([first(), second(), third()]).then((values) => {
+      let methods = [first(), second()];
+      if (document.querySelectorAll("input[data-place]").length > 2)
+        methods.push(third());
+      Promise.all(methods).then((values) => {
         window.log(
           "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
         );

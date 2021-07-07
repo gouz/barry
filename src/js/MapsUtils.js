@@ -108,7 +108,7 @@ export const getIsoCurve = (point, distance, time) => {
       distance: distance,
       time: time,
       graph: "Voiture",
-      reverse: true,
+      //reverse: true,
       onSuccess: (result) => {
         resolve(result);
       },
