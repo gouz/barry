@@ -26,10 +26,12 @@ export function windowInit() {
       `;
     document.querySelector("#addresses #wrapper").appendChild(div);
     window.address_count++;
+    window.nbPlaces++;
   };
   newAddress();
 
   window.removeAddress = (element) => {
+    window.nbPlaces--;
     element.parentNode.parentNode.removeChild(element.parentNode);
   };
 

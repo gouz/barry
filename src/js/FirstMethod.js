@@ -85,7 +85,8 @@ export function calcMiddle() {
               resolve(
                 currentInstructions.geometry.coordinates[
                   Math.round(
-                    delta * currentInstructions.geometry.coordinates.length
+                    (1 - delta) *
+                      currentInstructions.geometry.coordinates.length
                   )
                 ]
               );
