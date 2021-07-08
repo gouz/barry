@@ -58,7 +58,13 @@ export const addPoint = (lon, lat, color, id) => {
   window.map.addLayer(layer);
 };
 
-export const calcPath = (start, end, key, full) => {
+export const calcPath = (
+  start,
+  end,
+  key,
+  raw = true,
+  routeInstructions = false
+) => {
   return new Promise((resolve) => {
     Gp.Services.route({
       apiKey: api_key,
@@ -68,7 +74,8 @@ export const calcPath = (start, end, key, full) => {
       distanceUnit: "m",
       routePreference: window.calcMode == "time" ? "fastest" : "shortest",
       geometryInInstructions: false,
-      rawResponse: full,
+      rawResponse: raw,
+      geometryInInstructions: routeInstructions,
       onSuccess: (result) => {
         resolve({ key: key, path: result });
       },
@@ -107,6 +114,7 @@ export const getIsoCurve = (point, distance, time) => {
       distance: distance,
       time: time,
       graph: "Voiture",
+      smoothing: true,
       onSuccess: (result) => {
         resolve(result);
       },
@@ -163,7 +171,7 @@ export const detectNearCity = (point) => {
   return new Promise((resolve) => {
     Gp.Services.reverseGeocode({
       apiKey: api_key,
-      position: { x: point[0], y: point[1] },
+      position: { x: point[1], y: point[0] },
       srs: "EPSG:4326",
       filterOptions: {
         type: ["PositionOfInterest"],

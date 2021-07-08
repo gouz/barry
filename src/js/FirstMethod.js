@@ -12,8 +12,7 @@ export function calcMiddle() {
             calcPath(
               window.places[keys[i]],
               window.places[keys[j]],
-              keys[i] + ";" + keys[j],
-              true
+              keys[i] + ";" + keys[j]
             )
           );
     Promise.all(prms).then((values) => {
@@ -35,6 +34,7 @@ export function calcMiddle() {
             mins < 10 ? "0" + mins : mins
           }`
         );
+        x;
         if (
           (calcMode == "time" && t > maxTime) ||
           (calcMode == "distance" && d > maxDist)
@@ -54,21 +54,56 @@ export function calcMiddle() {
       );
       window.log("Je calcule le point à mi-temps.");
       if (points.length > 1)
-        calcPath(places[points[0]], places[points[1]], "", false).then(
+        calcPath(places[points[0]], places[points[1]], "", false, true).then(
           (res) => {
+            let currentInstructions = null;
+            const nbInstructions = res.path.routeInstructions.length;
+            let time = 0;
+            let km = 0;
+            const midTime = Math.round(maxTime / 2);
+            const midDist = Math.round(maxDist / 2);
+            for (let i = 0; i < nbInstructions; i++) {
+              km += parseFloat(res.path.routeInstructions[i].distance);
+              time += parseFloat(res.path.routeInstructions[i].duration);
+              currentInstructions = res.path.routeInstructions[i];
+              if (
+                ("time" == window.calcMode && time > midTime) ||
+                ("distance" == window.calcMode && km > midDist)
+              )
+                break;
+            }
+            if (null != currentInstructions) {
+              let delta = 0;
+              if ("time" == window.calcMode) {
+                delta =
+                  (time - midTime) / parseFloat(currentInstructions.duration);
+              } else if ("distance" == window.calcMode) {
+                delta =
+                  (km - midDist) / parseFloat(currentInstructions.distance);
+              }
+              window.log("Le point est trouvé.");
+              resolve(
+                currentInstructions.geometry.coordinates[
+                  Math.round(
+                    delta * currentInstructions.geometry.coordinates.length
+                  )
+                ]
+              );
+            }
+            /*
             const route = res.path.routeGeometry.coordinates;
             getIsoCurve(
               window.places[points[0]],
-              Math.round(maxDist / 2),
-              Math.round(maxTime / 2),
+              midDist,
+              midTime,
               calcMode
             ).then((result) => {
               search: for (
                 let i = 0;
                 i < result.geometry.coordinates[0].length;
-                i += 50
+                i += 20
               ) {
-                for (let j = 0; j < route.length; j += 10)
+                for (let j = 0; j < route.length; j += 20)
                   if (
                     roundCoord(result.geometry.coordinates[0][i][0]) ==
                       roundCoord(route[j][0]) &&
@@ -82,6 +117,7 @@ export function calcMiddle() {
               }
               reject();
             });
+            */
           }
         );
     });

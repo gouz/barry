@@ -12,6 +12,9 @@ import { calcMiddle as third } from "./ThirdMethod";
 mapInit();
 windowInit();
 
+const keys = ["first", "second", "third"];
+const colors = ["green", "blue", "orange"];
+
 window.calcMode = "time";
 
 window.can_calc = false;
@@ -24,27 +27,28 @@ document.querySelector("#calc").addEventListener(
       document.querySelector("#calc").style.display = "none";
       document.querySelector("#wip").style.display = "flex";
       window.log("C'est parti pour rechercher votre centre équitable");
-      let methods = [first(), second()];
-      if (document.querySelectorAll("input[data-place]").length > 2)
+      let methods = [first()];
+      if (document.querySelectorAll("input[data-place]").length > 2) {
+        methods.push(second());
         methods.push(third());
+      }
       Promise.all(methods).then((values) => {
         window.log(
           "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
         );
         let lon = 0;
         let lat = 0;
-        const keys = ["first", "second", "third"];
-        const colors = ["green", "blue", "orange"];
         values.map((v, i) => {
-          lon += v[0];
-          lat += v[1];
+          lon += parseFloat(v[0]);
+          lat += parseFloat(v[1]);
           drawMiddle(v, colors[i], keys[i], false);
         });
         lon /= values.length;
         lat /= values.length;
+        window.log(`On se retrouve à [${lon}, ${lat}]`);
         window.log("Je trouve la ville la plus proche du point.");
         drawMiddle([lon, lat], "red", "result", false);
-        detectNearCity([lat, lon]).then((coord) => {
+        detectNearCity([lon, lat]).then((coord) => {
           if (coord[0] == coord[1] && coord[0] == 0) {
             window.log(
               "Pas de ville trouvée proche, je suis désolé mais va falloir le faire à la main."
