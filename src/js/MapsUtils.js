@@ -11,10 +11,9 @@ import * as Gp from "geoportal-access-lib/dist/GpServices";
 import { Nominatim } from "nominatim-geocoder";
 
 let api_key = "jhyvi0fgmnuxvfv0zjzorvdn";
-/*
+
 if (window.location.hostname == "gouz.github.io")
   api_key = "34qcij6n2ecigthilez75ny1"; // only available for REFERER = gouz.github.io
-*/
 
 export function mapInit() {
   window.layers = {};
@@ -108,7 +107,6 @@ export const getIsoCurve = (point, distance, time) => {
       distance: distance,
       time: time,
       graph: "Voiture",
-      //reverse: true,
       onSuccess: (result) => {
         resolve(result);
       },
