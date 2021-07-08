@@ -3,7 +3,7 @@ import "../less/app.less";
 
 import "ol/ol.css";
 
-import { mapInit, drawMiddle, detectNearCity } from "./MapsUtils";
+import { mapInit, drawMiddle, detectNearCity, addPoint } from "./MapsUtils";
 import { windowInit } from "./WindowUtils";
 import { calcMiddle as first } from "./FirstMethod";
 import { calcMiddle as second } from "./SecondMethod";
@@ -35,18 +35,18 @@ document.querySelector("#calc").addEventListener(
         );
         let lon = 0;
         let lat = 0;
-        if (window.nbPlaces > 2) {
-          values.map((v, i) => {
-            lon += parseFloat(v[0]);
-            lat += parseFloat(v[1]);
-            drawMiddle(v, colors[i], keys[i], false);
-          });
-          lon /= values.length;
-          lat /= values.length;
-        } else {
+        //if (window.nbPlaces > 2) {
+        values.map((v, i) => {
+          lon += parseFloat(v[0]);
+          lat += parseFloat(v[1]);
+          addPoint(v[0], v[1], colors[i], keys[i]);
+        });
+        lon /= values.length;
+        lat /= values.length;
+        /*} else {
           lon = values[0][0];
           lat = values[0][1];
-        }
+        }*/
         window.log(`On se retrouve à [${lon}, ${lat}]`);
         window.log("Je trouve la ville la plus proche du point.");
         drawMiddle([lon, lat], "red", "result", false);
