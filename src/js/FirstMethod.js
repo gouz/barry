@@ -1,4 +1,4 @@
-import { calcPath, getIsoCurve, roundCoord, addPoint } from "./MapsUtils";
+import { calcPath } from "./MapsUtils";
 
 export function calcMiddle() {
   return new Promise((resolve, reject) => {
@@ -91,34 +91,6 @@ export function calcMiddle() {
                 ]
               );
             }
-            /*
-            const route = res.path.routeGeometry.coordinates;
-            getIsoCurve(
-              window.places[points[0]],
-              midDist,
-              midTime,
-              calcMode
-            ).then((result) => {
-              search: for (
-                let i = 0;
-                i < result.geometry.coordinates[0].length;
-                i += 20
-              ) {
-                for (let j = 0; j < route.length; j += 20)
-                  if (
-                    roundCoord(result.geometry.coordinates[0][i][0]) ==
-                      roundCoord(route[j][0]) &&
-                    roundCoord(result.geometry.coordinates[0][i][1]) ==
-                      roundCoord(route[j][1])
-                  ) {
-                    window.log("Le point est trouvé.");
-                    resolve(result.geometry.coordinates[0][i]);
-                    break search;
-                  }
-              }
-              reject();
-            });
-            */
           }
         );
     });

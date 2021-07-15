@@ -37,7 +37,7 @@ export const roundCoord = (num) => {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 };
 
-export const addPoint = (lon, lat, color, id) => {
+export const addPoint = (lon, lat, color, id, rad = 5) => {
   let place = [lon, lat];
   if (typeof window.layers[id] != undefined)
     window.map.removeLayer(window.layers[id]);
@@ -49,7 +49,7 @@ export const addPoint = (lon, lat, color, id) => {
     }),
     style: new Style({
       image: new Circle({
-        radius: 3,
+        radius: rad,
         fill: new Fill({ color: color }),
       }),
     }),
@@ -105,23 +105,6 @@ export const getPlace = (address, id) => {
   }
 };
 
-export const getIsoCurve = (point, distance, time) => {
-  return new Promise((resolve) => {
-    Gp.Services.isoCurve({
-      apiKey: api_key,
-      position: { x: point[0], y: point[1] },
-      method: window.calcMode,
-      distance: distance,
-      time: time,
-      graph: "Voiture",
-      smoothing: true,
-      onSuccess: (result) => {
-        resolve(result);
-      },
-    });
-  });
-};
-
 export const drawMiddle = (middle, color, dest) => {
   const keys = Object.keys(window.places);
   let prms = [];
@@ -141,12 +124,13 @@ export const drawMiddle = (middle, color, dest) => {
               } km en ${hours}h${mins < 10 ? "0" + mins : mins}`;
             }
             const route = res.path.routeGeometry.coordinates;
-            for (let i = 0; i < route.length; i += 50)
+            for (let i = 0; i < route.length; i += 20)
               addPoint(
                 route[i][0],
                 route[i][1],
                 "yellow",
-                `route_${res.key}_${i}`
+                `route_${res.key}_${i}`,
+                2
               );
             resolve();
           });

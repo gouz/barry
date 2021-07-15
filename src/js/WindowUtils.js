@@ -2,6 +2,7 @@ import { getPlace } from "./MapsUtils";
 
 export function windowInit() {
   window.address_count = 0;
+  window.nbPlaces = 0;
   window.newAddress = () => {
     const div = document.createElement("div");
     div.classList.add("wrap");
