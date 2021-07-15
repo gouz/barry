@@ -26,6 +26,9 @@ document.querySelector("#calc").addEventListener(
     if (window.can_calc) {
       document.querySelector("#calc").style.display = "none";
       document.querySelector("#wip").style.display = "flex";
+      document
+        .querySelectorAll("#addresses button")
+        .forEach((e) => (e.style.display = "none"));
       window.log("C'est parti pour rechercher votre centre équitable");
       let methods = [first(), second(), third()];
       Promise.all(methods).then((values) => {
