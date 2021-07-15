@@ -91,7 +91,7 @@ export const getPlace = (address, id) => {
       geocoder
         .search({ q: address })
         .then((response) => {
-          addPoint(response[0].lon, response[0].lat, "black", id);
+          addPoint(response[0].lon, response[0].lat, "#111827", id);
           if (Object.keys(window.places).length > 1) {
             window.can_calc = true;
             document.querySelector("#calc").classList.remove("disabled");
@@ -128,7 +128,7 @@ export const drawMiddle = (middle, color, dest) => {
               addPoint(
                 route[i][0],
                 route[i][1],
-                "yellow",
+                "#fef3c7",
                 `route_${res.key}_${i}`,
                 2
               );

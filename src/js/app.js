@@ -13,7 +13,7 @@ mapInit();
 windowInit();
 
 const keys = ["first", "second", "third"];
-const colors = ["green", "blue", "orange"];
+const colors = ["#10b981", "#3b82f6", "#f59e0b"];
 
 window.calcMode = "time";
 
@@ -52,7 +52,7 @@ document.querySelector("#calc").addEventListener(
         }
         window.log(`On se retrouve à [${lon}, ${lat}]`);
         window.log("Je trouve la ville la plus proche du point.");
-        addPoint(lon, lat, "red", "result");
+        addPoint(lon, lat, "#ef4444", "result");
         detectNearCity([lon, lat]).then((coord) => {
           if (coord[0] == coord[1] && coord[0] == 0) {
             window.log(
@@ -62,7 +62,7 @@ document.querySelector("#calc").addEventListener(
             window.log(
               `<a href="#" onclick="window.hideWIP(); return false;">Fermer</a>`
             );
-          } else drawMiddle(coord, "red", "result");
+          } else drawMiddle(coord, "#ef4444", "result");
         });
       });
     }
