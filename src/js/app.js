@@ -30,7 +30,9 @@ document.querySelector("#calc").addEventListener(
         .querySelectorAll("#addresses button")
         .forEach((e) => (e.style.display = "none"));
       window.log("C'est parti pour rechercher votre centre équitable");
-      let methods = [first(), second(), third()];
+      let methods = [second(), third()];
+      if ("localhost" == window.location.hostname)
+        methods = [first(), second(), third()];
       Promise.all(methods).then((values) => {
         window.log(
           "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
@@ -62,7 +64,13 @@ document.querySelector("#calc").addEventListener(
             window.log(
               `<a href="#" onclick="window.hideWIP(); return false;">Fermer</a>`
             );
-          } else drawMiddle(coord, "#ef4444", "result");
+          } else
+            drawMiddle(
+              coord,
+              "#ef4444",
+              "result",
+              "localhost" == window.location.hostname
+            );
         });
       });
     }
