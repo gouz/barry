@@ -105,54 +105,45 @@ export const getPlace = (address, id) => {
   }
 };
 
-export const drawMiddle = (middle, color, dest, calcRoutes = false) => {
-  if (calcRoutes) {
-    const keys = Object.keys(window.places);
-    let prms = [];
-    for (let k = 0; k < keys.length; k++)
-      if (keys[k].startsWith("place"))
-        prms.push(
-          new Promise((resolve) => {
-            calcPath(window.places[keys[k]], middle, k, false).then((res) => {
-              let e = document.querySelector(`#res_${res.key} .${dest}`);
-              if (e) {
-                const seconds = res.path.totalTime;
-                const hours = Math.floor(seconds / 3600);
-                const mins = Math.floor((seconds / 60) % 60);
-                e.innerText = ` ${
-                  Math.round(
-                    (100 * parseFloat(res.path.totalDistance)) / 1000
-                  ) / 100
-                } km en ${hours}h${mins < 10 ? "0" + mins : mins}`;
-              }
-              const route = res.path.routeGeometry.coordinates;
-              for (let i = 0; i < route.length; i += 20)
-                addPoint(
-                  route[i][0],
-                  route[i][1],
-                  "#fef3c7",
-                  `route_${res.key}_${i}`,
-                  2
-                );
-              resolve();
-            });
-          })
-        );
-    window.log("Je calcule le trajet pour chaque ville.");
-    Promise.all(prms).then(() => {
-      addPoint(middle[0], middle[1], color, dest);
-      document.querySelector(".spinner").style.display = "none";
-      window.log(
-        `<a href="#" onclick="window.hideWIP(); return false;">Voir les trajets</a>`
+export const drawMiddle = (middle, color, dest) => {
+  const keys = Object.keys(window.places);
+  let prms = [];
+  for (let k = 0; k < keys.length; k++)
+    if (keys[k].startsWith("place"))
+      prms.push(
+        new Promise((resolve) => {
+          calcPath(window.places[keys[k]], middle, k, false).then((res) => {
+            let e = document.querySelector(`#res_${res.key} .${dest}`);
+            if (e) {
+              const seconds = res.path.totalTime;
+              const hours = Math.floor(seconds / 3600);
+              const mins = Math.floor((seconds / 60) % 60);
+              e.innerText = ` ${
+                Math.round((100 * parseFloat(res.path.totalDistance)) / 1000) /
+                100
+              } km en ${hours}h${mins < 10 ? "0" + mins : mins}`;
+            }
+            const route = res.path.routeGeometry.coordinates;
+            for (let i = 0; i < route.length; i += 20)
+              addPoint(
+                route[i][0],
+                route[i][1],
+                "#fef3c7",
+                `route_${res.key}_${i}`,
+                2
+              );
+            resolve();
+          });
+        })
       );
-    });
-  } else {
+  window.log("Je calcule le trajet pour chaque ville.");
+  Promise.all(prms).then(() => {
     addPoint(middle[0], middle[1], color, dest);
     document.querySelector(".spinner").style.display = "none";
     window.log(
       `<a href="#" onclick="window.hideWIP(); return false;">Voir les trajets</a>`
     );
-  }
+  });
 };
 
 export const detectNearCity = (point) => {
