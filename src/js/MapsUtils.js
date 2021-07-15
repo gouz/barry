@@ -27,8 +27,8 @@ export function mapInit() {
       }),
     ],
     view: new View({
-      center: [2.213749, 46.227638],
-      zoom: 6,
+      center: [2.213749, 46.927638],
+      zoom: 6.7,
     }),
   });
 }
