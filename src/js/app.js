@@ -30,9 +30,7 @@ document.querySelector("#calc").addEventListener(
         .querySelectorAll("#addresses button")
         .forEach((e) => (e.style.display = "none"));
       window.log("C'est parti pour rechercher votre centre équitable");
-      let methods = [second(), third()];
-      if ("localhost" == window.location.hostname)
-        methods = [first(), second(), third()];
+      let methods = [first(), second(), third()];
       Promise.all(methods).then((values) => {
         window.log(
           "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
@@ -53,21 +51,19 @@ document.querySelector("#calc").addEventListener(
           addPoint(lon, lat, colors[0], keys[0]);
         }
         window.log(`On se retrouve à [${lon}, ${lat}]`);
-        if ("localhost" == window.location.hostname) {
-          window.log("Je trouve la ville la plus proche du point.");
-          addPoint(lon, lat, "#ef4444", "result");
-          detectNearCity([lon, lat]).then((coord) => {
-            if (coord[0] == coord[1] && coord[0] == 0) {
-              window.log(
-                "Pas de ville trouvée proche, je suis désolé mais va falloir le faire à la main."
-              );
-              document.querySelector(".spinner").style.display = "none";
-              window.log(
-                `<a href="#" onclick="window.hideWIP(); return false;">Fermer</a>`
-              );
-            } else drawMiddle(coord, "#ef4444", "result");
-          });
-        }
+        window.log("Je trouve la ville la plus proche du point.");
+        addPoint(lon, lat, "#ef4444", "result");
+        detectNearCity([lon, lat]).then((coord) => {
+          if (coord[0] == coord[1] && coord[0] == 0) {
+            window.log(
+              "Pas de ville trouvée proche, je suis désolé mais va falloir le faire à la main."
+            );
+            document.querySelector(".spinner").style.display = "none";
+            window.log(
+              `<a href="#" onclick="window.hideWIP(); return false;">Fermer</a>`
+            );
+          } else drawMiddle(coord, "#ef4444", "result");
+        });
       });
     }
   },
