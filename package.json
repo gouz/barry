@@ -33,7 +33,7 @@
     "tailwindcss": "2.2.19"
   },
   "dependencies": {
-    "geoportal-access-lib": "2.1.8",
+    "geoportal-access-lib": "3.0.3",
     "nominatim-geocoder": "0.1.4",
     "ol": "6.9.0"
   },
