@@ -35,7 +35,7 @@
   "dependencies": {
     "geoportal-access-lib": "3.0.5",
     "nominatim-geocoder": "0.1.4",
-    "ol": "6.9.0"
+    "ol": "6.10.0"
   },
   "browserslist": [
     "> 0.2%",
