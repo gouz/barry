@@ -24,7 +24,7 @@
     "@parcel/transformer-image": "2.1.0",
     "@parcel/transformer-less": "2.1.0",
     "@parcel/transformer-pug": "2.1.0",
-    "@parcel/transformer-webmanifest": "2.0.1",
+    "@parcel/transformer-webmanifest": "2.1.0",
     "@prettier/plugin-pug": "1.19.0",
     "autoprefixer": "10.4.1",
     "cssnano-preset-advanced": "5.1.9",
