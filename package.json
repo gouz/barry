@@ -17,7 +17,7 @@
   "license": "MIT",
   "devDependencies": {
     "@parcel/compressor-brotli": "2.1.1",
-    "@parcel/compressor-gzip": "2.1.0",
+    "@parcel/compressor-gzip": "2.1.1",
     "@parcel/packager-raw-url": "2.1.1",
     "@parcel/plugin": "2.1.0",
     "@parcel/reporter-dev-server": "2.1.0",
