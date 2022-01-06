@@ -18,7 +18,7 @@
   "devDependencies": {
     "@parcel/compressor-brotli": "2.1.0",
     "@parcel/compressor-gzip": "2.1.0",
-    "@parcel/packager-raw-url": "2.0.1",
+    "@parcel/packager-raw-url": "2.1.0",
     "@parcel/plugin": "2.0.1",
     "@parcel/reporter-dev-server": "2.0.1",
     "@parcel/transformer-image": "2.0.1",
