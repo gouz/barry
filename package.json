@@ -16,7 +16,7 @@
   "author": "Sylvain Gougouzian",
   "license": "MIT",
   "devDependencies": {
-    "@parcel/compressor-brotli": "2.1.1",
+    "@parcel/compressor-brotli": "2.2.0",
     "@parcel/compressor-gzip": "2.1.1",
     "@parcel/packager-raw-url": "2.1.1",
     "@parcel/plugin": "2.2.0",
