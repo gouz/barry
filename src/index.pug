@@ -9,66 +9,8 @@ html(lang="fr")
     link(rel="icon", type="image/png", sizes="16x16", href="favicon-16x16.png")
     link(rel="manifest", href="site.webmanifest")
   body
-    #map
-
-    #addresses
-      #wrapper
-      button#calc.disabled Calculer
-      //button#clean(on-click="window.clear()") Reset
-
-    #help.overlay
-      div
-        button#help-close 
-          svg(
-            width="24",
-            height="24",
-            stroke-width="1.5",
-            viewBox="0 0 24 24",
-            fill="none",
-            xmlns="http://www.w3.org/2000/svg"
-          )
-            path(
-              d="M9.17218 14.8284L12.0006 12M14.829 9.17157L12.0006 12M12.0006 12L9.17218 9.17157M12.0006 12L14.829 14.8284",
-              stroke="currentColor",
-              stroke-linecap="round",
-              stroke-linejoin="round"
-            )
-            path(
-              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z",
-              stroke="currentColor",
-              stroke-linecap="round",
-              stroke-linejoin="round"
-            )
-        h1 Barry
-        h2 Si on se retrouvait au milieu du chemin ?
-        p Cet outil est fonctionnel uniquement en France pour le moment.
-        p Il est basé sur 3 calculs :
-        ul 
-          li
-            span.bullet.green
-            | Le mi-chemin en temps sur le plus long trajet entre toutes les villes
-          li
-            span.bullet.blue
-            | La moyenne des coordonnées des villes
-          li 
-            span.bullet.orange
-            | Le centre du cadre dans lequel toutes les villes sont présentes
-        p 
-          | Ainsi on arrive à la moyenne de ces trois points pour obtenir le point
-          span.bullet.red
-          | qui correspond à une approximation du point le plus équitable pour les trajets de chacun.
-
-    #wip.overlay
-      div
-        #log
-        .spinner
-          .item 
-          .item 
-          .item 
-          .item 
-          .item 
-          .item 
-          .item 
-          .item 
+    #app
+      include pug/sidebar
+      #map
 
     script(src="./js/app.js", type="module")

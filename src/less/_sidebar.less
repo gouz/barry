@@ -1,0 +1,82 @@
+#sidebar {
+  @apply w-1/4 bg-slate-800 shadow h-full text-slate-100 py-2 px-4 flex flex-col;
+
+  h1 {
+    @apply border-b border-slate-600 flex items-center space-x-2 justify-center mb-4 pt-2 pb-4;
+
+    span {
+      @apply text-3xl font-bold tracking-wider;
+    }
+
+    svg {
+      @apply h-8 w-8 inline-block fill-red-500;
+    }
+  }
+
+  h2 {
+    @apply flex items-center;
+
+    svg {
+      @apply h-6 w-6 inline-block;
+    }
+
+    span {
+      @apply pl-2 text-gray-200 uppercase text-sm;
+    }
+  }
+}
+
+@import "./_address.less";
+
+#calculate {
+  @apply mt-4 w-4/5 mx-auto rounded-lg bg-green-500 text-slate-100 py-1 text-center block px-4;
+
+  &:hover {
+    @apply bg-green-400;
+  }
+
+  svg {
+    @apply inline-block animate-spin -ml-1 mr-2 h-5 w-5 text-white;
+
+    circle {
+      @apply opacity-25;
+    }
+
+    path {
+      @apply opacity-75;
+    }
+  }
+}
+
+#newsearch {
+  @apply mb-4 w-4/5 mx-auto rounded-lg bg-slate-500 text-slate-100 py-1 text-center block px-4;
+
+  &:hover {
+    @apply bg-slate-400;
+  }
+}
+
+#log {
+  @apply bg-slate-600 text-sm py-1 px-2 overflow-y-auto flex-grow rounded my-4;
+
+  @bg-color: rgb(71 85 105);
+  @fg-color: rgb(203 213 225);
+
+  scrollbar-width: thin;
+  scrollbar-color: @fg-color @bg-color;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: @bg-color;
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: @fg-color;
+    border-radius: 20px;
+    border: 1px solid @bg-color;
+  }
+}
