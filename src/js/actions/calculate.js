@@ -1,4 +1,4 @@
-import { drawMiddle, detectNearCity, addPoint } from "../MapsUtils";
+import { drawMiddle, detectNearCity, addPoint, fitToBox } from "../MapsUtils";
 import { longMiddle } from "../methods/longMiddle";
 import { average } from "../methods/average";
 import { center } from "../methods/center";
@@ -55,6 +55,7 @@ window.$barry.calculate = () => {
         );
       } else {
         drawMiddle(coord, window.$barry.resultColor, "result");
+        fitToBox();
       }
       window.$barry.$spinner.classList.add("hide");
       window.$barry.$calculate.classList.add("hide");

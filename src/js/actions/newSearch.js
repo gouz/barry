@@ -1,3 +1,5 @@
+import { zoomToFrance } from "../MapsUtils";
+
 window.$barry.newSearch = () => {
   window.$barry.$log.classList.add("hide");
   window.$barry.$newsearch.classList.add("hide");
@@ -11,4 +13,5 @@ window.$barry.newSearch = () => {
   });
   window.$barry.layers = {};
   window.$barry.newAddress();
+  zoomToFrance();
 };

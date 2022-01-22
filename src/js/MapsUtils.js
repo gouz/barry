@@ -1,6 +1,7 @@
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import { boundingExtent } from "ol/extent";
 import { Circle, Fill, Style } from "ol/style";
 import { Point } from "ol/geom";
 import { useGeographic } from "ol/proj";
@@ -31,6 +32,15 @@ export const mapInit = () => {
       zoom: 6.7,
     }),
   });
+};
+
+export const zoomToFrance = () => {
+  window.$barry.map.setView(
+    new View({
+      center: [2.213749, 46.927638],
+      zoom: 6.7,
+    })
+  );
 };
 
 export const roundCoord = (num) => {
@@ -175,5 +185,18 @@ export const detectNearCity = (point) => {
         }
       },
     });
+  });
+};
+
+export const fitToBox = () => {
+  const box = window.$barry.calcBox();
+  var ext = boundingExtent([
+    [box[0][1], box[0][0]],
+    [box[1][1], box[1][0]],
+  ]);
+  window.$barry.map.getView().fit(ext, {
+    size: window.$barry.map.getSize(),
+    padding: [50, 50, 50, 50],
+    duration: 2000,
   });
 };

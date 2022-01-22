@@ -2,6 +2,7 @@ import "../less/app.less";
 import "ol/ol.css";
 
 import "./globals";
+import "./actions/calcBox";
 import "./actions/calculate";
 import "./actions/canCalculate";
 import "./actions/log";
