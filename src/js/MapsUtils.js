@@ -132,10 +132,33 @@ export const drawMiddle = (middle, color, dest) => {
               const seconds = res.path.totalTime;
               const hours = Math.floor(seconds / 3600);
               const mins = Math.floor((seconds / 60) % 60);
+              const route = res.path.routeGeometry.coordinates;
+              const step = 7 * Object.keys(window.$barry.places).length;
+              let minLon = 99;
+              let maxLon = -99;
+              let minLat = 99;
+              let maxLat = -99;
+              for (let i = 0; i < route.length; i += step) {
+                const lo = parseFloat(route[i][0]);
+                const la = parseFloat(route[i][1]);
+                if (minLon > lo) minLon = lo;
+                if (maxLon < lo) maxLon = lo;
+                if (minLat > la) minLat = la;
+                if (maxLat < la) maxLat = la;
+                addPoint(
+                  route[i][0],
+                  route[i][1],
+                  window.$barry.roadColor,
+                  `route_${res.key}_${i}`,
+                  2
+                );
+              }
               window.$barry.log(
                 `
 <span onmouseenter="window.$barry.showNav('route_${res.key}', 1);"
-      onmouseleave="window.$barry.showNav('route_${res.key}', 0)">
+      onmouseleave="window.$barry.showNav('route_${res.key}', 0)"
+      onclick="window.$barry.zoom([[${minLat}, ${minLon}],[${maxLat}, ${maxLon}]])"
+>
   De 
   <b>
     ${document.querySelector(`input[data-city="${keys[k]}"]`).value}
@@ -150,17 +173,6 @@ export const drawMiddle = (middle, color, dest) => {
   </b>
 </span>`
               );
-              const route = res.path.routeGeometry.coordinates;
-              for (let i = 0; i < route.length; i += 20) {
-                addPoint(
-                  route[i][0],
-                  route[i][1],
-                  window.$barry.roadColor,
-                  `route_${res.key}_${i}`,
-                  2
-                );
-                window.$barry.layers[`route_${res.key}_${i}`].setOpacity(0.5);
-              }
               resolve();
             }
           );
@@ -201,8 +213,10 @@ export const detectNearCity = (point) => {
   });
 };
 
-export const fitToBox = () => {
-  const box = window.$barry.calcBox();
+export const fitToBox = (box) => {
+  if (typeof box == "undefined") {
+    box = window.$barry.calcBox();
+  }
   var ext = boundingExtent([
     [box[0][1], box[0][0]],
     [box[1][1], box[1][0]],

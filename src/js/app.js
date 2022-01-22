@@ -16,6 +16,7 @@ import "./actions/placePoint";
 import "./actions/removeAddress";
 import "./actions/showNav";
 import "./actions/toggleWelcome";
+import "./actions/zoom";
 
 import { mapInit } from "./MapsUtils";
 
