@@ -133,16 +133,25 @@ export const drawMiddle = (middle, color, dest) => {
               const hours = Math.floor(seconds / 3600);
               const mins = Math.floor((seconds / 60) % 60);
               window.$barry.log(
-                `De <b>${
-                  document.querySelector(`input[data-city="${keys[k]}"]`).value
-                }</b>, il y <b>${
-                  Math.round(
-                    (100 * parseFloat(res.path.totalDistance)) / 1000
-                  ) / 100
-                }</b> km en <b>${hours}h${mins < 10 ? "0" + mins : mins}</b>`
+                `
+<span onmouseenter="window.$barry.showNav('route_${res.key}', 1);"
+      onmouseleave="window.$barry.showNav('route_${res.key}', 0)">
+  De 
+  <b>
+    ${document.querySelector(`input[data-city="${keys[k]}"]`).value}
+  </b>
+  , il y 
+  <b>
+    ${Math.round((100 * parseFloat(res.path.totalDistance)) / 1000) / 100}
+  </b>
+  km en
+  <b>
+    ${hours} h ${mins < 10 ? "0" + mins : mins}
+  </b>
+</span>`
               );
               const route = res.path.routeGeometry.coordinates;
-              for (let i = 0; i < route.length; i += 20)
+              for (let i = 0; i < route.length; i += 20) {
                 addPoint(
                   route[i][0],
                   route[i][1],
@@ -150,12 +159,14 @@ export const drawMiddle = (middle, color, dest) => {
                   `route_${res.key}_${i}`,
                   2
                 );
+                window.$barry.layers[`route_${res.key}_${i}`].setOpacity(0.5);
+              }
               resolve();
             }
           );
         })
       );
-  window.$barry.log("Je calcule le trajet pour chaque ville.");
+  window.$barry.log("Je calcule le trajet pour chaque ville.", 1);
   Promise.all(prms).then(() => {
     addPoint(middle[0], middle[1], color, dest);
   });

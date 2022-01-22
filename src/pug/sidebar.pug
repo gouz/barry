@@ -29,14 +29,14 @@
       )
     span Configuration
     .form
-      label Mi-chemin en :
+      label Calcul du mi-chemin en :
       span temps
       .toggle
         input#toggleCalcMode(
           type="checkbox",
           onchange="window.$barry.changeCalcMode();"
         )
-        label
+        label(for="toggleCalcMode")
       span distance
 
   h3
@@ -76,5 +76,16 @@
       span Calculer le point de rencontre
 
   #log.hide
+    .form
+      label Niveau de réponse :
+      span simplifié
+      .toggle
+        input#toggleLogMode(
+          type="checkbox",
+          onchange="window.$barry.changeLogMode();"
+        )
+        label(for="toggleLogMode")
+      span détaillé
+    #log-content
 
   button#newsearch.hide(onclick="window.$barry.newSearch()") Nouvelle recherche

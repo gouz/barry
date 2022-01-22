@@ -14,21 +14,21 @@
   }
 
   h3 {
-    @apply flex items-center border-t border-slate-600 mt-2 pt-2;
+    @apply flex items-center border-t border-slate-600 mt-2 pt-2 text-sm;
 
     svg {
       @apply h-6 w-6 inline-block;
     }
 
     span {
-      @apply pl-2 text-gray-200 uppercase text-sm;
+      @apply pl-2 text-gray-200 uppercase;
     }
 
     .form {
       @apply flex items-center justify-end flex-grow;
 
       > label {
-        @apply pr-2 text-sm;
+        @apply pr-2;
       }
 
       span,
@@ -76,7 +76,28 @@
 }
 
 #log {
-  @apply bg-slate-600 text-sm py-1 px-2 overflow-y-auto flex-grow rounded my-4;
+  @apply bg-slate-600 text-sm py-1 px-2 flex-grow rounded my-4 overflow-hidden;
+
+  .form {
+    @apply flex items-center justify-end flex-grow  border-b mb-1 pb-1 border-slate-800;
+
+    > label {
+      @apply pr-2;
+    }
+
+    span,
+    > label {
+      @apply normal-case pl-0;
+    }
+
+    .toggle {
+      @apply mx-2;
+    }
+  }
+}
+
+#log-content {
+  @apply overflow-y-auto h-full mt-1;
 
   @bg-color: rgb(71 85 105);
   @fg-color: rgb(203 213 225);
@@ -97,5 +118,20 @@
     background-color: @fg-color;
     border-radius: 20px;
     border: 1px solid @bg-color;
+  }
+
+  p {
+    @apply mb-1;
+
+    span {
+      @apply cursor-pointer;
+    }
+  }
+
+  .log-0 {
+    @apply text-base text-white;
+  }
+  .log-1 {
+    @apply text-sm text-slate-200;
   }
 }

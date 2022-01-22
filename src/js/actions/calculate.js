@@ -4,7 +4,7 @@ import { average } from "../methods/average";
 import { center } from "../methods/center";
 
 window.$barry.calculate = () => {
-  window.$barry.$log.innerHTML = "";
+  window.$barry.$logContent.innerHTML = "";
   window.$barry.$log.classList.remove("hide");
   window.$barry.$spinner.classList.remove("hide");
   let slug = [];
@@ -27,7 +27,8 @@ window.$barry.calculate = () => {
   let verbalMethods = ["longMiddle", "average", "center"];
   Promise.all(methods).then((values) => {
     window.$barry.log(
-      "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées."
+      "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées.",
+      1
     );
     let lon = 0;
     let lat = 0;
@@ -54,8 +55,8 @@ window.$barry.calculate = () => {
         verbalMethods[0]
       );
     }
-    window.$barry.log(`On se retrouve à [${lon}, ${lat}]`);
-    window.$barry.log("Je cherche la ville la plus proche du point.");
+    window.$barry.log(`On se retrouve à [${lon}, ${lat}]`, 1);
+    window.$barry.log("Je cherche la ville la plus proche du point.", 1);
     addPoint(lon, lat, window.$barry.resultColor, "result");
     detectNearCity([lon, lat]).then((coord) => {
       if (coord[0] == coord[1] && coord[0] == 0) {

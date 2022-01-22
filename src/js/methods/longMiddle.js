@@ -2,7 +2,7 @@ import { calcPath } from "../MapsUtils";
 
 export const longMiddle = () => {
   return new Promise((resolve, reject) => {
-    window.$barry.log("Je calcule tous les chemins !");
+    window.$barry.log("Je calcule tous les chemins !", 1);
     let prms = [];
     const keys = Object.keys(window.$barry.places);
     for (let i = 0; i < keys.length; i++)
@@ -32,7 +32,8 @@ export const longMiddle = () => {
             document.querySelector(`input[data-city="${cities[1]}"]`).value
           }" il y a ${Math.round((100 * d) / 1000) / 100} km en ${hours}h${
             mins < 10 ? "0" + mins : mins
-          }`
+          }`,
+          1
         );
         if (
           (window.$barry.calculateMode == "time" && t > maxTime) ||
@@ -51,9 +52,10 @@ export const longMiddle = () => {
           document.querySelector(`input[data-city="${points[0]}"]`).value
         }" et "${
           document.querySelector(`input[data-city="${points[1]}"]`).value
-        }"`
+        }"`,
+        1
       );
-      window.$barry.log("Je calcule le point à mi-temps.");
+      window.$barry.log("Je calcule le point à mi-temps.", 1);
       if (points.length > 1) {
         calcPath(
           window.$barry.places[points[0]],
@@ -86,7 +88,7 @@ export const longMiddle = () => {
             } else if ("distance" == window.$barry.calculateMode) {
               delta = (km - midDist) / parseFloat(currentInstructions.distance);
             }
-            window.$barry.log("Le point est trouvé.");
+            window.$barry.log("Le point est trouvé.", 1);
             resolve(
               currentInstructions.geometry.coordinates[
                 Math.round(

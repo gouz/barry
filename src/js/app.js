@@ -8,11 +8,13 @@ import "./actions/calculate";
 import "./actions/canCalculate";
 import "./actions/canPlace";
 import "./actions/changeCalcMode";
+import "./actions/changeLogMode";
 import "./actions/log";
 import "./actions/newAddress";
 import "./actions/newSearch";
 import "./actions/placePoint";
 import "./actions/removeAddress";
+import "./actions/showNav";
 import "./actions/toggleWelcome";
 
 import { mapInit } from "./MapsUtils";

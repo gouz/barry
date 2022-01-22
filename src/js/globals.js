@@ -25,10 +25,12 @@ window.$barry = {
   $addressesWrapper: document.getElementById("addresses-wrapper"),
   $calculate: document.getElementById("calculate"),
   $log: document.getElementById("log"),
+  $logContent: document.getElementById("log-content"),
   $newsearch: document.getElementById("newsearch"),
   $spinner: document.getElementById("spinner"),
   $welcome: document.getElementById("welcome"),
   $reduceWelcome: document.getElementById("reduceWelcome"),
   $augmentWelcome: document.getElementById("augmentWelcome"),
   $toggleCalcMode: document.getElementById("toggleCalcMode"),
+  $toggleLogMode: document.getElementById("toggleLogMode"),
 };
