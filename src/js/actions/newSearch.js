@@ -1,7 +1,6 @@
 window.$barry.newSearch = () => {
   window.$barry.$log.classList.add("hide");
   window.$barry.$newsearch.classList.add("hide");
-  window.$barry.$calculate.classList.remove("hide");
   document.querySelectorAll(".address").forEach((e) => {
     e.parentNode.removeChild(e);
   });

@@ -1,12 +1,33 @@
 #welcome {
-  @apply bg-slate-100 py-1 px-2 overflow-y-auto rounded mb-4 text-slate-900 text-sm leading-4 relative;
+  @apply bg-slate-100 py-1 px-2 rounded mb-4 text-slate-900 text-sm leading-4 relative;
 
   h2 {
     @apply italic;
   }
 
   div {
-    @apply mt-2;
+    @apply mt-2  overflow-y-auto;
+
+    @fg-color: rgb(71 85 105);
+    @bg-color: rgb(203 213 225);
+
+    scrollbar-width: thin;
+    scrollbar-color: @fg-color @bg-color;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: @bg-color;
+      border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: @fg-color;
+      border-radius: 20px;
+      border: 1px solid @bg-color;
+    }
   }
 
   li {
