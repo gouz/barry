@@ -26,4 +26,7 @@ window.$barry = {
   $log: document.getElementById("log"),
   $newsearch: document.getElementById("newsearch"),
   $spinner: document.getElementById("spinner"),
+  $welcome: document.getElementById("welcome"),
+  $reduceWelcome: document.getElementById("reduceWelcome"),
+  $augmentWelcome: document.getElementById("augmentWelcome"),
 };

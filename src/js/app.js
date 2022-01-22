@@ -9,6 +9,7 @@ import "./actions/newAddress";
 import "./actions/newSearch";
 import "./actions/placePoint";
 import "./actions/removeAddress";
+import "./actions/toggleWelcome";
 
 import { mapInit } from "./MapsUtils";
 

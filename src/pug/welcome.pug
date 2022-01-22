@@ -1,0 +1,41 @@
+#welcome
+  h2 Si on se retrouvait au milieu du chemin ?
+  a#reduceWelcome(href="javascript:window.$barry.toggleWelcome();")
+    svg(
+      xmlns="http://www.w3.org/2000/svg",
+      viewBox="0 0 20 20",
+      fill="currentColor"
+    )
+      path(
+        fill-rule="evenodd",
+        d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z",
+        clip-rule="evenodd"
+      )
+  a#augmentWelcome.hide(href="javascript:window.$barry.toggleWelcome();")
+    svg(
+      xmlns="http://www.w3.org/2000/svg",
+      viewBox="0 0 20 20",
+      fill="currentColor"
+    )
+      path(
+        fill-rule="evenodd",
+        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z",
+        clip-rule="evenodd"
+      )
+  div
+    p Cet outil est fonctionnel uniquement en France pour le moment.
+    p Il est basé sur 3 calculs :
+    ul 
+      li
+      span.bullet.green
+      | Le mi-chemin en temps sur le plus long trajet entre toutes les villes
+      li
+      span.bullet.blue
+      | La moyenne des coordonnées des villes
+      li 
+      span.bullet.orange
+      | Le centre du cadre dans lequel toutes les villes sont présentes
+    p 
+      | Ainsi on arrive à la moyenne de ces trois points pour obtenir le point
+      span.bullet.red
+      | qui correspond à une approximation du point le plus équitable pour les trajets de chacun.
