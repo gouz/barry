@@ -32,7 +32,10 @@
       label Mi-chemin en :
       span temps
       .toggle
-        input(type="checkbox", onchange="window.$barry.changeCalcMode();")
+        input#toggleCalcMode(
+          type="checkbox",
+          onchange="window.$barry.changeCalcMode();"
+        )
         label
       span distance
 

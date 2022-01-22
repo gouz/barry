@@ -7,9 +7,18 @@ window.$barry.calculate = () => {
   window.$barry.$log.innerHTML = "";
   window.$barry.$log.classList.remove("hide");
   window.$barry.$spinner.classList.remove("hide");
-  document
-    .querySelectorAll("#addresses-wrapper button")
-    .forEach((e) => e.classList.add("hide"));
+  let slug = [];
+  slug.push(window.$barry.calculateMode);
+  document.querySelectorAll(".address").forEach((a) => {
+    const val = a.querySelector("input").value;
+    if ("" == val) {
+      window.$barry.removeAddress(a.id);
+    } else {
+      slug.push(val);
+      a.querySelectorAll("button").forEach((e) => e.classList.add("hide"));
+    }
+  });
+  window.location.hash = btoa(slug.join("|"));
   window.$barry.log(
     "C'est parti pour rechercher votre point de rencontre équitable"
   );
@@ -46,7 +55,7 @@ window.$barry.calculate = () => {
       );
     }
     window.$barry.log(`On se retrouve à [${lon}, ${lat}]`);
-    window.$barry.log("Je trouve la ville la plus proche du point.");
+    window.$barry.log("Je cherche la ville la plus proche du point.");
     addPoint(lon, lat, window.$barry.resultColor, "result");
     detectNearCity([lon, lat]).then((coord) => {
       if (coord[0] == coord[1] && coord[0] == 0) {

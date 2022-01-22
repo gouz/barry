@@ -30,4 +30,5 @@ window.$barry = {
   $welcome: document.getElementById("welcome"),
   $reduceWelcome: document.getElementById("reduceWelcome"),
   $augmentWelcome: document.getElementById("augmentWelcome"),
+  $toggleCalcMode: document.getElementById("toggleCalcMode"),
 };
