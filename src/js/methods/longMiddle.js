@@ -45,7 +45,9 @@ export const longMiddle = () => {
       }
       let points = keep.split(";");
       window.$barry.log(
-        `Le trajet le plus long est donc entre "${
+        `Le trajet le plus long (en ${
+          window.$barry.calculateMode == "time" ? "temps" : "distance"
+        }) est donc entre "${
           document.querySelector(`input[data-city="${points[0]}"]`).value
         }" et "${
           document.querySelector(`input[data-city="${points[1]}"]`).value

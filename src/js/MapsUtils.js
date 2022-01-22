@@ -115,6 +115,8 @@ export const getPlace = (address, id) => {
           console.log(error);
         });
     });
+  } else {
+    window.$barry.canCalculate();
   }
 };
 

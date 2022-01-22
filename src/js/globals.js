@@ -21,6 +21,7 @@ window.$barry = {
   addressesCount: 0,
   places: {},
   layers: {},
+  addressToCalc: {},
   $addressesWrapper: document.getElementById("addresses-wrapper"),
   $calculate: document.getElementById("calculate"),
   $log: document.getElementById("log"),

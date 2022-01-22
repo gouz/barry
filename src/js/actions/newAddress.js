@@ -10,7 +10,9 @@ window.$barry.newAddress = (id) => {
   div.innerHTML = `
 <input type="text"
        placeholder="Adresse postale"
+       onfocus="window.$barry.canPlace('place_${window.$barry.addressesCount}')"
        onblur="window.$barry.placePoint(this.value, 'place_${window.$barry.addressesCount}');"
+       onkeydown="window.$barry.calcAddress(event, '${window.$barry.addressesCount}', this.value)"
        data-city="place_${window.$barry.addressesCount}" />
 <button class="minus hide" 
         onclick="window.$barry.removeAddress('address_${window.$barry.addressesCount}')">
