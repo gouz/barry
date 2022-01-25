@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "eslint": "8.7.0",
-    "geoportal-access-lib": "3.0.5",
+    "geoportal-access-lib": "3.0.6",
     "nominatim-geocoder": "0.1.4",
     "ol": "6.12.0"
   },
