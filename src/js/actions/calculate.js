@@ -1,4 +1,7 @@
-import { drawMiddle, detectNearCity, addPoint, fitToBox } from "../MapsUtils";
+import { fitToBox } from "../map/fitToBox";
+import { drawMiddle } from "../map/drawMiddle";
+import { detectNearCity } from "../map/detectNearCity";
+import { addPoint } from "../map/addPoint";
 import { longMiddle } from "../methods/longMiddle";
 import { average } from "../methods/average";
 import { center } from "../methods/center";

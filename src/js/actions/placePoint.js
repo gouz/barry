@@ -1,4 +1,4 @@
-import { getPlace } from "../MapsUtils";
+import { getPlace } from "../map/getPlace";
 
 window.$barry.placePoint = (address, id) => {
   if (

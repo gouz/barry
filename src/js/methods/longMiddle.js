@@ -1,4 +1,4 @@
-import { calcPath } from "../MapsUtils";
+import { calcPath } from "../map/calcPath";
 
 export const longMiddle = () => {
   return new Promise((resolve, reject) => {

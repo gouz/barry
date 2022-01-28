@@ -1,4 +1,4 @@
-import { zoomToFrance } from "../MapsUtils";
+import { zoomToFrance } from "../map/zoomToFrance";
 
 window.$barry.newSearch = () => {
   window.$barry.$log.classList.add("hide");

@@ -1,4 +1,4 @@
-import { addPoint } from "../MapsUtils";
+import { addPoint } from "../map/addPoint";
 
 window.$barry.managePOI = (category) => {
   Object.keys(window.$barry.layers).forEach((id) => {

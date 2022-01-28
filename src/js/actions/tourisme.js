@@ -1,4 +1,4 @@
-import { fitToBox } from "../MapsUtils";
+import { fitToBox } from "../map/fitToBox";
 
 window.$barry.tourisme = () => {
   let url = new URL(window.$barry.urlTourismAPI);
