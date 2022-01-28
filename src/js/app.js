@@ -10,12 +10,15 @@ import "./actions/canPlace";
 import "./actions/changeCalcMode";
 import "./actions/changeLogMode";
 import "./actions/log";
+import "./actions/managePOI";
 import "./actions/newAddress";
 import "./actions/newSearch";
 import "./actions/placePoint";
 import "./actions/removeAddress";
+import "./actions/showPOI";
 import "./actions/showNav";
 import "./actions/toggleWelcome";
+import "./actions/tourisme";
 import "./actions/zoom";
 
 import { mapInit } from "./MapsUtils";

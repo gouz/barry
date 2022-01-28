@@ -66,6 +66,8 @@ window.$barry.calculate = () => {
       } else {
         drawMiddle(coord, window.$barry.resultColor, "result");
         fitToBox();
+        window.$barry.meetPoint = coord;
+        window.$barry.$pois.classList.remove("hide");
       }
       window.$barry.$spinner.classList.add("hide");
       window.$barry.$calculate.classList.add("hide");

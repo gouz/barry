@@ -1,0 +1,15 @@
+-
+  var list = [
+    "Camping",
+    "Cultural",
+    "Event",
+    "Food",
+    "Hotel",
+    "Sports",
+    "Tour"
+  ]
+each item in list
+    - var click = "javascript:window.$barry.showPOI('" + item + "');"
+    - var img = "img/" + item + ".svg"
+    a(href=click)
+        img(src=img)

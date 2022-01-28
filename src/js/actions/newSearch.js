@@ -14,4 +14,7 @@ window.$barry.newSearch = () => {
   window.$barry.layers = {};
   window.$barry.newAddress();
   zoomToFrance();
+  window.$barry.$pois.classList.remove("hide");
+  window.$barry.pois = [];
+  window.location.hash = "";
 };

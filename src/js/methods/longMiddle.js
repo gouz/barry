@@ -20,8 +20,8 @@ export const longMiddle = () => {
       let maxTime = 0;
       let keep = values[0].key;
       for (let i = 0; i < values.length; i++) {
-        const t = parseFloat(values[i].path.duration);
-        const d = parseFloat(values[i].path.distance);
+        const t = parseFloat(values[i].duration);
+        const d = parseFloat(values[i].distance);
         const hours = Math.floor(t / 3600);
         const mins = Math.floor((t / 60) % 60);
         let cities = values[i].key.split(";");
@@ -61,19 +61,18 @@ export const longMiddle = () => {
           window.$barry.places[points[0]],
           window.$barry.places[points[1]],
           "",
-          false,
           true
         ).then((res) => {
           let currentInstructions = null;
-          const nbInstructions = res.path.routeInstructions.length;
+          const nbInstructions = res.portions[0].steps.length;
           let time = 0;
           let km = 0;
           const midTime = Math.round(maxTime / 2);
           const midDist = Math.round(maxDist / 2);
           for (let i = 0; i < nbInstructions; i++) {
-            km += parseFloat(res.path.routeInstructions[i].distance);
-            time += parseFloat(res.path.routeInstructions[i].duration);
-            currentInstructions = res.path.routeInstructions[i];
+            km += parseFloat(res.portions[0].steps[i].distance);
+            time += parseFloat(res.portions[0].steps[i].duration);
+            currentInstructions = res.portions[0].steps[i];
             if (
               ("time" == window.$barry.calculateMode && time > midTime) ||
               ("distance" == window.$barry.calculateMode && km > midDist)
