@@ -1,7 +1,13 @@
 import { addPoint } from "../MapsUtils";
 
 window.$barry.managePOI = (category) => {
-  window.$barry.pois.forEach((poi) => {
+  Object.keys(window.$barry.layers).forEach((id) => {
+    if (id.startsWith("poi_")) {
+      window.$barry.map.removeLayer(window.$barry.layers[id]);
+    }
+  });
+  for (let p in window.$barry.pois) {
+    const poi = window.$barry.pois[p];
     if (poi.categories.includes(category)) {
       addPoint(
         poi.longitude,
@@ -11,5 +17,5 @@ window.$barry.managePOI = (category) => {
         3
       );
     }
-  });
+  }
 };

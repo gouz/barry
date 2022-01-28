@@ -32,7 +32,7 @@ window.$barry = {
     "Event",
     "Tour",
   ],
-  pois: [],
+  pois: {},
   $addressesWrapper: document.getElementById("addresses-wrapper"),
   $augmentWelcome: document.getElementById("augmentWelcome"),
   $calculate: document.getElementById("calculate"),
@@ -45,4 +45,5 @@ window.$barry = {
   $toggleCalcMode: document.getElementById("toggleCalcMode"),
   $toggleLogMode: document.getElementById("toggleLogMode"),
   $welcome: document.getElementById("welcome"),
+  $popin: document.getElementById("popin"),
 };

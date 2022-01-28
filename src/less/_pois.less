@@ -3,5 +3,25 @@
 
   a {
     @apply w-12 h-12 rounded bg-slate-300 text-slate-600 p-2 m-2;
+
+    &.active {
+      @apply text-red-600;
+    }
+  }
+}
+
+#popin {
+  @apply absolute w-96 rounded-lg bg-slate-100 py-2 px-4 shadow-md bottom-24 left-28 text-sm;
+
+  h3 {
+    @apply font-bold text-lg;
+  }
+
+  a {
+    @apply text-slate-700;
+
+    &:hover {
+      @apply text-red-600;
+    }
   }
 }

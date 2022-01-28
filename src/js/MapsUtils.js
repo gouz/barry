@@ -30,6 +30,40 @@ export const mapInit = () => {
       zoom: 6.7,
     }),
   });
+  window.$barry.map.on("pointermove", (event) => {
+    window.$barry.map.forEachFeatureAtPixel(
+      event.pixel,
+      (feature, layer) => {
+        if (feature.id_.startsWith("poi_")) {
+          const poi = window.$barry.pois[feature.id_];
+          window.$barry.$popin.innerHTML = `
+<h3>${poi.label}</h3>
+<p>${poi.description}</p>
+<ul>
+  <li>
+    ${poi.address.replace(/\|/g, "<br />")}<br />${poi.postcode} ${poi.city}
+  </li>
+  <li>
+    <a href="tel:${poi.phone}">${poi.phone}</a>
+  </li>
+  <li>
+    <a href="mailto:${poi.mail}">${poi.mail}</a>
+  </li>
+</ul>
+`;
+          window.$barry.$popin.classList.remove("hide");
+        } else {
+          window.$barry.$popin.classList.add("hide");
+        }
+      },
+      {
+        layerFilter: (layer) => {
+          return layer.type === new VectorLayer().type ? true : false;
+        },
+        hitTolerance: 6,
+      }
+    );
+  });
 };
 
 export const zoomToFrance = () => {
@@ -53,10 +87,12 @@ export const addPoint = (lon, lat, color, id, rad = 5) => {
     window.$barry.places[id] = place;
     window.$barry.canCalculate();
   }
-  let point = new Point(place);
+  const point = new Point(place);
+  const feature = new Feature(point);
+  feature.setId(id);
   const layer = new VectorLayer({
     source: new VectorSource({
-      features: [new Feature(point)],
+      features: [feature],
     }),
     style: new Style({
       image: new Circle({
@@ -187,13 +223,16 @@ export const detectNearCity = (point) => {
         responseJSON.xml.replace(/gml:/g, "gml-"),
         "application/xml"
       );
-      window.$barry.log(
-        `On se retrouve donc à <b>${
-          doc.querySelector('Place[type="Commune"]').textContent
-        }</b>`
-      );
-      const location = doc.querySelector("gml-pos").textContent.split(" ");
-      return [location[1], location[0]];
+      const commune = doc.querySelector('Place[type="Commune"]');
+      console.log(commune);
+      if (commune != null) {
+        window.$barry.log(
+          `On se retrouve donc à <b>${commune.textContent}</b>`
+        );
+        const location = doc.querySelector("gml-pos").textContent.split(" ");
+        return [location[1], location[0]];
+      }
+      return point;
     });
 };
 
