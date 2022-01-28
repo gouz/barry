@@ -21,8 +21,8 @@ import "./actions/toggleWelcome";
 import "./actions/tourisme";
 import "./actions/zoom";
 
-import { init as initMap } from "./map/init";
-initMap();
+import { mapInit } from "./map/init";
+mapInit();
 
 window.$barry.newAddress();
 
