@@ -6,7 +6,7 @@ export const detectNearCity = (point) => {
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.opengis.net/xls http://schemas.opengis.net/ols/1.2/olsAll.xsd">
     <RequestHeader/>
-    <Request methodName="ReverseGeocodeRequest" maximumResponses="10" requestID="abc" version="1.2">
+    <Request methodName="ReverseGeocodeRequest" maximumResponses="1" requestID="abc" version="1.2">
        <ReverseGeocodeRequest>
           <ReverseGeocodePreference>StreetAddress</ReverseGeocodePreference>
           <Position>
@@ -15,7 +15,7 @@ export const detectNearCity = (point) => {
              </gml:Point>
              <gml:CircleByCenterPoint>
                 <gml:pos>${point[1]} ${point[0]}</gml:pos>
-                <gml:radius>200</gml:radius>
+                <gml:radius>1000</gml:radius>
              </gml:CircleByCenterPoint>
           </Position>
        </ReverseGeocodeRequest>
