@@ -22,7 +22,7 @@ export const longMiddle = () => {
       for (let i = 0; i < values.length; i++) {
         const t = parseFloat(values[i].duration);
         const d = parseFloat(values[i].distance);
-        const hours = Math.floor(t / 3600);
+        const hours = Math.floor(t / 60);
         const mins = Math.floor((t / 60) % 60);
         let cities = values[i].key.split(";");
         window.$barry.log(
