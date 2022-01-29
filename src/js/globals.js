@@ -1,7 +1,3 @@
-let api_key = "jhyvi0fgmnuxvfv0zjzorvdn";
-if (window.location.hostname == "gouz.github.io")
-  api_key = "ky6zjp5bxnmd49ausjpfuzkj"; // only available for REFERER = gouz.github.io
-
 window.$barry = {
   methods: {
     longMiddle: {
@@ -36,7 +32,6 @@ window.$barry = {
     "Event",
     "Tour",
   ],
-  api_key: api_key,
   pois: {},
   $addressesWrapper: document.getElementById("addresses-wrapper"),
   $augmentWelcome: document.getElementById("augmentWelcome"),

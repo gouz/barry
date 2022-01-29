@@ -18,9 +18,9 @@ export const getPlace = (address, id) => {
 </XLS>`;
   if (address.trim() != "") {
     return fetch(
-      `https://wxs.ign.fr/${
-        window.$barry.api_key
-      }/geoportail/ols?xls=${encodeURI(query)}&output=json`
+      `https://wxs.ign.fr/calcul/geoportail/ols?xls=${encodeURI(
+        query
+      )}&output=json`
     )
       .then(function (response) {
         return response.json();

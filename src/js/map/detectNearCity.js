@@ -15,14 +15,14 @@ export const detectNearCity = (point) => {
              </gml:Point>
              <gml:CircleByCenterPoint>
                 <gml:pos>${point[1]} ${point[0]}</gml:pos>
-                <gml:radius>150</gml:radius>
+                <gml:radius>200</gml:radius>
              </gml:CircleByCenterPoint>
           </Position>
        </ReverseGeocodeRequest>
   </Request>
 </XLS>`;
   return fetch(
-    `https://wxs.ign.fr/${window.$barry.api_key}/geoportail/ols?xls=${encodeURI(
+    `https://wxs.ign.fr/calcul/geoportail/ols?xls=${encodeURI(
       query
     )}&output=json`
   )
