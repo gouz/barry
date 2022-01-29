@@ -22,7 +22,7 @@ window.$barry = {
   places: {},
   layers: {},
   addressToCalc: {},
-  urlTourismAPI: "http://localhost:8080",
+  urlTourismAPI: "https://titi.gougouzian.fr",
   tourismCategory: [
     "Sports",
     "Cultural",
