@@ -1,7 +1,3 @@
-let api_key = "jhyvi0fgmnuxvfv0zjzorvdn";
-if (window.location.hostname == "gouz.github.io")
-  api_key = "4s0umgz4cx4kz6lylojghete"; // only available for REFERER = gouz.github.io
-
 export const detectNearCity = (point) => {
   const query = `<?xml version="1.0" encoding="UTF-8"?>
 <XLS version="1.2"
@@ -26,7 +22,7 @@ export const detectNearCity = (point) => {
   </Request>
 </XLS>`;
   return fetch(
-    `https://wxs.ign.fr/${api_key}/geoportail/ols?xls=${encodeURI(
+    `https://wxs.ign.fr/${window.$barry.api_key}/geoportail/ols?xls=${encodeURI(
       query
     )}&output=json`
   )

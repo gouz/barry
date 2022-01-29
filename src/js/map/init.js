@@ -1,4 +1,3 @@
-import { Nominatim } from "nominatim-geocoder";
 import { useGeographic } from "ol/proj";
 import TileLayer from "ol/layer/Tile";
 import { Vector as VectorLayer } from "ol/layer";
@@ -7,7 +6,6 @@ import { Map, View } from "ol/index";
 
 export const mapInit = () => {
   window.$barry.layers = {};
-  window.$barry.geocoder = new Nominatim({ secure: true });
   useGeographic();
   window.$barry.map = new Map({
     target: "map",
