@@ -10,6 +10,7 @@ window.$barry.calculate = () => {
   window.$barry.$logContent.innerHTML = "";
   window.$barry.$log.classList.remove("hide");
   window.$barry.$spinner.classList.remove("hide");
+  window.$barry.$rappel.classList.add("hide");
   let slug = [];
   slug.push(window.$barry.calculateMode);
   document.querySelectorAll(".address").forEach((a) => {

@@ -43,6 +43,7 @@ window.$barry = {
   $newsearch: document.getElementById("newsearch"),
   $reduceWelcome: document.getElementById("reduceWelcome"),
   $pois: document.getElementById("pois"),
+  $rappel: document.getElementById("rappel"),
   $spinner: document.getElementById("spinner"),
   $toggleCalcMode: document.getElementById("toggleCalcMode"),
   $toggleLogMode: document.getElementById("toggleLogMode"),
