@@ -1,5 +1,6 @@
 import { calcPath } from "./calcPath";
 import { addPoint } from "./addPoint";
+import { addRoad } from "./addRoad";
 
 export const drawMiddle = (middle, color, dest) => {
   const keys = Object.keys(window.$barry.places);
@@ -12,32 +13,18 @@ export const drawMiddle = (middle, color, dest) => {
             const seconds = res.totalTime;
             const hours = Math.floor(seconds / 3600);
             const mins = Math.floor((seconds / 60) % 60);
-            const route = res.routeGeometry.coordinates;
-            const step = 5 * Object.keys(window.$barry.places).length;
-            let minLon = 99;
-            let maxLon = -99;
-            let minLat = 99;
-            let maxLat = -99;
-            for (let i = 0; i < route.length; i += step) {
-              const lo = parseFloat(route[i][0]);
-              const la = parseFloat(route[i][1]);
-              if (minLon > lo) minLon = lo;
-              if (maxLon < lo) maxLon = lo;
-              if (minLat > la) minLat = la;
-              if (maxLat < la) maxLat = la;
-              addPoint(
-                route[i][0],
-                route[i][1],
-                window.$barry.roadColor,
-                `route_${res.key}_${i}`,
-                2
-              );
-            }
+            addRoad(
+              res.routeGeometry,
+              window.$barry.roadColor,
+              `route_${res.key}`
+            );
             window.$barry.log(
               `
 <span onmouseenter="window.$barry.showNav('route_${res.key}', 1);"
       onmouseleave="window.$barry.showNav('route_${res.key}', 0)"
-      onclick="window.$barry.zoom([[${minLat}, ${minLon}],[${maxLat}, ${maxLon}]])"
+      onclick="window.$barry.zoom([[${res.bbox.top}, ${res.bbox.left}],[${
+                res.bbox.bottom
+              }, ${res.bbox.right}]])"
 >
   De 
   <b>
