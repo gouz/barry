@@ -22,7 +22,9 @@ import "./actions/tourisme";
 import "./actions/zoom";
 
 import { mapInit } from "./map/init";
+import { zoomToFrance } from "./map/zoomToFrance";
 mapInit();
+zoomToFrance();
 
 window.$barry.newAddress();
 

@@ -16,7 +16,7 @@ export const mapInit = () => {
     ],
     view: new View({
       center: [2.213749, 46.927638],
-      zoom: 6.7,
+      zoom: 2,
     }),
   });
   window.$barry.map.on("pointermove", (event) => {

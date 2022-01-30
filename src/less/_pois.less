@@ -1,5 +1,5 @@
 #pois {
-  @apply absolute top-0 right-0 flex;
+  @apply absolute top-0 right-0 flex opacity-0;
 
   a {
     @apply w-12 h-12 rounded bg-slate-300 text-slate-600 p-2 m-2;
@@ -23,5 +23,11 @@
     &:hover {
       @apply text-red-600;
     }
+  }
+}
+
+@media sm {
+  #pois {
+    @apply opacity-90;
   }
 }

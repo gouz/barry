@@ -1,5 +1,5 @@
 #sidebar {
-  @apply w-1/3 bg-slate-800 shadow h-full text-slate-100 py-2 px-4 flex flex-col min-h-fit;
+  @apply bg-slate-800 shadow text-slate-100 py-2 px-4 flex flex-col min-h-fit;
 
   h1 {
     @apply flex items-center space-x-2 justify-center pt-2 pb-4;
@@ -13,15 +13,18 @@
     }
   }
 
-  h3 {
-    @apply flex items-center border-t border-slate-600 mt-2 pt-2 text-sm;
+  .h3 {
+    @apply flex items-start border-t border-slate-600 mt-2 pt-2 text-sm flex-col;
 
-    svg {
-      @apply h-6 w-6 inline-block;
-    }
+    > span {
+      @apply flex items-center;
+      svg {
+        @apply h-6 w-6 inline-block;
+      }
 
-    span {
-      @apply pl-2 text-gray-200 uppercase;
+      h3 {
+        @apply pl-2 text-gray-200 uppercase;
+      }
     }
 
     .form {
@@ -40,6 +43,12 @@
         @apply mx-2;
       }
     }
+  }
+}
+
+@media sm {
+  .h3 {
+    @apply flex-row;
   }
 }
 

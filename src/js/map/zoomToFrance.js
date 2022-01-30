@@ -1,10 +1,8 @@
-import { View } from "ol/index";
+import { fitToBox } from "./fitToBox";
 
 export const zoomToFrance = () => {
-  window.$barry.map.setView(
-    new View({
-      center: [2.213749, 46.927638],
-      zoom: 6.7,
-    })
-  );
+  fitToBox([
+    [51.31133241804094, -4.369239747680932],
+    [42.14745185055437, 8.623599144082085],
+  ]);
 };
