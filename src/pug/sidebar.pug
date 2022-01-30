@@ -29,16 +29,37 @@
           d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
         )
       h3 Configuration
-    .form
-      label Calcul du mi-chemin en :
-      span temps
-      .toggle
-        input#toggleCalcMode(
-          type="checkbox",
-          onchange="window.$barry.changeCalcMode();"
-        )
-        label(for="toggleCalcMode")
-      span distance
+    .forms
+      .form
+        label Calcul du mi-chemin en :
+        span temps
+        .toggle
+          input#toggleCalcMode(
+            type="checkbox",
+            onchange="window.$barry.changeCalcMode();"
+          )
+          label(for="toggleCalcMode")
+        span distance
+      .form 
+        label Mode de transport :
+        span voiture
+        .toggle
+          input#toggleCalcTransport(
+            type="checkbox",
+            onchange="window.$barry.changeCalcTransport();"
+          )
+          label(for="toggleCalcTransport")
+        span piéton
+      .form 
+        label Autoriser les péages :
+        span oui
+        .toggle
+          input#toggleCalcToll(
+            type="checkbox",
+            onchange="window.$barry.changeCalcToll();"
+          )
+          label(for="toggleCalcToll")
+        span non
 
   .h3
     span

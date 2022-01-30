@@ -18,6 +18,8 @@ window.$barry = {
   resultColor: "#EF4444",
   roadColor: "#47695B",
   calculateMode: "time",
+  calculateTransport: "car",
+  calculateToll: true,
   addressesCount: 0,
   places: {},
   layers: {},

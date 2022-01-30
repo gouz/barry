@@ -8,6 +8,8 @@ import "./actions/calculate";
 import "./actions/canCalculate";
 import "./actions/canPlace";
 import "./actions/changeCalcMode";
+import "./actions/changeCalcTransport";
+import "./actions/changeCalcToll";
 import "./actions/changeLogMode";
 import "./actions/log";
 import "./actions/managePOI";

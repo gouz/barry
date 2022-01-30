@@ -14,7 +14,7 @@
   }
 
   .h3 {
-    @apply flex items-start border-t border-slate-600 mt-2 pt-2 text-sm flex-col;
+    @apply border-t border-slate-600 mt-2 pt-2 text-sm;
 
     > span {
       @apply flex items-center;
@@ -28,7 +28,7 @@
     }
 
     .form {
-      @apply flex items-center justify-end flex-grow;
+      @apply flex items-center justify-end flex-grow mt-1 w-full;
 
       > label {
         @apply pr-2;
@@ -43,12 +43,6 @@
         @apply mx-2;
       }
     }
-  }
-}
-
-@screen sm {
-  .h3 {
-    @apply flex-row;
   }
 }
 
