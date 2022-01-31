@@ -19,6 +19,7 @@ import "./actions/placePoint";
 import "./actions/removeAddress";
 import "./actions/showPOI";
 import "./actions/showNav";
+import "./actions/toggleConfiguration";
 import "./actions/toggleWelcome";
 import "./actions/tourisme";
 import "./actions/zoom";
