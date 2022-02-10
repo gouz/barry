@@ -24,7 +24,7 @@
     "@parcel/reporter-dev-server": "2.3.0",
     "@parcel/transformer-css-experimental": "2.3.0",
     "@parcel/transformer-image": "2.3.0",
-    "@parcel/transformer-less": "2.2.1",
+    "@parcel/transformer-less": "2.3.0",
     "@parcel/transformer-pug": "2.3.0",
     "@parcel/transformer-webmanifest": "2.3.0",
     "@prettier/plugin-pug": "1.19.2",
