@@ -23,7 +23,7 @@
     "@parcel/plugin": "2.2.1",
     "@parcel/reporter-dev-server": "2.2.1",
     "@parcel/transformer-css-experimental": "2.2.1",
-    "@parcel/transformer-image": "2.2.1",
+    "@parcel/transformer-image": "2.3.0",
     "@parcel/transformer-less": "2.2.1",
     "@parcel/transformer-pug": "2.3.0",
     "@parcel/transformer-webmanifest": "2.2.1",
