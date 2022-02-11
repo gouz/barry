@@ -25,7 +25,7 @@
     "@parcel/transformer-css-experimental": "2.3.0",
     "@parcel/transformer-image": "2.3.0",
     "@parcel/transformer-less": "2.3.0",
-    "@parcel/transformer-pug": "2.3.0",
+    "@parcel/transformer-pug": "2.3.1",
     "@parcel/transformer-webmanifest": "2.3.0",
     "@prettier/plugin-pug": "1.19.2",
     "autoprefixer": "10.4.2",
