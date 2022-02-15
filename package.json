@@ -32,7 +32,7 @@
     "eslint": "8.9.0",
     "parcel": "2.3.1",
     "postcss": "8.4.6",
-    "tailwindcss": "3.0.21"
+    "tailwindcss": "3.0.22"
   },
   "dependencies": {
     "geoportal-access-lib": "3.0.6",
