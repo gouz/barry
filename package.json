@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "geoportal-access-lib": "3.0.6",
-    "ol": "6.12.0"
+    "ol": "6.13.0"
   },
   "browserslist": [
     "> 0.2%",
