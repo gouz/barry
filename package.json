@@ -35,7 +35,7 @@
     "tailwindcss": "3.0.23"
   },
   "dependencies": {
-    "geoportal-access-lib": "3.0.6",
+    "geoportal-access-lib": "3.1.0",
     "ol": "6.13.0"
   },
   "browserslist": [
