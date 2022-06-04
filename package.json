@@ -27,7 +27,7 @@
     "@parcel/transformer-less": "2.4.1",
     "@parcel/transformer-pug": "2.4.1",
     "@parcel/transformer-webmanifest": "2.4.1",
-    "@prettier/plugin-pug": "1.20.1",
+    "@prettier/plugin-pug": "2.1.0",
     "autoprefixer": "10.4.5",
     "eslint": "8.13.0",
     "parcel": "2.4.1",
