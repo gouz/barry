@@ -29,7 +29,7 @@ window.$barry.calculate = () => {
 
   let methods = [longMiddle(), average(), center()];
   let verbalMethods = ["longMiddle", "average", "center"];
-  let weightMethods = [4, 2, 1];
+  let weightMethods = [8, 2, 1];
   Promise.all(methods).then((values) => {
     window.$barry.log(
       "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées.",
@@ -37,22 +37,23 @@ window.$barry.calculate = () => {
     );
     let lon = 0;
     let lat = 0;
+    let count = 0;
     if (Object.keys(window.$barry.places).length > 2) {
       values.map((v, i) => {
-        //for (let j = 0; j < weightMethods[i]; j++) {
-        lon += parseFloat(v[0]);
-        lat += parseFloat(v[1]);
-        //if (j == 0)
+        for (let j = 0; j < weightMethods[i]; j++) {
+          lon += parseFloat(v[0]);
+          lat += parseFloat(v[1]);
+          count++;
+        }
         addPoint(
           v[0],
           v[1],
           window.$barry.methods[verbalMethods[i]].color,
           verbalMethods[i]
         );
-        //}
       });
-      lon /= values.length;
-      lat /= values.length;
+      lon /= count;
+      lat /= count;
     } else {
       lon = values[0][0];
       lat = values[0][1];
