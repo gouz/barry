@@ -29,7 +29,7 @@ window.$barry.calculate = () => {
 
   let methods = [longMiddle(), average(), center()];
   let verbalMethods = ["longMiddle", "average", "center"];
-  let weightMethods = [8, 2, 1];
+  let weightMethods = [13, 2, 1];
   Promise.all(methods).then((values) => {
     window.$barry.log(
       "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées.",
