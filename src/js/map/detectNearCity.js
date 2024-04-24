@@ -19,12 +19,12 @@ export const detectNearCity = (point) => {
       onSuccess: function (result) {
         let found = false;
         result.locations.forEach((l) => {
-          if ("City" == l.matchType && !found) {
+          if (l.placeAttributes?.extrafields?.cleabs.startsWith("COMMUNE_") && !found) {
             found = true;
             window.$barry.log(
-              `On se retrouve donc à <b>${l.placeAttributes.commune}</b>`
+              `On se retrouve donc à <b>${l.placeAttributes.name}</b>`
             );
-            resolve([l.position.x, l.position.y]);
+            resolve([l.position.lon, l.position.lat]);
           }
         });
         resolve(point);
