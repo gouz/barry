@@ -8,8 +8,8 @@ export const getPlace = (address, id) => {
       apiKey: "calcul",
       onSuccess: (result) => {
         addPoint(
-          result.locations[0].position.y,
-          result.locations[0].position.x,
+          result.locations[0].position.lon,
+          result.locations[0].position.lat,
           window.$barry.addressColor,
           id
         );

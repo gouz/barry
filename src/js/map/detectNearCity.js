@@ -9,8 +9,13 @@ export const detectNearCity = (point) => {
       },
       filterOptions: {
         type: ["PositionOfInterest"], // type de localisant
+        circle: {
+          x: point[0],
+          y: point[1],
+          radius: 4
+      } 
       },
-      apiKey: "calcul",
+      apiKey: "calcul", 
       onSuccess: function (result) {
         let found = false;
         result.locations.forEach((l) => {
