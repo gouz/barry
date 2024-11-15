@@ -5,8 +5,8 @@ import { Vector as VectorSource } from "ol/source";
 import { Feature } from "ol/index";
 
 export const addPoint = (lon, lat, color, id, rad = 5) => {
-  let place = [lon, lat];
-  if (typeof window.$barry.layers[id] != "undefined")
+  const place = [lon, lat];
+  if (typeof window.$barry.layers[id] !== "undefined")
     window.$barry.map.removeLayer(window.$barry.layers[id]);
   if (id.startsWith("place")) {
     window.$barry.places[id] = place;

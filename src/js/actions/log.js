@@ -1,8 +1,8 @@
 window.$barry.log = (msg, level) => {
-  if (typeof level == "undefined") {
-    level = 0;
+  let lvl = level;
+  if (typeof level === "undefined") {
+    lvl = 0;
   }
-  window.$barry.$logContent.innerHTML += `<p class="log-${level}${
-    level > 0 ? " hide" : ""
-  }">${msg}</p>`;
+  window.$barry.$logContent.innerHTML += `<p class="log-${lvl}${lvl > 0 ? " hide" : ""
+    }">${msg}</p>`;
 };

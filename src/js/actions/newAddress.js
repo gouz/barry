@@ -1,5 +1,5 @@
 window.$barry.newAddress = (id) => {
-  if (typeof id != "undefined") {
+  if (typeof id !== "undefined") {
     const el = document.getElementById(id);
     el.querySelector(".plus").classList.toggle("hide");
     el.querySelector(".minus").classList.toggle("hide");

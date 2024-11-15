@@ -6,8 +6,8 @@ window.$barry.calcBox = () => {
   let maxLat = -99;
   for (let i = 0; i < keys.length; i++) {
     if (keys[i].startsWith("place")) {
-      const lo = parseFloat(window.$barry.places[keys[i]][0]);
-      const la = parseFloat(window.$barry.places[keys[i]][1]);
+      const lo = Number.parseFloat(window.$barry.places[keys[i]][0]);
+      const la = Number.parseFloat(window.$barry.places[keys[i]][1]);
       if (minLon > lo) minLon = lo;
       if (maxLon < lo) maxLon = lo;
       if (minLat > la) minLat = la;

@@ -1,7 +1,7 @@
 import * as Gp from "geoportal-access-lib/dist/GpServices";
 
 export const calcPath = (start, end, key, routeInstructions = false) => {
-  let avoidFeature = [];
+  const avoidFeature = [];
   if (!window.$barry.calculateToll) {
     avoidFeature.push("toll");
   }

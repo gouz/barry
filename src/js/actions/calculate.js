@@ -11,15 +11,15 @@ window.$barry.calculate = () => {
   window.$barry.$log.classList.remove("hide");
   window.$barry.$spinner.classList.remove("hide");
   window.$barry.$rappel.classList.add("hide");
-  let slug = [];
+  const slug = [];
   slug.push(window.$barry.calculateMode);
-  document.querySelectorAll(".address").forEach((a) => {
+  document.querySelectorAll(".address").forEach((a, _) => {
     const val = a.querySelector("input").value;
     if ("" == val) {
       window.$barry.removeAddress(a.id);
     } else {
       slug.push(val);
-      a.querySelectorAll("button").forEach((e) => e.classList.add("hide"));
+      a.querySelectorAll("button").forEach((e, _) => e.classList.add("hide"));
     }
   });
   window.location.hash = btoa(slug.join("|"));
@@ -27,9 +27,9 @@ window.$barry.calculate = () => {
     "C'est parti pour rechercher votre point de rencontre équitable"
   );
 
-  let methods = [longMiddle(), average(), center()];
-  let verbalMethods = ["longMiddle", "average", "center"];
-  let weightMethods = [13, 2, 1];
+  const methods = [longMiddle(), average(), center()];
+  const verbalMethods = ["longMiddle", "average", "center"];
+  const weightMethods = [13, 2, 1];
   Promise.all(methods).then((values) => {
     window.$barry.log(
       "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées.",
@@ -41,8 +41,8 @@ window.$barry.calculate = () => {
     if (Object.keys(window.$barry.places).length > 2) {
       values.map((v, i) => {
         for (let j = 0; j < weightMethods[i]; j++) {
-          lon += parseFloat(v[0]);
-          lat += parseFloat(v[1]);
+          lon += Number.parseFloat(v[0]);
+          lat += Number.parseFloat(v[1]);
           count++;
         }
         addPoint(
@@ -68,7 +68,7 @@ window.$barry.calculate = () => {
     window.$barry.log("Je cherche la ville la plus proche du point.", 1);
     addPoint(lon, lat, window.$barry.resultColor, "result");
     detectNearCity([lon, lat]).then((coord) => {
-      if (coord[0] == coord[1] && coord[0] == 0) {
+      if (coord[0] === coord[1] && coord[0] === 0) {
         window.$barry.log(
           "Pas de ville trouvée proche, je suis désolé mais va falloir le faire à la main."
         );

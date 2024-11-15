@@ -31,21 +31,21 @@ zoomToFrance();
 
 window.$barry.newAddress();
 
-if (window.location.hash != "") {
+if (window.location.hash !== "") {
   const s = atob(window.location.hash.substring(1)).split("|");
   if (s.length > 1) {
     window.$barry.calculateMode = s.shift();
-    if ("time" != window.$barry.calculateMode) {
+    if ("time" !== window.$barry.calculateMode) {
       window.$barry.$toggleCalcMode.checked = true;
     }
-    s.forEach((c) => {
+    s.forEach((c, _) => {
       const place = window.$barry.addressesCount - 1;
       window.$barry.canPlace(`place_${place}`);
       window.$barry.placePoint(c, `place_${place}`);
       const addr = document.getElementById(`address_${place}`);
-      addr.querySelector(`input`).value = c;
-      addr.querySelector(`.plus`).classList.add("hide");
-      addr.querySelector(`.minus`).classList.remove("hide");
+      addr.querySelector("input").value = c;
+      addr.querySelector(".plus").classList.add("hide");
+      addr.querySelector(".minus").classList.remove("hide");
       window.$barry.newAddress();
     });
   }

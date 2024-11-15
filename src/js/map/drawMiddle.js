@@ -4,7 +4,7 @@ import { addRoad } from "./addRoad";
 
 export const drawMiddle = (middle, color, dest) => {
   const keys = Object.keys(window.$barry.places);
-  let prms = [];
+  const prms = [];
   for (let k = 0; k < keys.length; k++)
     if (keys[k].startsWith("place"))
       prms.push(
@@ -22,8 +22,7 @@ export const drawMiddle = (middle, color, dest) => {
               `
 <span onmouseenter="window.$barry.showNav('route_${res.key}', 1);"
       onmouseleave="window.$barry.showNav('route_${res.key}', 0)"
-      onclick="window.$barry.zoom([[${res.bbox.top}, ${res.bbox.left}],[${
-                res.bbox.bottom
+      onclick="window.$barry.zoom([[${res.bbox.top}, ${res.bbox.left}],[${res.bbox.bottom
               }, ${res.bbox.right}]])"
 >
   De 
@@ -32,11 +31,11 @@ export const drawMiddle = (middle, color, dest) => {
   </b>
   , il y 
   <b>
-    ${Math.round((100 * parseFloat(res.totalDistance)) / 1000) / 100}
+    ${Math.round((100 * Number.parseFloat(res.totalDistance)) / 1000) / 100}
   </b>
   km en
   <b>
-    ${hours} h ${mins < 10 ? "0" + mins : mins}
+    ${hours} h ${mins < 10 ? `0${mins}` : mins}
   </b>
 </span>`
             );

@@ -5,7 +5,7 @@ import { Feature } from "ol/index";
 import { GeoJSON } from "ol/format";
 
 export const addRoad = (coordinates, color, id, size = 3) => {
-  if (typeof window.$barry.layers[id] != undefined)
+  if (typeof window.$barry.layers[id] !== "undefined")
     window.$barry.map.removeLayer(window.$barry.layers[id]);
   const format = new GeoJSON();
   const feature = new Feature({
@@ -20,11 +20,11 @@ export const addRoad = (coordinates, color, id, size = 3) => {
       }),
     })
   );
-  var vectorSource = new VectorSource({
+  const vectorSource = new VectorSource({
     features: [feature],
   });
 
-  var vectorLayer = new VectorLayer({
+  const vectorLayer = new VectorLayer({
     source: vectorSource,
   });
 

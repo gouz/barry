@@ -47,7 +47,7 @@ export const mapInit = () => {
       },
       {
         layerFilter: (layer) => {
-          return layer.type === new VectorLayer().type ? true : false;
+          return layer.type === new VectorLayer().type;
         },
         hitTolerance: 6,
       }

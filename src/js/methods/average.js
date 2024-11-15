@@ -5,8 +5,8 @@ export function average() {
     let lats = 0;
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].startsWith("place")) {
-        lons += parseFloat(window.$barry.places[keys[i]][0]);
-        lats += parseFloat(window.$barry.places[keys[i]][1]);
+        lons += Number.parseFloat(window.$barry.places[keys[i]][0]);
+        lats += Number.parseFloat(window.$barry.places[keys[i]][1]);
       }
     }
     lons /= keys.length;
