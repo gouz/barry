@@ -18,7 +18,7 @@ export const calcPath = (start, end, key, routeInstructions = false) => {
       graph: window.$barry.calculateTransport,
       exclusions: avoidFeature,
       routePreference:
-        window.$barry.calculateMode == "time" ? "fastest" : "shortest",
+        window.$barry.calculateMode === "time" ? "fastest" : "shortest",
       geometryInInstructions: routeInstructions,
       apiKey: "calcul",
       onSuccess: (result) => {

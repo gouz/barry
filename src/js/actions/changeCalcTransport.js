@@ -1,7 +1,7 @@
 window.$barry.changeCalcTransport = () => {
-  if ("car" === window.$barry.calculateTransport) {
-    window.$barry.calculateTransport = "pedestrian";
+  if ("Voiture" === window.$barry.calculateTransport) {
+    window.$barry.calculateTransport = "Pieton";
   } else {
-    window.$barry.calculateTransport = "car";
+    window.$barry.calculateTransport = "Voiture";
   }
 };
