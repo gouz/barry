@@ -54,7 +54,7 @@ window.$barry.calculate = () => {
       });
       lon /= count;
       lat /= count;
-    } else {
+    } else if (values) {
       lon = values[0][0];
       lat = values[0][1];
       addPoint(
