@@ -5,11 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
     <link rel="icon" type="image/svg+xml" href="./src/img/favicon.svg" />
+    <link rel="preconnect" href="https://data.geopf.fr" crossorigin />
     <title>Barry</title>
     <style id="colors"></style>
   </head>
   <body>
-    <pug src="./src/app.pug" />
-    <script type="module" src="./src/js/app.js"></script>
+    <div id="app">
+      <div id="sidebar">
+        <h1>
+          <span>Barry</span>
+          <svg
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </h1>
+
+        <div id="welcome">
+          <h2>Si on se retrouvait au milieu du chemin ?</h2>
+          <button type="button" id="reduceWelcome" aria-label="Réduire la présentation">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <button type="button" id="augmentWelcome" class="hide" aria-label="Afficher la présentation">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <div>
+            <p>Cet outil est fonctionnel <b>uniquement en France </b>pour le moment.</p>
+            <p>Il est basé sur 3 calculs :</p>
+            <ul>
+              <li>
+                <span class="bullet green"></span>Le mi-chemin en temps ou en distance sur le plus
+                long trajet entre toutes les villes
+              </li>
+              <li>
+                <span class="bullet blue"></span>La moyenne des coordonnées des villes
+              </li>
+              <li>
+                <span class="bullet orange"></span>Le centre du cadre dans lequel toutes les villes
+                sont présentes
+              </li>
+            </ul>
+            <p>
+              Ainsi on arrive à la moyenne de ces trois points pour obtenir le point<span
+                class="bullet red"
+              ></span
+              >qui correspond à une approximation du point le plus équitable pour les trajets de
+              chacun.
+            </p>
+          </div>
+        </div>
+
+        <div class="h3">
+          <span>
+            <svg
+              aria-hidden="true"
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
+            </svg>
+            <h3>Configuration</h3>
+            <button type="button" id="reduceConfiguration" aria-label="Réduire la configuration">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button type="button" id="augmentConfiguration" class="hide" aria-label="Afficher la configuration">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </span>
+          <div id="configuration">
+            <div class="form">
+              <label>Calcul du mi-chemin en :</label>
+              <span>temps</span>
+              <div class="toggle">
+                <input
+                  id="toggleCalcMode"
+                  type="checkbox"
+                />
+                <label for="toggleCalcMode"></label>
+              </div>
+              <span>distance</span>
+            </div>
+            <div class="form">
+              <label>Mode de transport :</label>
+              <span>voiture</span>
+              <div class="toggle">
+                <input
+                  id="toggleCalcTransport"
+                  type="checkbox"
+                />
+                <label for="toggleCalcTransport"></label>
+              </div>
+              <span>piéton</span>
+            </div>
+            <div class="form">
+              <label>Éviter les autoroutes :</label>
+              <span>non</span>
+              <div class="toggle">
+                <input
+                  id="toggleAvoidMotorways"
+                  type="checkbox"
+                />
+                <label for="toggleAvoidMotorways"></label>
+              </div>
+              <span>oui</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="h3">
+          <span>
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+              />
+            </svg>
+            <h3>Ajouter des adresses/villes</h3>
+          </span>
+        </div>
+
+        <div id="addresses">
+          <div id="addresses-wrapper"></div>
+          <button id="calculate" type="button" class="hide">
+            <svg
+              id="spinner"
+              aria-hidden="true"
+              class="hide"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            <span>Calculer le point de rencontre</span>
+          </button>
+        </div>
+
+        <div id="rappel">
+          <svg
+            aria-hidden="true"
+            class="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            />
+          </svg>
+          <span>Pour le moment le calcul ne fonctionne qu'en France.</span>
+        </div>
+
+        <div id="log" class="hide">
+          <div class="form">
+            <label>Niveau de réponse :</label>
+            <span>simplifié</span>
+            <div class="toggle">
+              <input id="toggleLogMode" type="checkbox" />
+              <label for="toggleLogMode"></label>
+            </div>
+            <span>détaillé</span>
+          </div>
+          <div id="log-content"></div>
+        </div>
+
+        <button id="newsearch" type="button" class="hide">
+          Nouvelle recherche
+        </button>
+      </div>
+
+      <div id="map"></div>
+
+    </div>
+
+    <template id="address-template">
+      <div class="address">
+        <input type="text" placeholder="Adresse postale" autocomplete="off" />
+        <button type="button" class="minus hide" aria-label="Retirer cette adresse">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button type="button" class="plus" aria-label="Ajouter une adresse">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </template>
+
+    <script
+      data-name="BMC-Widget"
+      data-cfasync="false"
+      src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+      data-id="gouz"
+      data-description="Aidez moi en faisant des dons"
+      data-message="Merci pour vos dons, je propose mes outils gratuitement, un petit don fait toujours plaisir."
+      data-color="#40DCA5"
+      data-position="bottom"
+      data-x_margin="18"
+      data-y_margin="18"
+    ></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>

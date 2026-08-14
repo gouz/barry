@@ -1,0 +1,49 @@
+@import "tailwindcss" source(none);
+
+@import "./_toggle.css";
+@import "./_welcome.css";
+@import "./_address.css";
+@import "./_sidebar.css";
+
+@source "../**/*.ts";
+@source "../../index.html";
+
+/* Préflight v3 : v4 ne met plus le curseur pointer sur les boutons
+   et colore les placeholders en currentColor. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder {
+    color: var(--color-gray-400);
+  }
+}
+
+html,
+body {
+  @apply w-full h-full m-0 p-0 bg-slate-800;
+}
+
+#map {
+  @apply w-full h-96;
+}
+
+.hide {
+  display: none !important;
+}
+
+@media (width >= 40rem) {
+  #app {
+    @apply flex h-full flex-row;
+  }
+
+  #sidebar {
+    @apply w-1/3 h-full;
+  }
+
+  #map {
+    @apply w-2/3 h-full grow;
+  }
+}

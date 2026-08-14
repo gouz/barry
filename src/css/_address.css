@@ -1,0 +1,36 @@
+.address {
+  @apply flex w-full mt-2;
+
+  input {
+    @apply grow-0 w-full px-2 py-1 rounded-lg h-8 mr-1 text-slate-800 text-sm bg-white;
+
+    /* Adresse non résolue : le détail est dans l'attribut title. */
+    &[aria-invalid="true"] {
+      @apply ring-2 ring-red-500;
+    }
+  }
+
+  button {
+    @apply rounded-sm flex items-center justify-center text-slate-50 w-8 h-8;
+
+    svg {
+      @apply block w-5 h-5;
+    }
+
+    &.plus {
+      @apply bg-blue-500;
+
+      &:hover {
+        @apply bg-blue-400;
+      }
+    }
+
+    &.minus {
+      @apply bg-red-500;
+
+      &:hover {
+        @apply bg-red-400;
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+import type { Box, Coord } from "../types.ts";
+
+/** Cadre englobant un ensemble de points, en `[[lat, lon], [lat, lon]]`. */
+export function boundingBox(coords: readonly Coord[]): Box {
+  if (coords.length === 0) throw new Error("boundingBox() sans coordonnées");
+
+  let lonMin = Number.POSITIVE_INFINITY;
+  let lonMax = Number.NEGATIVE_INFINITY;
+  let latMin = Number.POSITIVE_INFINITY;
+  let latMax = Number.NEGATIVE_INFINITY;
+
+  for (const [lon, lat] of coords) {
+    if (lon < lonMin) lonMin = lon;
+    if (lon > lonMax) lonMax = lon;
+    if (lat < latMin) latMin = lat;
+    if (lat > latMax) latMax = lat;
+  }
+  return [
+    [latMin, lonMin],
+    [latMax, lonMax],
+  ];
+}
+
+/** Moyenne arithmétique des coordonnées. */
+export function averageCoord(coords: readonly Coord[]): Coord {
+  if (coords.length === 0) throw new Error("averageCoord() sans coordonnées");
+
+  let lon = 0;
+  let lat = 0;
+  for (const coord of coords) {
+    lon += coord[0];
+    lat += coord[1];
+  }
+  return [lon / coords.length, lat / coords.length];
+}
+
+/** Centre du cadre englobant. */
+export function boxCenter(coords: readonly Coord[]): Coord {
+  const [[latMin, lonMin], [latMax, lonMax]] = boundingBox(coords);
+  return [(lonMin + lonMax) / 2, (latMin + latMax) / 2];
+}
+
+/** Toutes les paires possibles, sans répétition. */
+export function pairs<T>(items: readonly T[]): [T, T][] {
+  const result: [T, T][] = [];
+  for (let i = 0; i < items.length; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      // biome-ignore lint/style/noNonNullAssertion: indices bornés par la boucle
+      result.push([items[i]!, items[j]!]);
+    }
+  }
+  return result;
+}
+
+export function formatDuration(seconds: number): string {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds / 60) % 60);
+  return `${hours}h${String(minutes).padStart(2, "0")}`;
+}
+
+export function formatDistance(meters: number): string {
+  return `${(Math.round((100 * meters) / 1000) / 100).toLocaleString("fr-FR")} km`;
+}

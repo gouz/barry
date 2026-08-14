@@ -2,10 +2,14 @@
 	"name": "barry",
 	"version": "1.0.0",
 	"description": "Calc barycenter",
+	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
-		"preview": "vite preview"
+		"build": "tsc --noEmit && vite build",
+		"preview": "vite preview",
+		"lint": "biome check .",
+		"format": "biome check --write .",
+		"typecheck": "tsc --noEmit"
 	},
 	"repository": {
 		"type": "git",
@@ -14,21 +18,14 @@
 	"author": "Sylvain Gougouzian",
 	"license": "GPL-3.0-or-later",
 	"devDependencies": {
-		"@prettier/plugin-pug": "^3.2.0",
-		"eslint": "8.57.0",
-		"less": "^4.2.1",
-		"prettier": "^3.4.2",
-		"pug": "^3.0.3",
-		"vite": "^5.4.11",
-		"vite-plugin-pug": "^0.3.2"
+		"@biomejs/biome": "^2.5.8",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/node": "^26.2.0",
+		"tailwindcss": "^4.3.3",
+		"typescript": "^7.0.2",
+		"vite": "^8.2.1"
 	},
 	"dependencies": {
-		"autoprefixer": "^10.4.20",
-		"geoportal-access-lib": "3.4.6",
-		"normalize.css": "^8.0.1",
-		"ol": "7.1.0",
-		"postcss": "^8.4.49",
-		"sha1": "1.1.1",
-		"tailwindcss": "^3.4.17"
+		"ol": "^10.10.0"
 	}
 }
