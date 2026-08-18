@@ -1,6 +1,7 @@
 import "./css/app.css";
 import "ol/ol.css";
 
+import { onWait } from "./api/client.ts";
 import { findNearestCity } from "./api/geocode.ts";
 import { route } from "./api/route.ts";
 import {
@@ -98,6 +99,12 @@ async function calculate(): Promise<void> {
   clearLog();
   openLog();
 
+  const stopWatching = onWait(({ delay }) => {
+    log(
+      `Le service IGN me demande de patienter, je réessaie dans ${Math.round(delay / 1000)} s.`,
+    );
+  });
+
   location.hash = encodePermalink(
     settings.mode,
     addresses.map((a) => a.label),
@@ -132,6 +139,7 @@ async function calculate(): Promise<void> {
       error instanceof Error ? error.message : "Le calcul a échoué, réessayez.",
     );
   } finally {
+    stopWatching();
     show(spinner, false);
     show(calculateButton, false);
     calculateButton.disabled = false;

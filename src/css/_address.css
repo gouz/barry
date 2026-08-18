@@ -1,12 +1,38 @@
 .address {
   @apply flex w-full mt-2;
 
+  .field {
+    @apply relative grow mr-1;
+  }
+
   input {
-    @apply grow-0 w-full px-2 py-1 rounded-lg h-8 mr-1 text-slate-800 text-sm bg-white;
+    @apply grow-0 w-full px-2 py-1 rounded-lg h-8 text-slate-800 text-sm bg-white;
 
     /* Adresse non résolue : le détail est dans l'attribut title. */
     &[aria-invalid="true"] {
       @apply ring-2 ring-red-500;
+    }
+  }
+
+  .spinner {
+    @apply hidden absolute top-1/2 right-2 -translate-y-1/2 w-4 h-4 animate-spin text-slate-500;
+
+    circle {
+      @apply opacity-25;
+    }
+
+    path {
+      @apply opacity-75;
+    }
+  }
+
+  &.pending {
+    .spinner {
+      @apply block;
+    }
+
+    input {
+      @apply pr-7;
     }
   }
 

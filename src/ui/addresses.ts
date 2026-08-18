@@ -16,6 +16,8 @@ let onChange: () => void;
 /** Dernier libellé effectivement géocodé, pour ne pas rejouer la requête à chaque blur. */
 const resolved = new Map<string, string>();
 
+const pending = new Map<string, { label: string; task: Promise<void> }>();
+
 export function initAddresses(notifyChange: () => void): void {
   wrapper = el("addresses-wrapper");
   template = el<HTMLTemplateElement>("address-template");
@@ -76,6 +78,7 @@ function removeRow(id: string): void {
   document.getElementById(`address_${id}`)?.remove();
   deleteAddress(id);
   resolved.delete(id);
+  pending.delete(id);
   removePoint(id);
   refreshButtons();
   onChange();
@@ -108,6 +111,27 @@ async function resolve(id: string, input: HTMLInputElement): Promise<void> {
   }
   if (resolved.get(id) === label) return;
 
+  const running = pending.get(id);
+  if (running?.label === label) return running.task;
+
+  const task = locate(id, input, label);
+  pending.set(id, { label, task });
+  try {
+    await task;
+  } finally {
+    if (pending.get(id)?.task === task) pending.delete(id);
+  }
+}
+
+async function locate(
+  id: string,
+  input: HTMLInputElement,
+  label: string,
+): Promise<void> {
+  const address = getAddress(id);
+  if (!address) return;
+
+  setPending(id, true);
   try {
     const coord = await geocode(label);
     resolved.set(id, label);
@@ -123,8 +147,16 @@ async function resolve(id: string, input: HTMLInputElement): Promise<void> {
     input.setAttribute("aria-invalid", "true");
     input.title =
       error instanceof Error ? error.message : "Adresse introuvable";
+  } finally {
+    setPending(id, false);
   }
   onChange();
+}
+
+function setPending(id: string, waiting: boolean): void {
+  document
+    .getElementById(`address_${id}`)
+    ?.classList.toggle("pending", waiting);
 }
 
 /** Verrouille le formulaire pendant et après un calcul. */
@@ -139,6 +171,7 @@ export function lockRows(locked: boolean): void {
 export function clearRows(): void {
   wrapper.replaceChildren();
   resolved.clear();
+  pending.clear();
 }
 
 export function canCalculate(): boolean {
