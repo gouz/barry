@@ -23,8 +23,8 @@
       })();
     </script>
     <!-- End Matomo Code -->
-    <script type="module" crossorigin src="/assets/index-CkDJ7Knl.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B8gtaakV.css">
+    <script type="module" crossorigin src="/assets/index-Bp-qTGvf.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DGClr4SL.css">
   </head>
   <body>
     <div id="app">
@@ -227,6 +227,21 @@
             </svg>
             <span>Calculer le point de rencontre</span>
           </button>
+          <div id="status" class="hide" role="status" aria-live="polite">
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            <span id="status-text"></span>
+          </div>
         </div>
 
         <div id="rappel">
@@ -272,7 +287,22 @@
 
     <template id="address-template">
       <div class="address">
-        <input type="text" placeholder="Adresse postale" autocomplete="off" />
+        <span class="field">
+          <input type="text" placeholder="Adresse postale" autocomplete="off" />
+          <svg
+            class="spinner"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        </span>
         <button type="button" class="minus hide" aria-label="Retirer cette adresse">
           <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />

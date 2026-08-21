@@ -1,6 +1,13 @@
 const BASE = "https://data.geopf.fr";
 
-const MAX_ATTEMPTS = 4;
+/**
+ * Temps total qu'une requête accepte de patienter avant d'abandonner.
+ *
+ * Un 429 n'est pas une erreur mais une invitation à ralentir : on attend et on
+ * rejoue, pour que l'utilisateur ne voie jamais le refus. Seul un service
+ * durablement saturé finit par remonter une erreur.
+ */
+const WAIT_BUDGET = 60_000;
 const BASE_BACKOFF = 1_000;
 const MAX_BACKOFF = 20_000;
 const RETRYABLE = new Set([429, 500, 502, 503, 504]);
@@ -37,6 +44,30 @@ export function onWait(listener: WaitListener): () => void {
   return () => listeners.delete(listener);
 }
 
+export interface Activity {
+  /** Requêtes IGN en cours, cache exclu. */
+  readonly running: number;
+  /** Instant jusqu'auquel les appels sont suspendus, ou 0 si la voie est libre. */
+  readonly throttledUntil: number;
+}
+
+const activityListeners = new Set<(activity: Activity) => void>();
+
+let running = 0;
+let throttledUntil = 0;
+
+/** S'abonne à l'activité réseau ; l'état courant est livré immédiatement. */
+export function onActivity(listener: (activity: Activity) => void): () => void {
+  activityListeners.add(listener);
+  listener({ running, throttledUntil });
+  return () => activityListeners.delete(listener);
+}
+
+function notifyActivity(): void {
+  const activity: Activity = { running, throttledUntil };
+  for (const listener of activityListeners) listener(activity);
+}
+
 function sleep(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) {
@@ -62,6 +93,8 @@ function sleep(ms: number, signal?: AbortSignal): Promise<void> {
 function limiter(minGap: number, maxConcurrent: number) {
   let active = 0;
   let nextSlot = 0;
+  /** Pause imposée par un 429 : elle vaut pour tout le service, pas pour la seule requête refusée. */
+  let blockedUntil = 0;
   const waiting: (() => void)[] = [];
 
   function release(): void {
@@ -75,22 +108,26 @@ function limiter(minGap: number, maxConcurrent: number) {
         await new Promise<void>((resolve) => waiting.push(resolve));
       }
       active++;
-      const now = Date.now();
-      const slot = Math.max(now, nextSlot);
-      nextSlot = slot + minGap;
-      if (slot > now) {
-        try {
-          await sleep(slot - now, signal);
-        } catch (cause) {
-          release();
-          throw cause;
+      try {
+        // Une requête qui dormait déjà doit prendre en compte une pause
+        // survenue entre-temps : sans cette boucle, elle repartirait pendant le
+        // refroidissement et récolterait un nouveau 429.
+        for (;;) {
+          const now = Date.now();
+          const slot = Math.max(now, nextSlot, blockedUntil);
+          nextSlot = slot + minGap;
+          if (slot > now) await sleep(slot - now, signal);
+          if (Date.now() >= blockedUntil) return;
         }
+      } catch (cause) {
+        release();
+        throw cause;
       }
     },
     release,
-    /** Repousse le prochain départ, après un 429 ou un 503. */
+    /** Suspend le service, après un 429 ou un 503. */
     cooldown(ms: number): void {
-      nextSlot = Math.max(nextSlot, Date.now() + ms);
+      blockedUntil = Math.max(blockedUntil, Date.now() + ms);
     },
   };
 }
@@ -172,6 +209,7 @@ async function request<T>(
   signal?: AbortSignal,
 ): Promise<T> {
   const service = limiterFor(path);
+  let waited = 0;
 
   for (let attempt = 1; ; attempt++) {
     await service.acquire(signal);
@@ -192,8 +230,8 @@ async function request<T>(
     }
 
     if (!response.ok) {
-      const retryable = RETRYABLE.has(response.status);
-      if (!retryable || attempt >= MAX_ATTEMPTS) {
+      const delay = retryDelay(response, attempt);
+      if (!RETRYABLE.has(response.status) || waited + delay > WAIT_BUDGET) {
         throw new GeoplateformeError(
           response.status === 429
             ? "Le service IGN est saturé, réessayez dans quelques instants."
@@ -202,11 +240,18 @@ async function request<T>(
         );
       }
 
-      const delay = retryDelay(response, attempt);
+      waited += delay;
       service.cooldown(delay);
+      throttledUntil = Math.max(throttledUntil, Date.now() + delay);
+      notifyActivity();
       for (const listener of listeners)
         listener({ path, attempt, delay, status: response.status });
+
       await sleep(delay, signal);
+      if (Date.now() >= throttledUntil) {
+        throttledUntil = 0;
+        notifyActivity();
+      }
       continue;
     }
 
@@ -249,10 +294,17 @@ export async function getJSON<T>(
   const shared = signal ? undefined : inflight.get(key);
   if (shared) return shared as Promise<T>;
 
-  const task = request<T>(url, path, signal).then((value) => {
-    remember(key, value);
-    return value;
-  });
+  running++;
+  notifyActivity();
+  const task = request<T>(url, path, signal)
+    .then((value) => {
+      remember(key, value);
+      return value;
+    })
+    .finally(() => {
+      running--;
+      notifyActivity();
+    });
   if (!signal) {
     inflight.set(key, task);
     task.catch(() => {}).finally(() => inflight.delete(key));

@@ -1,7 +1,7 @@
 import "./css/app.css";
 import "ol/ol.css";
 
-import { onWait } from "./api/client.ts";
+import { type Activity, onActivity, onWait } from "./api/client.ts";
 import { findNearestCity } from "./api/geocode.ts";
 import { route } from "./api/route.ts";
 import {
@@ -46,6 +46,54 @@ const calculateButton = el<HTMLButtonElement>("calculate");
 const newSearchButton = el<HTMLButtonElement>("newsearch");
 const spinner = el("spinner");
 const rappel = el("rappel");
+const status = el("status");
+const statusText = el("status-text");
+
+/**
+ * Vrai entre le clic sur « Calculer » et la remise à zéro.
+ *
+ * Hors de cette fenêtre, seule une saturation mérite d'être signalée : le
+ * géocodage d'une adresse a déjà son propre indicateur sur la ligne concernée.
+ */
+let showingResult = false;
+let countdown: number | undefined;
+
+/**
+ * Reflète l'activité réseau : requêtes en cours, et surtout décompte de la
+ * pause quand l'IGN nous demande de ralentir. Le 429 est ainsi vécu comme une
+ * attente annoncée plutôt que comme une erreur.
+ */
+function renderActivity({ running, throttledUntil }: Activity): void {
+  if (countdown !== undefined) {
+    window.clearInterval(countdown);
+    countdown = undefined;
+  }
+
+  if (throttledUntil > 0) {
+    show(status, true);
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((throttledUntil - Date.now()) / 1000));
+      if (left === 0) {
+        // La pause est écoulée : on reprend l'affichage normal sans attendre
+        // qu'une requête signale la reprise — elle a pu être abandonnée.
+        renderActivity({ running, throttledUntil: 0 });
+        return;
+      }
+      statusText.textContent = `Le service IGN est saturé, je patiente ${left} s…`;
+    };
+    tick();
+    countdown = window.setInterval(tick, 500);
+    return;
+  }
+
+  if (!showingResult || running === 0) {
+    show(status, false);
+    return;
+  }
+  show(status, true);
+  statusText.textContent =
+    running === 1 ? "Une requête en cours…" : `${running} requêtes en cours…`;
+}
 
 function refreshCalculateButton(): void {
   show(calculateButton, canCalculate());
@@ -137,6 +185,7 @@ async function calculate(): Promise<void> {
   if (addresses.length < 2) return;
 
   cancelPendingRoutes();
+  showingResult = true;
   lockRows(true);
   show(rappel, false);
   // Le spinner vit dans le bouton : celui-ci reste visible pendant le calcul,
@@ -196,6 +245,7 @@ async function calculate(): Promise<void> {
 
 function newSearch(): void {
   cancelPendingRoutes();
+  showingResult = false;
   closeLog();
   show(newSearchButton, false);
   show(rappel, true);
@@ -212,6 +262,7 @@ function newSearch(): void {
 async function bootstrap(): Promise<void> {
   initMap(el("map"));
   initLog();
+  onActivity(renderActivity);
   initControls();
   initAddresses(refreshCalculateButton);
 

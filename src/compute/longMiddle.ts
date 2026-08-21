@@ -66,13 +66,15 @@ export async function longMiddle(
   const all = pairs(addresses);
   const combinations = narrow(all);
 
+  // Annoncé sans repli dans le journal détaillé : le résultat repose sur un
+  // échantillon de paires, l'utilisateur doit le savoir sans avoir à déplier.
   if (combinations.length < all.length) {
     log(
-      `Sur les ${all.length} trajets possibles, je n'en calcule que ${combinations.length} : le plus long relie forcément deux des villes les plus éloignées à vol d'oiseau.`,
-      true,
+      `Je ne calcule pas les ${all.length} trajets possibles : le plus long relie forcément deux des villes les plus éloignées, je n'étudie donc que les ${combinations.length} paires les plus étirées à vol d'oiseau.`,
     );
+  } else {
+    log("Je calcule les chemins entre toutes les villes.", true);
   }
-  log("Je calcule tous les chemins !", true);
 
   const routes = await Promise.all(
     combinations.map(([a, b]) =>

@@ -75,6 +75,22 @@
   }
 }
 
+#status {
+  @apply mt-2 flex items-center justify-center text-sm text-slate-300;
+
+  svg {
+    @apply inline-block animate-spin mr-2 h-4 w-4 shrink-0;
+
+    circle {
+      @apply opacity-25;
+    }
+
+    path {
+      @apply opacity-75;
+    }
+  }
+}
+
 #newsearch {
   @apply mb-4 w-4/5 mx-auto rounded-lg bg-slate-500 text-slate-100 py-1 text-center block px-4;
 
