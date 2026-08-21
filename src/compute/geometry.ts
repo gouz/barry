@@ -61,3 +61,23 @@ export function formatDuration(seconds: number): string {
 export function formatDistance(meters: number): string {
   return `${(Math.round((100 * meters) / 1000) / 100).toLocaleString("fr-FR")} km`;
 }
+
+const EARTH_RADIUS = 6_371_000;
+
+/**
+ * Distance orthodromique (« à vol d'oiseau ») entre deux points, en mètres.
+ *
+ * Sert à classer les paires de villes sans interroger l'IGN : seules les mieux
+ * classées méritent un vrai calcul d'itinéraire.
+ */
+export function haversine(a: Coord, b: Coord): number {
+  const toRad = Math.PI / 180;
+  const [lonA, latA] = a;
+  const [lonB, latB] = b;
+  const dLat = (latB - latA) * toRad;
+  const dLon = (lonB - lonA) * toRad;
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(latA * toRad) * Math.cos(latB * toRad) * Math.sin(dLon / 2) ** 2;
+  return 2 * EARTH_RADIUS * Math.asin(Math.min(1, Math.sqrt(h)));
+}

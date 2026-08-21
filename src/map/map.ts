@@ -70,18 +70,26 @@ export function removePoint(id: string): void {
   if (existing) pointSource.removeFeature(existing);
 }
 
+/** `dashed` distingue une ligne droite provisoire d'un itinéraire réel. */
 export function addRoad(
   id: string,
   geometry: GeoJSONLineString,
   color: string,
   width = 3,
+  dashed = false,
 ): void {
   const existing = roadSource.getFeatureById(id);
   if (existing) roadSource.removeFeature(existing);
 
   const feature = new Feature(geojson.readGeometry(geometry) as LineString);
   feature.setId(id);
-  const style = new Style({ stroke: new Stroke({ color, width }) });
+  const style = new Style({
+    stroke: new Stroke({
+      color,
+      width,
+      lineDash: dashed ? [6, 8] : undefined,
+    }),
+  });
   feature.setStyle(style);
   // Mémorisé pour pouvoir rétablir le style après un masquage (cf. highlightRoad).
   feature.set("baseStyle", style);

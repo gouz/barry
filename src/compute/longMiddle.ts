@@ -1,7 +1,12 @@
 import { route } from "../api/route.ts";
 import type { Address } from "../state.ts";
 import type { CalcMode, Coord, Route, Transport } from "../types.ts";
-import { formatDistance, formatDuration, pairs } from "./geometry.ts";
+import {
+  formatDistance,
+  formatDuration,
+  haversine,
+  pairs,
+} from "./geometry.ts";
 
 type Located = Address & { coord: Coord };
 
@@ -12,27 +17,72 @@ export interface LongMiddleOptions {
   log: (message: string, detailed?: boolean) => void;
 }
 
+/** Nombre de paires soumises à l'IGN, au minimum. */
+const CANDIDATES = 3;
+/**
+ * Écart toléré à la plus longue distance à vol d'oiseau pour rester candidat.
+ *
+ * Couvre le cas d'une paire un peu moins éloignée mais plus lente sur la route
+ * (relief, absence d'autoroute), qui peut coiffer la première au poteau.
+ */
+const MARGIN = 0.15;
+
 const cost = (r: Route, mode: CalcMode) =>
   mode === "time" ? r.duration : r.distance;
 
 /**
+ * Restreint les paires à celles susceptibles de porter le plus long trajet.
+ *
+ * Le classement à vol d'oiseau est gratuit et très corrélé au trajet routier :
+ * plutôt que d'interroger l'IGN sur les n·(n−1)/2 paires, on ne garde que les
+ * plus étirées. Le nombre d'appels devient constant au lieu de quadratique.
+ */
+function narrow(all: readonly [Located, Located][]): [Located, Located][] {
+  if (all.length <= CANDIDATES) return [...all];
+
+  const ranked = all
+    .map((pair) => ({ pair, span: haversine(pair[0].coord, pair[1].coord) }))
+    .sort((a, b) => b.span - a.span);
+
+  // biome-ignore lint/style/noNonNullAssertion: `ranked` a la taille de `all`
+  const threshold = ranked[0]!.span * (1 - MARGIN);
+  return ranked
+    .filter((entry, index) => index < CANDIDATES || entry.span >= threshold)
+    .map((entry) => entry.pair);
+}
+
+/**
  * Point situé à mi-parcours du plus long trajet entre deux des villes.
  *
- * Coût : une requête par paire (n·(n−1)/2) pour identifier le plus long trajet,
- * puis une seule requête supplémentaire — avec le détail des tronçons — sur la
- * paire retenue. Demander les tronçons dès le premier passage alourdirait
- * chaque réponse sans servir aux paires écartées.
+ * Coût : une requête par paire retenue par {@link narrow} — trois le plus
+ * souvent, quel que soit le nombre de villes. Le détail des tronçons est
+ * demandé dès cette passe : sur si peu de paires, la réponse plus lourde coûte
+ * moins cher qu'une requête supplémentaire sur la paire gagnante.
  */
 export async function longMiddle(
   addresses: readonly Located[],
   { mode, transport, avoidMotorways, log }: LongMiddleOptions,
 ): Promise<Coord> {
+  const all = pairs(addresses);
+  const combinations = narrow(all);
+
+  if (combinations.length < all.length) {
+    log(
+      `Sur les ${all.length} trajets possibles, je n'en calcule que ${combinations.length} : le plus long relie forcément deux des villes les plus éloignées à vol d'oiseau.`,
+      true,
+    );
+  }
   log("Je calcule tous les chemins !", true);
 
-  const options = { mode, transport, avoidMotorways };
-  const combinations = pairs(addresses);
   const routes = await Promise.all(
-    combinations.map(([a, b]) => route(a.coord, b.coord, options)),
+    combinations.map(([a, b]) =>
+      route(a.coord, b.coord, {
+        mode,
+        transport,
+        avoidMotorways,
+        withSteps: true,
+      }),
+    ),
   );
 
   let best = 0;
@@ -55,11 +105,8 @@ export async function longMiddle(
   );
 
   log("Je calcule le point à mi-temps.", true);
-  const detailed = await route(from.coord, to.coord, {
-    ...options,
-    withSteps: true,
-  });
-  const point = midpointOf(detailed, mode);
+  // biome-ignore lint/style/noNonNullAssertion: `best` est un index valide
+  const point = midpointOf(routes[best]!, mode);
   log("Le point est trouvé.", true);
   return point;
 }

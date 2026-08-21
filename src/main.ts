@@ -8,6 +8,7 @@ import {
   boundingBox,
   formatDistance,
   formatDuration,
+  haversine,
 } from "./compute/geometry.ts";
 import { meetingPoint } from "./compute/meetingPoint.ts";
 import { COLORS, METHODS } from "./config.ts";
@@ -25,7 +26,7 @@ import {
   resetAddresses,
   settings,
 } from "./state.ts";
-import type { Coord } from "./types.ts";
+import type { Box, Coord } from "./types.ts";
 import {
   addRow,
   addRowWith,
@@ -50,30 +51,75 @@ function refreshCalculateButton(): void {
   show(calculateButton, canCalculate());
 }
 
-async function drawRoutesToMeetingPoint(
+/**
+ * Itinéraires d'illustration en cours de calcul.
+ *
+ * Ils survivent à l'affichage du résultat : on les abandonne explicitement
+ * quand l'utilisateur repart de zéro, pour ne pas consommer le quota IGN au
+ * profit d'un journal qui vient d'être effacé.
+ */
+let pendingRoutes: AbortController | undefined;
+
+function cancelPendingRoutes(): void {
+  pendingRoutes?.abort();
+  pendingRoutes = undefined;
+}
+
+/**
+ * Trace les trajets des villes vers le point de rencontre.
+ *
+ * Ces itinéraires n'illustrent que le résultat déjà trouvé : plutôt que de
+ * faire attendre l'affichage, on montre tout de suite la ligne droite et son
+ * estimation à vol d'oiseau, et chaque trajet réel remplace son estimation dès
+ * qu'il arrive. La file d'attente du client espace ces requêtes sans que la
+ * latence se voie.
+ */
+function drawRoutesToMeetingPoint(
   target: Coord,
   addresses: readonly Located[],
-): Promise<void> {
+): void {
   log("Je calcule le trajet pour chaque ville.", true);
   const options = {
     mode: settings.mode,
     transport: settings.transport,
     avoidMotorways: settings.avoidMotorways,
   };
-  const routes = await Promise.all(
-    addresses.map((a) => route(a.coord, target, options)),
-  );
 
-  routes.forEach((itinerary, index) => {
-    const address = addresses[index];
-    if (!address) return;
+  const controller = new AbortController();
+  pendingRoutes = controller;
+
+  for (const address of addresses) {
     const id = `route_${address.id}`;
-    addRoad(id, itinerary.geometry, COLORS.road);
+    addRoad(
+      id,
+      { type: "LineString", coordinates: [address.coord, target] },
+      COLORS.road,
+      2,
+      true,
+    );
 
     const line = log(
-      `De ${address.label}, il y a ${formatDistance(itinerary.distance)} en ${formatDuration(itinerary.duration)}`,
+      `De ${address.label}, environ ${formatDistance(haversine(address.coord, target))} à vol d'oiseau, je calcule le trajet…`,
     );
     line.classList.add("route-link");
+
+    // Réajusté sur l'itinéraire réel dès qu'il est connu ; d'ici là, le clic
+    // cadre la ligne droite.
+    let box: Box = boundingBox([address.coord, target]);
+
+    void route(address.coord, target, options, controller.signal)
+      .then((itinerary) => {
+        addRoad(id, itinerary.geometry, COLORS.road);
+        box = itinerary.box;
+        line.textContent = `De ${address.label}, il y a ${formatDistance(itinerary.distance)} en ${formatDuration(itinerary.duration)}`;
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        line.textContent = `De ${address.label}, environ ${formatDistance(haversine(address.coord, target))} à vol d'oiseau (trajet indisponible)`;
+        line.title =
+          error instanceof Error ? error.message : "Trajet indisponible";
+      });
+
     line.addEventListener("mouseenter", () => {
       highlightRoad(id);
     });
@@ -81,15 +127,16 @@ async function drawRoutesToMeetingPoint(
       highlightRoad(null);
     });
     line.addEventListener("click", () => {
-      fitTo(itinerary.box);
+      fitTo(box);
     });
-  });
+  }
 }
 
 async function calculate(): Promise<void> {
   const addresses = locatedAddresses();
   if (addresses.length < 2) return;
 
+  cancelPendingRoutes();
   lockRows(true);
   show(rappel, false);
   // Le spinner vit dans le bouton : celui-ci reste visible pendant le calcul,
@@ -131,7 +178,7 @@ async function calculate(): Promise<void> {
     } else {
       log(`On se retrouve donc à ${city.name}`);
       addPoint("result", city.coord, COLORS.result);
-      await drawRoutesToMeetingPoint(city.coord, addresses);
+      drawRoutesToMeetingPoint(city.coord, addresses);
       fitTo(boundingBox([...addresses.map((a) => a.coord), city.coord]));
     }
   } catch (error) {
@@ -148,6 +195,7 @@ async function calculate(): Promise<void> {
 }
 
 function newSearch(): void {
+  cancelPendingRoutes();
   closeLog();
   show(newSearchButton, false);
   show(rappel, true);
