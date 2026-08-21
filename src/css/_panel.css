@@ -1,20 +1,31 @@
 /*
  * Bouton de repli.
  *
- * Un carré de 18 px et un signe monospace : l'état se lit dans le glyphe
- * (« − » ouvert, « + » fermé) et non dans l'orientation d'un chevron. Le
- * glyphe est produit par `aria-expanded`, seule source de vérité.
+ * Un carré de 18 px et un chevron : pointe en bas, la section est fermée et
+ * son contenu attend dessous ; pointe en haut, elle est ouverte et se referme.
+ * Le chevron n'est pas un caractère mais deux filets d'un pixel — l'angle d'un
+ * carré tourné à 45° —, comme le reste du feuillet, et sa rotation suit
+ * `aria-expanded`, seule source de vérité.
+ *
+ * Nommé `fold` et non `collapse` : Tailwind possède un utilitaire `collapse`
+ * (`visibility: collapse`) qui, à égalité de spécificité et déclaré en amont,
+ * rendait le bouton purement et simplement invisible.
  */
-.collapse {
+.fold {
   @apply relative grid h-[18px] w-[18px] shrink-0 place-items-center border border-rule-strong;
-  @apply font-mono text-[0.75rem] leading-none text-ink-2 transition-colors;
+  @apply text-ink-2 transition-colors;
 
   &::before {
-    content: "+";
+    content: "";
+    @apply block h-[6px] w-[6px] border-r border-b border-current;
+    /* La rotation précède la translation : le chevron est recentré dans le
+       carré une fois tourné, sa pointe pesant d'un côté. */
+    transform: translateY(-1px) rotate(45deg);
+    transition: transform 150ms;
   }
 
   &[aria-expanded="true"]::before {
-    content: "−";
+    transform: translateY(1px) rotate(-135deg);
   }
 
   &:hover {

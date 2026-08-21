@@ -33,8 +33,8 @@
       })();
     </script>
     <!-- End Matomo Code -->
-    <script type="module" crossorigin src="/assets/index-DPGyyRzu.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-jVHcu4jh.css">
+    <script type="module" crossorigin src="/assets/index-Bw7R6u8J.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DmpzyKxp.css">
   </head>
   <body>
     <div id="app">
@@ -55,11 +55,9 @@
           </svg>
           <div>
             <h1>Barry</h1>
-            <p class="origin eyebrow">Géoplateforme IGN · France</p>
+            <p class="tagline">Si on se retrouvait au milieu du chemin ?</p>
           </div>
         </header>
-
-        <p class="tagline">Si on se retrouvait au milieu du chemin ?</p>
 
         <section class="section" id="welcome">
           <header>
@@ -68,8 +66,8 @@
             <button
               type="button"
               id="toggleWelcome"
-              class="collapse"
-              aria-expanded="true"
+              class="fold"
+              aria-expanded="false"
               aria-controls="welcome-body"
               aria-label="Afficher ou masquer la méthode"
             ></button>
@@ -112,8 +110,8 @@
             <button
               type="button"
               id="toggleConfiguration"
-              class="collapse"
-              aria-expanded="true"
+              class="fold"
+              aria-expanded="false"
               aria-controls="configuration"
               aria-label="Afficher ou masquer les réglages"
             ></button>
@@ -159,13 +157,23 @@
           <header>
             <span class="index eyebrow">03</span>
             <h2 class="eyebrow">Points de départ</h2>
+            <button
+              type="button"
+              id="toggleAddresses"
+              class="fold"
+              aria-expanded="true"
+              aria-controls="addresses-body"
+              aria-label="Afficher ou masquer les points de départ"
+            ></button>
           </header>
 
-          <div id="addresses-wrapper"></div>
-          <p id="addresses-hint" class="eyebrow">
-            <span class="hint-keyboard"><kbd>Entrée</kbd> valide et ouvre la ligne suivante</span>
-            <span class="hint-touch">Le + ajoute une ville, le − la retire</span>
-          </p>
+          <div id="addresses-body">
+            <div id="addresses-wrapper"></div>
+            <p id="addresses-hint" class="eyebrow">
+              <span class="hint-keyboard"><kbd>Entrée</kbd> valide et ouvre la ligne suivante</span>
+              <span class="hint-touch">Le + ajoute une ville, le − la retire</span>
+            </p>
+          </div>
 
           <div class="actions">
             <button id="calculate" type="button" class="btn-primary hide">
@@ -212,17 +220,27 @@
           <header>
             <span class="index eyebrow">04</span>
             <h2 class="eyebrow">Journal</h2>
+            <button
+              type="button"
+              id="toggleLog"
+              class="fold"
+              aria-expanded="true"
+              aria-controls="log-body"
+              aria-label="Afficher ou masquer le journal"
+            ></button>
           </header>
-          <div class="switch-row">
-            <span class="switch-title">Niveau de détail</span>
-            <span class="switch-off">simplifié</span>
-            <div class="toggle">
-              <input id="toggleLogMode" type="checkbox" />
-              <label for="toggleLogMode"><span class="sr-only">Journal détaillé</span></label>
+          <div id="log-body">
+            <div class="switch-row">
+              <span class="switch-title">Niveau de détail</span>
+              <span class="switch-off">simplifié</span>
+              <div class="toggle">
+                <input id="toggleLogMode" type="checkbox" />
+                <label for="toggleLogMode"><span class="sr-only">Journal détaillé</span></label>
+              </div>
+              <span class="switch-on">complet</span>
             </div>
-            <span class="switch-on">complet</span>
+            <div id="log-content" class="scroll-slim"></div>
           </div>
-          <div id="log-content" class="scroll-slim"></div>
         </section>
 
         <div id="dock" class="actions">
@@ -238,6 +256,7 @@
             >IGN</a
           >
           <a href="https://github.com/gouz/barry" target="_blank" rel="noopener">Source</a>
+          <a href="https://gouz.dev" target="_blank" rel="noopener">gouz.dev</a>
         </footer>
       </div>
 
@@ -256,12 +275,13 @@
 
     <template id="address-template">
       <div class="address">
-        <span class="field">
+        <div class="field">
           <input
             type="text"
             placeholder="Ville ou adresse postale"
             aria-label="Ville ou adresse postale"
             autocomplete="off"
+            autocapitalize="off"
             spellcheck="false"
           />
           <svg
@@ -277,7 +297,12 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-        </span>
+          <div
+            class="suggestions scroll-slim hide"
+            role="listbox"
+            aria-label="Propositions"
+          ></div>
+        </div>
         <button type="button" class="minus hide" aria-label="Retirer cette adresse"></button>
         <button type="button" class="plus" aria-label="Ajouter une adresse"></button>
       </div>

@@ -1,0 +1,50 @@
+/*
+ * Propositions d'adresse.
+ *
+ * La liste prolonge le champ plutôt qu'elle ne flotte au-dessus : même filet
+ * d'encre, mêmes angles vifs, aucune ombre. On lit un tiroir qui s'ouvre sous
+ * la ligne, pas une fenêtre posée sur la page.
+ */
+.suggestions {
+  @apply absolute top-full right-0 left-0 z-30 max-h-56 overflow-y-auto overscroll-contain;
+  @apply border border-ink bg-sheet;
+}
+
+.suggestion {
+  @apply flex cursor-pointer flex-wrap items-baseline gap-x-2 px-2 py-1.5;
+  @apply border-b border-rule last:border-b-0;
+
+  .name {
+    @apply grow text-[0.8125rem] leading-snug text-ink;
+  }
+
+  /* La nature du lieu tranche entre la commune et le lieu-dit homonyme : sur
+     « Lyon », l'API en propose six. */
+  .kind {
+    @apply shrink-0 text-ink-3;
+  }
+
+  .detail {
+    @apply w-full pt-0.5 font-mono text-[0.6875rem] leading-none text-ink-3;
+  }
+
+  /* La proposition visée passe à l'encre pleine, au clavier comme à la souris :
+     un seul état, une seule lecture. */
+  &:hover,
+  &[aria-selected="true"] {
+    @apply bg-ink;
+
+    .name {
+      @apply text-sheet;
+    }
+
+    .kind,
+    .detail {
+      @apply text-rule;
+    }
+  }
+
+  @media (pointer: coarse) {
+    @apply py-2.5;
+  }
+}

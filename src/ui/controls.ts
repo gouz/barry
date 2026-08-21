@@ -43,13 +43,16 @@ export function initControls(): void {
     settings.avoidMotorways = avoidMotorways.checked;
   });
 
-  // Sur petit écran, la méthode passe après l'essentiel : elle s'ouvre d'un
-  // doigt, mais ne repousse pas le formulaire sous le pli au chargement.
-  if (window.matchMedia("(width < 48rem)").matches)
-    el("toggleWelcome").setAttribute("aria-expanded", "false");
-
-  bindCollapse("toggleConfiguration", el("configuration"));
+  /*
+   * Toutes les sections se replient. L'état de départ est écrit dans le HTML :
+   * la méthode et les réglages arrivent fermés — on les consulte une fois, pas
+   * à chaque recherche —, le formulaire et le journal ouverts. Seule l'action
+   * « Calculer » échappe au pli, pour rester atteignable liste repliée.
+   */
   bindCollapse("toggleWelcome", el("welcome-body"));
+  bindCollapse("toggleConfiguration", el("configuration"));
+  bindCollapse("toggleAddresses", el("addresses-body"));
+  bindCollapse("toggleLog", el("log-body"));
 }
 
 /**
