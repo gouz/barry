@@ -35,7 +35,7 @@ import {
   initAddresses,
   lockRows,
 } from "./ui/addresses.ts";
-import { initControls, syncControls } from "./ui/controls.ts";
+import { initControls, lockControls, syncControls } from "./ui/controls.ts";
 import { el, show } from "./ui/dom.ts";
 import { clearLog, closeLog, initLog, log, openLog } from "./ui/log.ts";
 import { decodePermalink, encodePermalink } from "./ui/permalink.ts";
@@ -187,6 +187,7 @@ async function calculate(): Promise<void> {
   cancelPendingRoutes();
   showingResult = true;
   lockRows(true);
+  lockControls(true);
   show(rappel, false);
   // Le spinner vit dans le bouton : celui-ci reste visible pendant le calcul,
   // et n'est masqué qu'une fois le résultat affiché.
@@ -202,7 +203,7 @@ async function calculate(): Promise<void> {
   });
 
   location.hash = encodePermalink(
-    settings.mode,
+    settings,
     addresses.map((a) => a.label),
   );
   log("C'est parti pour rechercher votre point de rencontre équitable");
@@ -253,6 +254,7 @@ function newSearch(): void {
   clearRows();
   resetAddresses();
   lockRows(false);
+  lockControls(false);
   addRow();
   refreshCalculateButton();
   fitTo();
@@ -276,6 +278,8 @@ async function bootstrap(): Promise<void> {
   const permalink = decodePermalink(location.hash);
   if (permalink) {
     settings.mode = permalink.mode;
+    settings.transport = permalink.transport;
+    settings.avoidMotorways = permalink.avoidMotorways;
     syncControls();
     for (const label of permalink.addresses) await addRowWith(label);
   }

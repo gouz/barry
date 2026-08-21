@@ -1,6 +1,13 @@
 import { settings } from "../state.ts";
 import { el, show } from "./dom.ts";
 
+/** Les interrupteurs qui déterminent le calcul, et donc à verrouiller pendant. */
+const CALC_TOGGLES = [
+  "toggleCalcMode",
+  "toggleCalcTransport",
+  "toggleAvoidMotorways",
+] as const;
+
 /**
  * Câble un bouton de repli sur une cible.
  *
@@ -38,6 +45,20 @@ export function initControls(): void {
 
   bindCollapse("toggleConfiguration", el("configuration"));
   bindCollapse("toggleWelcome", el("welcome-body"));
+}
+
+/**
+ * Verrouille les réglages de calcul.
+ *
+ * Pendant et après un calcul, les basculer n'aurait aucun effet : le résultat
+ * affiché a figé ses paramètres. Plutôt que de laisser l'utilisateur agir dans
+ * le vide, on désactive les interrupteurs jusqu'à la recherche suivante. Le
+ * niveau de détail du journal, lui, reste manœuvrable : il ne touche pas au
+ * calcul.
+ */
+export function lockControls(locked: boolean): void {
+  for (const id of CALC_TOGGLES) el<HTMLInputElement>(id).disabled = locked;
+  el("configuration").setAttribute("aria-disabled", String(locked));
 }
 
 /** Reflète l'état dans les interrupteurs (au chargement d'un permalien). */

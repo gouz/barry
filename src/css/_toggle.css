@@ -34,4 +34,28 @@
   &:has(input:focus-visible) label {
     @apply outline-2 outline-offset-1 outline-vermilion;
   }
+
+  /*
+   * Verrouillé : le contact retombe dans les gris du papier et le curseur
+   * annonce l'inaction avant même le clic.
+   */
+  input:disabled {
+    @apply cursor-not-allowed bg-rule-strong;
+  }
+
+  input:disabled + label {
+    @apply cursor-not-allowed border-rule bg-tint;
+  }
+
+  input:checked:disabled {
+    @apply bg-sheet;
+  }
+
+  input:checked:disabled + label {
+    @apply border-rule-strong bg-rule-strong;
+  }
+
+  &:has(input:disabled):hover label {
+    @apply border-rule;
+  }
 }

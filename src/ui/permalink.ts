@@ -1,8 +1,30 @@
-import type { CalcMode } from "../types.ts";
+import type { Settings } from "../state.ts";
+import type { CalcMode, Transport } from "../types.ts";
 
-export interface Permalink {
-  readonly mode: CalcMode;
+export interface Permalink extends Settings {
   readonly addresses: readonly string[];
+}
+
+/**
+ * Le premier segment porte tous les réglages, séparés par des virgules.
+ *
+ * Les liens de la première version ne contenaient là que le mode
+ * (`time` ou `distance`) : un segment sans virgule est donc reconnu comme
+ * ancien et complété par les valeurs par défaut. Les liens déjà partagés
+ * restent ainsi lisibles, et le format peut encore s'étendre par la droite.
+ */
+function encodeSettings({ mode, transport, avoidMotorways }: Settings): string {
+  return [mode, transport, avoidMotorways ? "1" : "0"].join(",");
+}
+
+function decodeSettings(segment: string): Settings {
+  const [mode, transport, avoidMotorways] = segment.split(",");
+  return {
+    mode: mode === "distance" ? "distance" : ("time" satisfies CalcMode),
+    transport:
+      transport === "pedestrian" ? "pedestrian" : ("car" satisfies Transport),
+    avoidMotorways: avoidMotorways === "1",
+  };
 }
 
 /**
@@ -13,10 +35,10 @@ export interface Permalink {
  * alors sur un encodage UTF-8 signalé par un `~` initial.
  */
 export function encodePermalink(
-  mode: CalcMode,
+  settings: Settings,
   addresses: readonly string[],
 ): string {
-  const raw = [mode, ...addresses].join("|");
+  const raw = [encodeSettings(settings), ...addresses].join("|");
   try {
     return btoa(raw);
   } catch {
@@ -43,7 +65,7 @@ export function decodePermalink(hash: string): Permalink | null {
     return null;
   }
 
-  const [mode, ...addresses] = raw.split("|");
-  if (addresses.length === 0) return null;
-  return { mode: mode === "distance" ? "distance" : "time", addresses };
+  const [settings, ...addresses] = raw.split("|");
+  if (settings === undefined || addresses.length === 0) return null;
+  return { ...decodeSettings(settings), addresses };
 }

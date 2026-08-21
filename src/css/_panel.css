@@ -44,6 +44,16 @@
   &:not(:has(input:checked)) .switch-off {
     @apply text-ink;
   }
+
+  /* Verrouillée, la ligne entière passe au gris : le réglage reste lisible mais
+     ne se présente plus comme actionnable. */
+  &:has(input:disabled) {
+    .switch-title,
+    .switch-off,
+    .switch-on {
+      @apply text-ink-3;
+    }
+  }
 }
 
 /* Action principale : un rectangle d'encre pleine qui bascule au vermillon. */

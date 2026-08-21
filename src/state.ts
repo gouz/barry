@@ -10,9 +10,15 @@ export interface Address {
 }
 
 /** Paramètres de calcul, pilotés par les interrupteurs de la barre latérale. */
-export const settings = {
-  mode: "time" as CalcMode,
-  transport: "car" as Transport,
+export interface Settings {
+  mode: CalcMode;
+  transport: Transport;
+  avoidMotorways: boolean;
+}
+
+export const settings: Settings = {
+  mode: "time",
+  transport: "car",
   avoidMotorways: false,
 };
 
