@@ -145,8 +145,27 @@ export function clearAll(): void {
   roadSource.clear();
 }
 
+/**
+ * Recalcule la taille du canevas.
+ *
+ * Utile quand le conteneur change de hauteur sous l'action de l'utilisateur
+ * (poignée de partage) : on ne veut pas attendre l'observateur de
+ * redimensionnement pour que les tuiles suivent le geste.
+ */
+export function refreshMapSize(): void {
+  map?.updateSize();
+}
+
 export function fitTo(box: Box = FRANCE_BOX): void {
   const [[latA, lonA], [latB, lonB]] = box;
+  const size = requireMap().getSize();
+  const [width, height] = size ?? [];
+  // La marge se mesure à la vue, pas en absolu : sur un bandeau de carte de
+  // 300 px de haut, 50 px de marge en mangeraient le tiers.
+  const margin =
+    width && height
+      ? Math.max(12, Math.min(50, Math.min(width, height) * 0.12))
+      : 50;
   requireMap()
     .getView()
     .fit(
@@ -155,8 +174,8 @@ export function fitTo(box: Box = FRANCE_BOX): void {
         [lonB, latB],
       ]),
       {
-        size: requireMap().getSize(),
-        padding: [50, 50, 50, 50],
+        size,
+        padding: [margin, margin, margin, margin],
         duration: 2000,
       },
     );

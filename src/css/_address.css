@@ -23,6 +23,9 @@
 
   input {
     @apply h-9 w-full border-0 bg-transparent pr-7 pl-0 text-[0.875rem] text-ink;
+    /* La barre d'action épinglée ne doit pas masquer la ligne qu'on amène
+       sous les yeux au moment de la saisie. */
+    scroll-margin: 5rem 0;
 
     &:focus {
       @apply outline-none;
@@ -68,6 +71,10 @@
     @apply w-7 shrink-0 border-l border-rule font-mono text-[0.875rem] leading-none text-ink-3;
     @apply transition-colors;
 
+    @media (pointer: coarse) {
+      @apply w-11 text-[1rem];
+    }
+
     &:hover {
       @apply bg-ink text-sheet;
     }
@@ -87,5 +94,34 @@
 
   kbd {
     @apply border border-rule-strong px-1 font-mono text-[0.625rem] text-ink-2;
+  }
+}
+
+/*
+ * Saisie tactile : la ligne monte à 44 px et le texte à 16 px. Ce n'est pas
+ * un choix esthétique — en deçà de 16 px, iOS zoome à la prise de focus et la
+ * carte disparaît de l'écran.
+ */
+@media (pointer: coarse) {
+  .address input {
+    @apply h-11 text-[1rem];
+  }
+}
+
+/* L'indice de saisie parle le langage du périphérique : le clavier pour la
+   souris, les boutons pour le doigt. */
+#addresses-hint {
+  .hint-touch {
+    @apply hidden;
+  }
+
+  @media (pointer: coarse) {
+    .hint-keyboard {
+      @apply hidden;
+    }
+
+    .hint-touch {
+      @apply inline;
+    }
   }
 }

@@ -2,7 +2,10 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f2eee5" />
     <meta
@@ -158,40 +161,43 @@
 
           <div id="addresses-wrapper"></div>
           <p id="addresses-hint" class="eyebrow">
-            <kbd>Entrée</kbd> valide et ouvre la ligne suivante
+            <span class="hint-keyboard"><kbd>Entrée</kbd> valide et ouvre la ligne suivante</span>
+            <span class="hint-touch">Le + ajoute une ville, le − la retire</span>
           </p>
 
-          <button id="calculate" type="button" class="btn-primary mt-3 hide">
-            <svg
-              id="spinner"
-              aria-hidden="true"
-              class="hide"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            <span>Calculer le point de rencontre</span>
-          </button>
-          <div id="status" class="hide" role="status" aria-live="polite">
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            <span id="status-text"></span>
+          <div class="actions">
+            <button id="calculate" type="button" class="btn-primary hide">
+              <svg
+                id="spinner"
+                aria-hidden="true"
+                class="hide"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span>Calculer le point de rencontre</span>
+            </button>
+            <div id="status" class="hide" role="status" aria-live="polite">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span id="status-text"></span>
+            </div>
           </div>
         </section>
 
@@ -217,7 +223,7 @@
           <div id="log-content" class="scroll-slim"></div>
         </section>
 
-        <div class="px-4 py-3">
+        <div id="dock" class="actions">
           <button id="newsearch" type="button" class="btn-ghost hide">Nouvelle recherche</button>
         </div>
 
@@ -234,6 +240,16 @@
       </div>
 
       <div id="map"></div>
+
+      <hr
+        id="grip"
+        aria-orientation="horizontal"
+        aria-label="Ajuster la hauteur de la carte"
+        aria-valuemin="20"
+        aria-valuemax="78"
+        aria-valuenow="42"
+        tabindex="0"
+      />
     </div>
 
     <template id="address-template">

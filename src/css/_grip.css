@@ -1,0 +1,43 @@
+/*
+ * Poignée de partage carte / feuillet.
+ *
+ * Sur petit écran, les deux se disputent la hauteur : selon qu'on saisit des
+ * villes ou qu'on lit le résultat, ce n'est pas la même qui doit dominer.
+ * Plutôt que d'arbitrer à sa place, on laisse l'utilisateur déplacer la
+ * frontière.
+ *
+ * Le vocabulaire reste celui du feuillet : une bande de papier fermée par un
+ * filet d'encre, avec deux traits de préhension au centre. Un `hr` plutôt
+ * qu'un `div` : c'est bien un séparateur, et le rôle vient alors tout seul.
+ */
+#grip {
+  --grip-line: var(--color-rule-strong);
+
+  @apply m-0 h-7 w-full shrink-0 touch-none border-0 border-b border-ink bg-sheet;
+  cursor: row-resize;
+
+  /* Les deux filets de préhension sont peints dans le fond : un `hr` n'a pas
+     d'enfant à qui confier ce dessin. */
+  background-image: linear-gradient(
+    to bottom,
+    var(--grip-line) 0 1px,
+    transparent 1px 4px,
+    var(--grip-line) 4px 5px
+  );
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 2.25rem 5px;
+  transition: background-color 100ms;
+
+  &:hover,
+  &:focus-visible,
+  &.dragging {
+    --grip-line: var(--color-ink);
+  }
+
+  /* Pendant le glissement, la bande se teinte : le doigt masque la poignée,
+     pas la bande. */
+  &.dragging {
+    @apply bg-tint;
+  }
+}

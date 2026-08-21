@@ -11,6 +11,15 @@
   label {
     @apply absolute inset-0 block border border-rule-strong bg-tint;
     @apply transition-colors duration-100;
+
+    /* Le contact fait 32 × 16 px : trop peu pour un doigt. La glissière étend
+       sa zone sensible à 44 px sans grossir le dessin. */
+    @media (pointer: coarse) {
+      &::after {
+        content: "";
+        @apply absolute -inset-x-2 -inset-y-3.5;
+      }
+    }
   }
 
   input {

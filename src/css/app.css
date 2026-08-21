@@ -8,6 +8,7 @@
 @import "./_log.css";
 @import "./_map.css";
 @import "./_sidebar.css";
+@import "./_grip.css";
 
 @source "../**/*.ts";
 @source "../../index.html";
@@ -77,28 +78,56 @@
   display: none !important;
 }
 
-/* Mobile : la carte en bandeau, le feuillet dessous. Un filet les sépare, pas
-   une ombre ni un chevauchement. */
+/*
+ * Petit écran : la carte en bandeau, le feuillet dessous, une poignée pour
+ * arbitrer entre les deux. Rien ne défile au niveau du document — la carte
+ * reste sous les yeux pendant qu'on remplit le feuillet, qui défile seul.
+ * C'est aussi ce qui évite au doigt d'hésiter entre déplacer la carte et
+ * faire défiler la page.
+ */
 #app {
-  @apply flex h-full w-full flex-col;
+  /* Part de la hauteur revenant à la carte, déplacée à la poignée
+     (cf. ui/layout.ts). */
+  --map-h: 42%;
+
+  @apply flex w-full flex-col overflow-hidden bg-paper;
+  /* dvh plutôt que % : la barre d'adresse mobile ne doit pas tronquer le
+     feuillet. */
+  height: 100dvh;
+  /* Encoche et barre d'accueil : la mise en page entière se tient à
+     l'intérieur, y compris les barres collantes. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 #map {
-  @apply order-first h-[40svh] w-full shrink-0 border-b border-ink;
+  @apply w-full shrink-0 border-b border-ink;
+  order: -2;
+  height: var(--map-h);
+}
+
+#grip {
+  order: -1;
 }
 
 /* Au-delà du pli, la carte occupe tout et le feuillet devient une colonne. */
 @media (width >= 48rem) {
   #app {
-    @apply flex-row overflow-hidden;
+    @apply flex-row;
+    height: 100%;
   }
 
   #sidebar {
-    @apply order-first h-full w-[23rem] shrink-0;
+    @apply h-full w-[23rem] shrink-0 grow-0;
   }
 
   #map {
-    @apply order-none h-full w-auto grow border-b-0;
+    @apply h-full w-auto grow border-b-0;
+    order: 0;
+  }
+
+  #grip {
+    @apply hidden;
   }
 }
 

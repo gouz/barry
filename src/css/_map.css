@@ -14,6 +14,8 @@
 
   .ol-zoom {
     @apply top-3 right-3 left-auto flex flex-col;
+    /* En paysage, l'encoche mord sur le bord droit de la carte. */
+    right: max(0.75rem, env(safe-area-inset-right));
   }
 
   .ol-control button {
@@ -24,6 +26,12 @@
     &:hover,
     &:focus {
       @apply bg-ink text-sheet outline-none;
+    }
+
+    /* Au doigt, les commandes passent à 44 px : sur un bandeau de carte, rater
+       le zoom oblige à recadrer à deux doigts. */
+    @media (pointer: coarse) {
+      @apply h-11 w-11 text-lg;
     }
   }
 

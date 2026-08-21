@@ -6,7 +6,7 @@
  * glyphe est produit par `aria-expanded`, seule source de vérité.
  */
 .collapse {
-  @apply grid h-[18px] w-[18px] shrink-0 place-items-center border border-rule-strong;
+  @apply relative grid h-[18px] w-[18px] shrink-0 place-items-center border border-rule-strong;
   @apply font-mono text-[0.75rem] leading-none text-ink-2 transition-colors;
 
   &::before {
@@ -20,6 +20,15 @@
   &:hover {
     @apply border-ink bg-ink text-sheet;
   }
+
+  /* Au doigt, le carré de 18 px se vise mal : on lui donne 44 px de zone
+     sensible sans rien changer à ce qui se voit. */
+  @media (pointer: coarse) {
+    &::after {
+      content: "";
+      @apply absolute -inset-[13px];
+    }
+  }
 }
 
 /*
@@ -28,6 +37,10 @@
  */
 .switch-row {
   @apply flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5;
+
+  @media (pointer: coarse) {
+    @apply py-2.5;
+  }
 
   .switch-title {
     @apply grow text-[0.8125rem] text-ink-2;
@@ -70,6 +83,11 @@
     @apply cursor-progress border-rule-strong bg-rule-strong;
   }
 
+  /* Au doigt, le rectangle gagne en hauteur : c'est l'action principale. */
+  @media (pointer: coarse) {
+    @apply py-3.5;
+  }
+
   svg {
     @apply h-3.5 w-3.5 shrink-0 animate-spin;
 
@@ -91,6 +109,10 @@
 
   &:hover {
     @apply bg-ink text-sheet;
+  }
+
+  @media (pointer: coarse) {
+    @apply py-3.5;
   }
 }
 
@@ -125,5 +147,41 @@
     path {
       @apply opacity-90;
     }
+  }
+}
+
+/*
+ * Barre d'action.
+ *
+ * Au fil du feuillet sur grand écran ; épinglée au bas de la zone de
+ * défilement sur petit écran, où le bouton doit rester sous le pouce quelle
+ * que soit la longueur de la liste d'adresses.
+ */
+.actions {
+  @apply mt-3;
+}
+
+#dock {
+  @apply px-4 pb-3;
+}
+
+/* Une barre dont tout le contenu est masqué ne doit pas laisser son filet. */
+.actions:not(:has(> :not(.hide))) {
+  @apply hidden;
+}
+
+@media (width < 48rem) {
+  .actions {
+    @apply sticky bottom-0 z-20 border-t border-rule bg-sheet px-4 pt-3 pb-3;
+  }
+
+  /* Dans une section, la barre déborde des marges pour toucher les deux
+     bords : épinglée, elle se lit comme un socle, non comme un bouton posé. */
+  .section > .actions {
+    @apply -mx-4 -mb-3;
+  }
+
+  #dock {
+    @apply mt-0;
   }
 }

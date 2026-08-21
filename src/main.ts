@@ -37,6 +37,7 @@ import {
 } from "./ui/addresses.ts";
 import { initControls, lockControls, syncControls } from "./ui/controls.ts";
 import { el, show } from "./ui/dom.ts";
+import { expandMap, initLayout, resetLayout, reveal } from "./ui/layout.ts";
 import { clearLog, closeLog, initLog, log, openLog } from "./ui/log.ts";
 import { decodePermalink, encodePermalink } from "./ui/permalink.ts";
 
@@ -195,6 +196,9 @@ async function calculate(): Promise<void> {
   show(spinner, true);
   clearLog();
   openLog();
+  // Sur petit écran, le journal vient de naître tout en bas : sans cela, le
+  // calcul se déroulerait hors champ.
+  reveal(el("log"));
 
   const stopWatching = onWait(({ delay }) => {
     log(
@@ -219,6 +223,7 @@ async function calculate(): Promise<void> {
 
     log("Je cherche la ville la plus proche du point.", true);
     addPoint("result", coord, COLORS.result, 9);
+    expandMap();
 
     const city = await findNearestCity(coord);
     if (!city) {
@@ -258,11 +263,13 @@ function newSearch(): void {
   addRow();
   refreshCalculateButton();
   fitTo();
+  resetLayout();
   history.replaceState(null, "", location.pathname + location.search);
 }
 
 async function bootstrap(): Promise<void> {
   initMap(el("map"));
+  initLayout();
   initLog();
   onActivity(renderActivity);
   initControls();

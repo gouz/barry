@@ -1,10 +1,17 @@
+/*
+ * Le feuillet est toujours sa propre zone de défilement : sur petit écran il
+ * occupe la hauteur laissée par la carte, sur grand écran la colonne entière.
+ * `overscroll-contain` empêche le geste de déborder sur la carte une fois le
+ * feuillet arrivé en butée.
+ */
 #sidebar {
-  @apply relative z-10 flex min-h-0 flex-col bg-sheet text-ink;
+  @apply relative z-10 flex min-h-0 grow flex-col overflow-y-auto overscroll-contain;
+  @apply bg-sheet text-ink;
 }
 
 @media (width >= 48rem) {
   #sidebar {
-    @apply overflow-y-auto border-r border-ink;
+    @apply border-r border-ink;
   }
 }
 
@@ -13,14 +20,14 @@
  * titre annonce d'emblée qu'on manipule des mesures, pas des impressions.
  */
 #brand {
-  @apply flex items-end gap-3 border-b-2 border-ink px-4 pt-5 pb-3;
+  @apply flex items-end gap-3 border-b-2 border-ink px-4 pt-4 pb-2.5;
 
   .mark {
-    @apply mb-0.5 h-7 w-7 shrink-0 text-vermilion;
+    @apply mb-0.5 h-6 w-6 shrink-0 text-vermilion;
   }
 
   h1 {
-    @apply text-[2rem] leading-[0.85] font-medium tracking-[-0.035em];
+    @apply text-[1.75rem] leading-[0.85] font-medium tracking-[-0.035em];
   }
 
   .origin {
@@ -28,9 +35,20 @@
   }
 }
 
+/* Sur grand écran l'espace ne manque pas : le bandeau reprend sa taille pleine
+   et suit le défilement. Sur petit écran il s'efface pour laisser la place au
+   formulaire. */
 @media (width >= 48rem) {
   #brand {
-    @apply sticky top-0 z-20 bg-sheet;
+    @apply sticky top-0 z-20 bg-sheet pt-5 pb-3;
+
+    .mark {
+      @apply h-7 w-7;
+    }
+
+    h1 {
+      @apply text-[2rem];
+    }
   }
 }
 
@@ -60,9 +78,10 @@
 
 #credits {
   @apply mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-rule px-4 py-3 text-ink-3;
-
   a {
-    @apply transition-colors;
+    /* Un peu de hauteur autour du lien : l'étiquette reste fine, la cible
+       tactile ne l'est plus. */
+    @apply py-1 transition-colors;
 
     &:hover {
       @apply text-vermilion;

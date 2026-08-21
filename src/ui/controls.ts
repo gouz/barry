@@ -43,6 +43,11 @@ export function initControls(): void {
     settings.avoidMotorways = avoidMotorways.checked;
   });
 
+  // Sur petit écran, la méthode passe après l'essentiel : elle s'ouvre d'un
+  // doigt, mais ne repousse pas le formulaire sous le pli au chargement.
+  if (window.matchMedia("(width < 48rem)").matches)
+    el("toggleWelcome").setAttribute("aria-expanded", "false");
+
   bindCollapse("toggleConfiguration", el("configuration"));
   bindCollapse("toggleWelcome", el("welcome-body"));
 }

@@ -6,6 +6,12 @@
 #log-content {
   @apply max-h-[38vh] overflow-y-auto;
 
+  /* Sur petit écran, le feuillet défile déjà : un second ascenseur imbriqué
+     ferait hésiter le geste. Le registre se déroule alors en entier. */
+  @media (width < 48rem) {
+    @apply max-h-none overflow-visible;
+  }
+
   /* Les nombres du journal (distances, durées) restent alignés d'une ligne
      à l'autre. */
   font-variant-numeric: tabular-nums;
@@ -31,6 +37,21 @@
 
     &:hover {
       @apply bg-vermilion-wash text-vermilion;
+    }
+
+    /* Au doigt il n'y a pas de survol : la ligne s'annonce cliquable par sa
+       hauteur et un chevron discret. */
+    @media (pointer: coarse) {
+      @apply flex items-center gap-2 py-2.5;
+
+      &::after {
+        content: "→";
+        @apply ml-auto shrink-0 font-mono text-[0.75rem] text-vermilion;
+      }
+
+      &:active {
+        @apply bg-vermilion-wash text-vermilion;
+      }
     }
   }
 }
