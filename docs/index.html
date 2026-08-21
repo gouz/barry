@@ -3,18 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="icon" type="image/svg+xml" href="./src/img/favicon.svg" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f2eee5" />
+    <meta
+      name="description"
+      content="Barry calcule le point de rencontre le plus équitable entre plusieurs villes ou adresses en France."
+    />
+    <link rel="icon" href="./favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
     <link rel="preconnect" href="https://data.geopf.fr" crossorigin />
-    <title>Barry</title>
-    <style id="colors"></style>
+    <title>Barry — le point de rencontre équitable</title>
     <!-- Matomo -->
     <script>
       var _paq = window._paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
-      (function() {
+      (() => {
         var u="//matomo.gouz.dev/";
         _paq.push(['setTrackerUrl', u+'matomo.php']);
         _paq.push(['setSiteId', '5']);
@@ -23,194 +30,140 @@
       })();
     </script>
     <!-- End Matomo Code -->
-    <script type="module" crossorigin src="/assets/index-Bp-qTGvf.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DGClr4SL.css">
+    <script type="module" crossorigin src="/assets/index-BiGjij4c.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D1ii7AW8.css">
   </head>
   <body>
     <div id="app">
-      <div id="sidebar">
-        <h1>
-          <span>Barry</span>
+      <div id="sidebar" class="scroll-slim">
+        <header id="brand">
           <svg
+            class="mark"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
           >
-            <path
-              fill-rule="evenodd"
-              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-              clip-rule="evenodd"
-            />
+            <circle cx="12" cy="12" r="6.5" />
+            <path d="M12 1.5v5M12 17.5v5M1.5 12h5M17.5 12h5" />
+            <circle cx="12" cy="12" r="1.75" fill="currentColor" stroke="none" />
           </svg>
-        </h1>
-
-        <div id="welcome">
-          <h2>Si on se retrouvait au milieu du chemin ?</h2>
-          <button type="button" id="reduceWelcome" aria-label="Réduire la présentation">
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-          <button type="button" id="augmentWelcome" class="hide" aria-label="Afficher la présentation">
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
           <div>
-            <p>Cet outil est fonctionnel <b>uniquement en France </b>pour le moment.</p>
-            <p>Il est basé sur 3 calculs :</p>
-            <ul>
+            <h1>Barry</h1>
+            <p class="origin eyebrow">Géoplateforme IGN · France</p>
+          </div>
+        </header>
+
+        <p class="tagline">Si on se retrouvait au milieu du chemin ?</p>
+
+        <section class="section" id="welcome">
+          <header>
+            <span class="index eyebrow">01</span>
+            <h2 class="eyebrow">Méthode</h2>
+            <button
+              type="button"
+              id="toggleWelcome"
+              class="collapse"
+              aria-expanded="true"
+              aria-controls="welcome-body"
+              aria-label="Afficher ou masquer la méthode"
+            ></button>
+          </header>
+          <div id="welcome-body">
+            <p>Trois points sont calculés, pondérés, puis moyennés.</p>
+            <ul class="legend">
               <li>
-                <span class="bullet green"></span>Le mi-chemin en temps ou en distance sur le plus
-                long trajet entre toutes les villes
+                <span class="key long"></span>
+                <span class="text"
+                  >Le mi-chemin, en temps ou en distance, sur le plus long trajet entre toutes les
+                  villes</span
+                >
+                <span class="weight eyebrow">×13</span>
               </li>
               <li>
-                <span class="bullet blue"></span>La moyenne des coordonnées des villes
+                <span class="key avg"></span>
+                <span class="text">La moyenne des coordonnées des villes</span>
+                <span class="weight eyebrow">×2</span>
               </li>
               <li>
-                <span class="bullet orange"></span>Le centre du cadre dans lequel toutes les villes
-                sont présentes
+                <span class="key center"></span>
+                <span class="text"
+                  >Le centre du cadre dans lequel toutes les villes sont présentes</span
+                >
+                <span class="weight eyebrow">×1</span>
               </li>
             </ul>
             <p>
-              Ainsi on arrive à la moyenne de ces trois points pour obtenir le point<span
-                class="bullet red"
-              ></span
-              >qui correspond à une approximation du point le plus équitable pour les trajets de
-              chacun.
+              Leur moyenne donne le point<span class="bullet result"></span>: la meilleure
+              approximation d'un lieu équitable pour les trajets de chacun.
             </p>
           </div>
-        </div>
+        </section>
 
-        <div class="h3">
-          <span>
-            <svg
-              aria-hidden="true"
-              class="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            <h3>Configuration</h3>
-            <button type="button" id="reduceConfiguration" aria-label="Réduire la configuration">
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-            <button type="button" id="augmentConfiguration" class="hide" aria-label="Afficher la configuration">
-              <svg
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </span>
+        <section class="section">
+          <header>
+            <span class="index eyebrow">02</span>
+            <h2 class="eyebrow">Réglages</h2>
+            <button
+              type="button"
+              id="toggleConfiguration"
+              class="collapse"
+              aria-expanded="true"
+              aria-controls="configuration"
+              aria-label="Afficher ou masquer les réglages"
+            ></button>
+          </header>
           <div id="configuration">
-            <div class="form">
-              <label>Calcul du mi-chemin en :</label>
-              <span>temps</span>
+            <div class="switch-row">
+              <span class="switch-title">Mi-chemin en</span>
+              <span class="switch-off">temps</span>
               <div class="toggle">
-                <input
-                  id="toggleCalcMode"
-                  type="checkbox"
-                />
-                <label for="toggleCalcMode"></label>
+                <input id="toggleCalcMode" type="checkbox" />
+                <label for="toggleCalcMode"
+                  ><span class="sr-only">Calcul du mi-chemin en distance</span></label
+                >
               </div>
-              <span>distance</span>
+              <span class="switch-on">distance</span>
             </div>
-            <div class="form">
-              <label>Mode de transport :</label>
-              <span>voiture</span>
+            <div class="switch-row">
+              <span class="switch-title">Transport</span>
+              <span class="switch-off">voiture</span>
               <div class="toggle">
-                <input
-                  id="toggleCalcTransport"
-                  type="checkbox"
-                />
-                <label for="toggleCalcTransport"></label>
+                <input id="toggleCalcTransport" type="checkbox" />
+                <label for="toggleCalcTransport"
+                  ><span class="sr-only">Mode de transport piéton</span></label
+                >
               </div>
-              <span>piéton</span>
+              <span class="switch-on">piéton</span>
             </div>
-            <div class="form">
-              <label>Éviter les autoroutes :</label>
-              <span>non</span>
+            <div class="switch-row">
+              <span class="switch-title">Autoroutes</span>
+              <span class="switch-off">permises</span>
               <div class="toggle">
-                <input
-                  id="toggleAvoidMotorways"
-                  type="checkbox"
-                />
-                <label for="toggleAvoidMotorways"></label>
+                <input id="toggleAvoidMotorways" type="checkbox" />
+                <label for="toggleAvoidMotorways"
+                  ><span class="sr-only">Éviter les autoroutes</span></label
+                >
               </div>
-              <span>oui</span>
+              <span class="switch-on">évitées</span>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="h3">
-          <span>
-            <svg
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-              />
-            </svg>
-            <h3>Ajouter des adresses/villes</h3>
-          </span>
-        </div>
+        <section class="section" id="addresses">
+          <header>
+            <span class="index eyebrow">03</span>
+            <h2 class="eyebrow">Points de départ</h2>
+          </header>
 
-        <div id="addresses">
           <div id="addresses-wrapper"></div>
-          <button id="calculate" type="button" class="hide">
+          <p id="addresses-hint" class="eyebrow">
+            <kbd>Entrée</kbd> valide et ouvre la ligne suivante
+          </p>
+
+          <button id="calculate" type="button" class="btn-primary mt-3 hide">
             <svg
               id="spinner"
               aria-hidden="true"
@@ -242,53 +195,59 @@
             </svg>
             <span id="status-text"></span>
           </div>
-        </div>
+        </section>
 
-        <div id="rappel">
-          <svg
-            aria-hidden="true"
-            class="w-6 h-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-            />
-          </svg>
-          <span>Pour le moment le calcul ne fonctionne qu'en France.</span>
-        </div>
+        <aside id="rappel" class="notice mx-4 my-3">
+          <span class="label eyebrow">Note</span>
+          <p>Pour le moment, le calcul ne fonctionne qu'en France.</p>
+        </aside>
 
-        <div id="log" class="hide">
-          <div class="form">
-            <label>Niveau de réponse :</label>
-            <span>simplifié</span>
+        <section class="section" id="log">
+          <header>
+            <span class="index eyebrow">04</span>
+            <h2 class="eyebrow">Journal</h2>
+          </header>
+          <div class="switch-row">
+            <span class="switch-title">Niveau de détail</span>
+            <span class="switch-off">simplifié</span>
             <div class="toggle">
               <input id="toggleLogMode" type="checkbox" />
-              <label for="toggleLogMode"></label>
+              <label for="toggleLogMode"><span class="sr-only">Journal détaillé</span></label>
             </div>
-            <span>détaillé</span>
+            <span class="switch-on">complet</span>
           </div>
-          <div id="log-content"></div>
+          <div id="log-content" class="scroll-slim"></div>
+        </section>
+
+        <div class="px-4 py-3">
+          <button id="newsearch" type="button" class="btn-ghost hide">Nouvelle recherche</button>
         </div>
 
-        <button id="newsearch" type="button" class="hide">
-          Nouvelle recherche
-        </button>
+        <footer id="credits" class="eyebrow">
+          <a href="https://openlayers.org/" target="_blank" rel="noopener">OpenLayers</a>
+          <a
+            href="https://geoservices.ign.fr/documentation/services/services-geoplateforme"
+            target="_blank"
+            rel="noopener"
+            >IGN</a
+          >
+          <a href="https://github.com/gouz/barry" target="_blank" rel="noopener">Source</a>
+        </footer>
       </div>
 
       <div id="map"></div>
-
     </div>
 
     <template id="address-template">
       <div class="address">
         <span class="field">
-          <input type="text" placeholder="Adresse postale" autocomplete="off" />
+          <input
+            type="text"
+            placeholder="Ville ou adresse postale"
+            aria-label="Ville ou adresse postale"
+            autocomplete="off"
+            spellcheck="false"
+          />
           <svg
             class="spinner"
             aria-hidden="true"
@@ -303,16 +262,8 @@
             />
           </svg>
         </span>
-        <button type="button" class="minus hide" aria-label="Retirer cette adresse">
-          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <button type="button" class="plus" aria-label="Ajouter une adresse">
-          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-          </svg>
-        </button>
+        <button type="button" class="minus hide" aria-label="Retirer cette adresse"></button>
+        <button type="button" class="plus" aria-label="Ajouter une adresse"></button>
       </div>
     </template>
 
@@ -323,7 +274,7 @@
       data-id="gouz"
       data-description="Aidez moi en faisant des dons"
       data-message="Merci pour vos dons, je propose mes outils gratuitement, un petit don fait toujours plaisir."
-      data-color="#40DCA5"
+      data-color="#cf3a22"
       data-position="bottom"
       data-x_margin="18"
       data-y_margin="18"

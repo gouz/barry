@@ -1,49 +1,117 @@
 @import "tailwindcss" source(none);
 
+@import "./_tokens.css";
+@import "./_panel.css";
 @import "./_toggle.css";
 @import "./_welcome.css";
 @import "./_address.css";
+@import "./_log.css";
+@import "./_map.css";
 @import "./_sidebar.css";
 
 @source "../**/*.ts";
 @source "../../index.html";
 
-/* Préflight v3 : v4 ne met plus le curseur pointer sur les boutons
-   et colore les placeholders en currentColor. */
 @layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    @apply m-0 h-full w-full p-0;
+    @apply bg-paper font-sans text-ink;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Préflight v3 : v4 ne met plus le curseur pointer sur les boutons
+     et colore les placeholders en currentColor. */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 
   input::placeholder {
-    color: var(--color-gray-400);
+    @apply text-ink-3;
+  }
+
+  /* Un seul repère de focus, franc et carré, pour tout ce qui est atteignable
+     au clavier. */
+  :focus-visible {
+    @apply outline-2 outline-offset-1 outline-vermilion;
+  }
+
+  ::selection {
+    @apply bg-vermilion text-sheet;
   }
 }
 
-html,
-body {
-  @apply w-full h-full m-0 p-0 bg-slate-800;
+/*
+ * Étiquette monospace en petites capitales : l'unité typographique qui revient
+ * partout (numéros de section, intitulés, boutons, légendes).
+ */
+.eyebrow {
+  @apply font-mono text-[0.625rem] leading-none tracking-[0.18em] uppercase;
 }
 
-#map {
-  @apply w-full h-96;
+/* Ascenseur réduit à un filet, dans le ton du papier. */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply bg-rule-strong;
+  }
 }
 
 .hide {
   display: none !important;
 }
 
-@media (width >= 40rem) {
+/* Mobile : la carte en bandeau, le feuillet dessous. Un filet les sépare, pas
+   une ombre ni un chevauchement. */
+#app {
+  @apply flex h-full w-full flex-col;
+}
+
+#map {
+  @apply order-first h-[40svh] w-full shrink-0 border-b border-ink;
+}
+
+/* Au-delà du pli, la carte occupe tout et le feuillet devient une colonne. */
+@media (width >= 48rem) {
   #app {
-    @apply flex h-full flex-row;
+    @apply flex-row overflow-hidden;
   }
 
   #sidebar {
-    @apply w-1/3 h-full;
+    @apply order-first h-full w-[23rem] shrink-0;
   }
 
   #map {
-    @apply w-2/3 h-full grow;
+    @apply order-none h-full w-auto grow border-b-0;
+  }
+}
+
+@media (width >= 90rem) {
+  #sidebar {
+    @apply w-[25rem];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
   }
 }

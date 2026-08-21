@@ -1,0 +1,119 @@
+/*
+ * Bouton de repli.
+ *
+ * Un carré de 18 px et un signe monospace : l'état se lit dans le glyphe
+ * (« − » ouvert, « + » fermé) et non dans l'orientation d'un chevron. Le
+ * glyphe est produit par `aria-expanded`, seule source de vérité.
+ */
+.collapse {
+  @apply grid h-[18px] w-[18px] shrink-0 place-items-center border border-rule-strong;
+  @apply font-mono text-[0.75rem] leading-none text-ink-2 transition-colors;
+
+  &::before {
+    content: "+";
+  }
+
+  &[aria-expanded="true"]::before {
+    content: "−";
+  }
+
+  &:hover {
+    @apply border-ink bg-ink text-sheet;
+  }
+}
+
+/*
+ * Ligne de réglage : intitulé à gauche, les deux options encadrant
+ * l'interrupteur à droite.
+ */
+.switch-row {
+  @apply flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5;
+
+  .switch-title {
+    @apply grow text-[0.8125rem] text-ink-2;
+  }
+
+  .switch-off,
+  .switch-on {
+    @apply font-mono text-[0.6875rem] tracking-[0.06em] text-ink-3 transition-colors;
+  }
+
+  /* L'option retenue s'écrit en encre pleine, l'autre s'efface : l'état se lit
+     sans déchiffrer la position du curseur. */
+  &:has(input:checked) .switch-on,
+  &:not(:has(input:checked)) .switch-off {
+    @apply text-ink;
+  }
+}
+
+/* Action principale : un rectangle d'encre pleine qui bascule au vermillon. */
+.btn-primary {
+  @apply flex w-full items-center justify-center gap-2 border border-ink bg-ink px-4 py-2.5;
+  @apply font-mono text-[0.6875rem] tracking-[0.16em] text-sheet uppercase;
+  @apply transition-colors duration-100;
+
+  &:hover:not(:disabled) {
+    @apply border-vermilion bg-vermilion;
+  }
+
+  &:disabled {
+    @apply cursor-progress border-rule-strong bg-rule-strong;
+  }
+
+  svg {
+    @apply h-3.5 w-3.5 shrink-0 animate-spin;
+
+    circle {
+      @apply opacity-30;
+    }
+
+    path {
+      @apply opacity-90;
+    }
+  }
+}
+
+/* Action secondaire : le même rectangle, en creux. */
+.btn-ghost {
+  @apply flex w-full items-center justify-center gap-2 border border-ink bg-transparent px-4 py-2.5;
+  @apply font-mono text-[0.6875rem] tracking-[0.16em] text-ink uppercase;
+  @apply transition-colors duration-100;
+
+  &:hover {
+    @apply bg-ink text-sheet;
+  }
+}
+
+/*
+ * Note en marge : filet vermillon à gauche et étiquette, à la manière d'une
+ * annotation portée sur un plan.
+ */
+.notice {
+  @apply flex gap-2.5 border-l-2 border-vermilion bg-vermilion-wash px-3 py-2;
+
+  .label {
+    @apply shrink-0 pt-px text-vermilion;
+  }
+
+  p {
+    @apply text-[0.75rem] leading-snug text-ink-2;
+  }
+}
+
+/* Ligne d'état du réseau, sous le bouton de calcul. */
+#status {
+  @apply flex items-center justify-center gap-2 pt-2;
+  @apply font-mono text-[0.6875rem] text-ink-2;
+
+  svg {
+    @apply h-3 w-3 shrink-0 animate-spin;
+
+    circle {
+      @apply opacity-30;
+    }
+
+    path {
+      @apply opacity-90;
+    }
+  }
+}

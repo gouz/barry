@@ -1,0 +1,36 @@
+/*
+ * Journal tenu comme un registre : des lignes de même hauteur, séparées par des
+ * filets, sans puce ni horodatage décoratif. Les lignes de détail sont
+ * décalées sous celle qu'elles précisent.
+ */
+#log-content {
+  @apply max-h-[38vh] overflow-y-auto;
+
+  /* Les nombres du journal (distances, durées) restent alignés d'une ligne
+     à l'autre. */
+  font-variant-numeric: tabular-nums;
+
+  p {
+    @apply border-b border-rule py-1.5 last:border-b-0;
+  }
+
+  .log-0 {
+    @apply text-[0.8125rem] leading-snug text-ink;
+  }
+
+  .log-1 {
+    @apply pl-3 font-mono text-[0.6875rem] leading-snug text-ink-3;
+    /* Le décalage est marqué par un filet vertical, non par un caractère :
+       il tient quelle que soit la longueur du texte. */
+    box-shadow: inset 1px 0 0 0 var(--color-rule);
+  }
+
+  /* Ligne de trajet : survol et clic pilotent la carte. */
+  .route-link {
+    @apply cursor-pointer transition-colors;
+
+    &:hover {
+      @apply bg-vermilion-wash text-vermilion;
+    }
+  }
+}

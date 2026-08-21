@@ -1,0 +1,59 @@
+/*
+ * Habillage de la carte OpenLayers.
+ *
+ * Les commandes natives reprennent le vocabulaire du feuillet — filet d'encre,
+ * angles vifs, monospace — pour que la carte ne ressemble pas à un composant
+ * importé.
+ */
+#map {
+  @apply bg-paper;
+
+  .ol-control {
+    @apply bg-transparent;
+  }
+
+  .ol-zoom {
+    @apply top-3 right-3 left-auto flex flex-col;
+  }
+
+  .ol-control button {
+    @apply m-0 grid h-8 w-8 place-items-center border border-ink bg-sheet;
+    @apply font-mono text-base leading-none font-normal text-ink;
+    @apply transition-colors;
+
+    &:hover,
+    &:focus {
+      @apply bg-ink text-sheet outline-none;
+    }
+  }
+
+  /* Les deux boutons se partagent un seul filet. */
+  .ol-zoom .ol-zoom-out {
+    @apply border-t-0;
+  }
+
+  .ol-attribution {
+    @apply right-0 bottom-0;
+
+    &:not(.ol-collapsed) {
+      @apply border-t border-l border-ink bg-sheet;
+    }
+
+    ul {
+      @apply px-2 py-0.5 font-mono text-[0.625rem] text-ink-2;
+      text-shadow: none;
+    }
+
+    a {
+      @apply text-ink-2 underline underline-offset-2;
+
+      &:hover {
+        @apply text-vermilion;
+      }
+    }
+
+    button {
+      @apply h-5 w-5 border border-ink font-mono text-[0.625rem];
+    }
+  }
+}

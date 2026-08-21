@@ -1,165 +1,71 @@
 #sidebar {
-  @apply bg-slate-800 shadow-sm text-slate-100 py-2 px-4 flex flex-col min-h-fit;
+  @apply relative z-10 flex min-h-0 flex-col bg-sheet text-ink;
+}
+
+@media (width >= 48rem) {
+  #sidebar {
+    @apply overflow-y-auto border-r border-ink;
+  }
+}
+
+/*
+ * En-tête : la marque en gros, l'origine des données en petit. Le mono sous le
+ * titre annonce d'emblée qu'on manipule des mesures, pas des impressions.
+ */
+#brand {
+  @apply flex items-end gap-3 border-b-2 border-ink px-4 pt-5 pb-3;
+
+  .mark {
+    @apply mb-0.5 h-7 w-7 shrink-0 text-vermilion;
+  }
 
   h1 {
-    @apply flex items-center space-x-2 justify-center pt-2 pb-4;
-
-    span {
-      @apply text-3xl font-bold tracking-wider;
-    }
-
-    svg {
-      @apply h-8 w-8 inline-block fill-red-500;
-    }
+    @apply text-[2rem] leading-[0.85] font-medium tracking-[-0.035em];
   }
 
-  .h3 {
-    @apply border-t border-slate-600 mt-2 pt-2 text-sm;
+  .origin {
+    @apply mt-1.5 text-ink-3;
+  }
+}
 
-    > span {
-      @apply flex items-center;
+@media (width >= 48rem) {
+  #brand {
+    @apply sticky top-0 z-20 bg-sheet;
+  }
+}
 
-      svg {
-        @apply h-6 w-6 inline-block;
-      }
+/*
+ * Section : un numéro, un intitulé, un filet. Aucun cadre — la hiérarchie est
+ * portée par la numérotation et l'espacement, comme dans un document technique.
+ */
+.section {
+  @apply border-b border-rule px-4 py-3;
 
-      h3 {
-        @apply pl-2 text-gray-200 uppercase grow;
-      }
+  > header {
+    @apply flex items-baseline gap-2.5;
+
+    .index {
+      @apply text-vermilion;
     }
 
-    .form {
-      @apply flex items-center justify-end grow mt-1 w-full;
-
-      > label {
-        @apply pr-2;
-      }
-
-      span,
-      > label {
-        @apply normal-case pl-0;
-      }
-
-      .toggle {
-        @apply mx-2;
-      }
+    h2 {
+      @apply grow text-ink-2;
     }
   }
 }
 
-#rappel {
-  @apply rounded-sm bg-slate-300 mt-2 px-2 py-1 text-sm text-slate-800 flex items-center justify-center;
-
-  svg {
-    @apply inline-block w-6 h-6 mr-2;
-  }
+.tagline {
+  @apply px-4 pt-3 text-[0.8125rem] leading-snug text-ink-2 italic;
 }
 
-#calculate {
-  @apply mt-4 w-4/5 mx-auto rounded-lg bg-green-500 text-slate-100 py-1 text-center block px-4;
+#credits {
+  @apply mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-rule px-4 py-3 text-ink-3;
 
-  &:hover {
-    @apply bg-green-400;
-  }
-
-  svg {
-    @apply inline-block animate-spin -ml-1 mr-2 h-5 w-5 text-white;
-
-    circle {
-      @apply opacity-25;
-    }
-
-    path {
-      @apply opacity-75;
-    }
-  }
-}
-
-#status {
-  @apply mt-2 flex items-center justify-center text-sm text-slate-300;
-
-  svg {
-    @apply inline-block animate-spin mr-2 h-4 w-4 shrink-0;
-
-    circle {
-      @apply opacity-25;
-    }
-
-    path {
-      @apply opacity-75;
-    }
-  }
-}
-
-#newsearch {
-  @apply mb-4 w-4/5 mx-auto rounded-lg bg-slate-500 text-slate-100 py-1 text-center block px-4;
-
-  &:hover {
-    @apply bg-slate-400;
-  }
-}
-
-#log {
-  @apply bg-slate-600 text-sm py-1 px-2 grow rounded-sm my-4 overflow-hidden;
-
-  .form {
-    @apply flex items-center justify-end grow border-b mb-1 pb-1 border-slate-800;
-
-    > label {
-      @apply pr-2;
-    }
-
-    span,
-    > label {
-      @apply normal-case pl-0;
-    }
-
-    .toggle {
-      @apply mx-2;
-    }
-  }
-}
-
-#log-content {
-  @apply overflow-y-auto mt-1;
-  height: 90%;
-
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-slate-300) var(--color-slate-600);
-
-  &::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: var(--color-slate-600);
-    border-radius: 20px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--color-slate-300);
-    border-radius: 20px;
-    border: 1px solid var(--color-slate-600);
-  }
-
-  p {
-    @apply mb-1;
-  }
-
-  /* Ligne de trajet : survol et clic pilotent la carte. */
-  .route-link {
-    @apply cursor-pointer;
+  a {
+    @apply transition-colors;
 
     &:hover {
-      @apply text-white underline;
+      @apply text-vermilion;
     }
-  }
-
-  .log-0 {
-    @apply text-base text-white;
-  }
-
-  .log-1 {
-    @apply text-sm text-slate-200;
   }
 }

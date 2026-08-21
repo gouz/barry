@@ -1,25 +1,23 @@
 import { settings } from "../state.ts";
 import { el, show } from "./dom.ts";
 
-/** Câble un couple de boutons réduire/agrandir sur une cible. */
-function bindCollapse(
-  reduceId: string,
-  augmentId: string,
-  target: HTMLElement,
-): void {
-  const reduce = el(reduceId);
-  const augment = el(augmentId);
-  const apply = (collapsed: boolean) => {
-    show(target, !collapsed);
-    show(reduce, !collapsed);
-    show(augment, collapsed);
+/**
+ * Câble un bouton de repli sur une cible.
+ *
+ * L'état vit dans `aria-expanded` : il sert à la fois d'information pour les
+ * lecteurs d'écran, de source de vérité au clic, et de sélecteur CSS pour
+ * l'orientation du chevron.
+ */
+function bindCollapse(buttonId: string, target: HTMLElement): void {
+  const button = el(buttonId);
+  const apply = (expanded: boolean) => {
+    show(target, expanded);
+    button.setAttribute("aria-expanded", String(expanded));
   };
-  reduce.addEventListener("click", () => {
-    apply(true);
+  button.addEventListener("click", () => {
+    apply(button.getAttribute("aria-expanded") !== "true");
   });
-  augment.addEventListener("click", () => {
-    apply(false);
-  });
+  apply(button.getAttribute("aria-expanded") !== "false");
 }
 
 export function initControls(): void {
@@ -38,14 +36,8 @@ export function initControls(): void {
     settings.avoidMotorways = avoidMotorways.checked;
   });
 
-  bindCollapse(
-    "reduceConfiguration",
-    "augmentConfiguration",
-    el("configuration"),
-  );
-
-  const welcomeBody = el("welcome").querySelector<HTMLElement>("div");
-  if (welcomeBody) bindCollapse("reduceWelcome", "augmentWelcome", welcomeBody);
+  bindCollapse("toggleConfiguration", el("configuration"));
+  bindCollapse("toggleWelcome", el("welcome-body"));
 }
 
 /** Reflète l'état dans les interrupteurs (au chargement d'un permalien). */

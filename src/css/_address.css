@@ -1,62 +1,91 @@
+/*
+ * Liste d'adresses numérotée.
+ *
+ * Le numéro vient d'un compteur CSS : l'ajout et le retrait d'une ligne
+ * renumérotent la liste sans que le JavaScript s'en mêle.
+ */
+#addresses-wrapper {
+  counter-reset: address;
+}
+
 .address {
-  @apply flex w-full mt-2;
+  @apply flex items-stretch border-b border-rule;
+  counter-increment: address;
+
+  &::before {
+    @apply flex w-7 shrink-0 items-center font-mono text-[0.6875rem] text-ink-3 tabular-nums;
+    content: counter(address, decimal-leading-zero);
+  }
 
   .field {
-    @apply relative grow mr-1;
+    @apply relative grow;
   }
 
   input {
-    @apply grow-0 w-full px-2 py-1 rounded-lg h-8 text-slate-800 text-sm bg-white;
+    @apply h-9 w-full border-0 bg-transparent pr-7 pl-0 text-[0.875rem] text-ink;
+
+    &:focus {
+      @apply outline-none;
+    }
 
     /* Adresse non résolue : le détail est dans l'attribut title. */
     &[aria-invalid="true"] {
-      @apply ring-2 ring-red-500;
+      @apply text-vermilion;
     }
+
+    &[readonly] {
+      @apply cursor-default text-ink-2;
+    }
+  }
+
+  /*
+   * Ligne active : filet d'encre et soulignement vermillon. Le soulignement est
+   * posé en ombre interne plutôt qu'en bordure, pour ne pas décaler la ligne
+   * d'un pixel au moment du focus.
+   */
+  &:focus-within {
+    @apply border-ink;
+    box-shadow: inset 0 -2px 0 0 var(--color-vermilion);
   }
 
   .spinner {
-    @apply hidden absolute top-1/2 right-2 -translate-y-1/2 w-4 h-4 animate-spin text-slate-500;
+    @apply absolute top-1/2 right-1.5 hidden h-3.5 w-3.5 -translate-y-1/2 animate-spin text-vermilion;
 
     circle {
-      @apply opacity-25;
+      @apply opacity-30;
     }
 
     path {
-      @apply opacity-75;
+      @apply opacity-90;
     }
   }
 
-  &.pending {
-    .spinner {
-      @apply block;
-    }
-
-    input {
-      @apply pr-7;
-    }
+  &.pending .spinner {
+    @apply block;
   }
 
   button {
-    @apply rounded-sm flex items-center justify-center text-slate-50 w-8 h-8;
+    @apply w-7 shrink-0 border-l border-rule font-mono text-[0.875rem] leading-none text-ink-3;
+    @apply transition-colors;
 
-    svg {
-      @apply block w-5 h-5;
+    &:hover {
+      @apply bg-ink text-sheet;
     }
 
-    &.plus {
-      @apply bg-blue-500;
-
-      &:hover {
-        @apply bg-blue-400;
-      }
+    &.minus::before {
+      content: "−";
     }
 
-    &.minus {
-      @apply bg-red-500;
-
-      &:hover {
-        @apply bg-red-400;
-      }
+    &.plus::before {
+      content: "+";
     }
+  }
+}
+
+#addresses-hint {
+  @apply pt-2 text-ink-3;
+
+  kbd {
+    @apply border border-rule-strong px-1 font-mono text-[0.625rem] text-ink-2;
   }
 }

@@ -1,0 +1,52 @@
+/*
+ * Jetons de conception.
+ *
+ * Parti pris : un instrument cartographique sur papier plutôt qu'un tableau de
+ * bord. D'où le fond crème, l'encre chaude, l'unique vermillon, l'absence
+ * d'ombres et de coins arrondis — la structure est portée par des filets de
+ * 1 px, comme sur une carte imprimée.
+ *
+ * Toute la peau du produit tient dans ce fichier : changer de palette, c'est
+ * changer ces valeurs, pas relire les écrans.
+ */
+@theme {
+  /* Helvetica en tête : le ton neutre de la cartographie suisse. */
+  --font-sans:
+    "Helvetica Neue", Helvetica, ui-sans-serif, system-ui, "Segoe UI", Arial,
+    sans-serif;
+  /* Le monospace porte les étiquettes, les nombres et les coordonnées : il
+     signale la donnée mesurée. */
+  --font-mono:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, "Roboto Mono", Consolas,
+    monospace;
+
+  /* Papier. */
+  --color-paper: #f2eee5;
+  --color-sheet: #fbf9f5;
+  --color-tint: #e9e4d8;
+
+  /* Encre, par ordre d'importance décroissante. */
+  --color-ink: #17140f;
+  --color-ink-2: #574f44;
+  --color-ink-3: #8b8375;
+
+  /* Filets. */
+  --color-rule: #d3cdbe;
+  --color-rule-strong: #b0a897;
+
+  /* Vermillon : la marque, le résultat, le focus. Une seule couleur vive,
+     jamais décorative. */
+  --color-vermilion: #cf3a22;
+  --color-vermilion-wash: #f7e7e2;
+
+  /* Les trois calculs et leur moyenne. Teintes de carte topographique, non de
+     palette d'interface : elles doivent tenir sur les tuiles OSM. */
+  --color-m-long: #1f7a5c;
+  --color-m-avg: #1d4f91;
+  --color-m-center: #b3701a;
+  --color-m-result: #cf3a22;
+
+  /* Aucune ombre, aucun arrondi : les valeurs par défaut sont neutralisées
+     là où Tailwind en propose. */
+  --radius-none: 0px;
+}

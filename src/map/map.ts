@@ -14,7 +14,7 @@ import Fill from "ol/style/Fill.js";
 import Stroke from "ol/style/Stroke.js";
 import Style from "ol/style/Style.js";
 import View from "ol/View.js";
-import { FRANCE_BOX } from "../config.ts";
+import { COLORS, FRANCE_BOX } from "../config.ts";
 import type { Box, Coord, GeoJSONLineString } from "../types.ts";
 
 /**
@@ -50,17 +50,29 @@ function requireMap(): Map {
   return map;
 }
 
+/**
+ * Pose un repère.
+ *
+ * Le liseré clair n'est pas décoratif : sans lui, un point sombre se perd dans
+ * les zones denses du fond de carte.
+ */
 export function addPoint(
   id: string,
   [lon, lat]: Coord,
   color: string,
-  radius = 5,
+  radius = 6,
 ): void {
   removePoint(id);
   const feature = new Feature(new Point([lon, lat]));
   feature.setId(id);
   feature.setStyle(
-    new Style({ image: new Circle({ radius, fill: new Fill({ color }) }) }),
+    new Style({
+      image: new Circle({
+        radius,
+        fill: new Fill({ color }),
+        stroke: new Stroke({ color: COLORS.halo, width: 2 }),
+      }),
+    }),
   );
   pointSource.addFeature(feature);
 }
@@ -87,23 +99,44 @@ export function addRoad(
     stroke: new Stroke({
       color,
       width,
-      lineDash: dashed ? [6, 8] : undefined,
+      lineCap: "round",
+      lineJoin: "round",
+      lineDash: dashed ? [2, 8] : undefined,
     }),
   });
   feature.setStyle(style);
-  // Mémorisé pour pouvoir rétablir le style après un masquage (cf. highlightRoad).
+  // Mémorisés pour pouvoir rétablir ou accentuer le tracé (cf. highlightRoad).
   feature.set("baseStyle", style);
+  feature.set(
+    "highlightStyle",
+    new Style({
+      stroke: new Stroke({
+        color: COLORS.highlight,
+        width: width + 2,
+        lineCap: "round",
+        lineJoin: "round",
+        lineDash: dashed ? [2, 8] : undefined,
+      }),
+    }),
+  );
   roadSource.addFeature(feature);
 }
 
 /**
- * Met en avant une route : les autres sont masquées le temps du survol.
- * `null` rétablit l'affichage complet.
+ * Met en avant une route : elle passe à la couleur d'accentuation et les autres
+ * sont masquées le temps du survol. `null` rétablit l'affichage complet.
  */
 export function highlightRoad(id: string | null): void {
   for (const feature of roadSource.getFeatures()) {
-    const base = feature.get("baseStyle") as Style;
-    feature.setStyle(id === null || feature.getId() === id ? base : HIDDEN);
+    if (id === null) {
+      feature.setStyle(feature.get("baseStyle") as Style);
+      continue;
+    }
+    feature.setStyle(
+      feature.getId() === id
+        ? (feature.get("highlightStyle") as Style)
+        : HIDDEN,
+    );
   }
 }
 

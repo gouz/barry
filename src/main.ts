@@ -141,7 +141,7 @@ function drawRoutesToMeetingPoint(
     addRoad(
       id,
       { type: "LineString", coordinates: [address.coord, target] },
-      COLORS.road,
+      COLORS.roadHint,
       2,
       true,
     );
@@ -157,7 +157,7 @@ function drawRoutesToMeetingPoint(
 
     void route(address.coord, target, options, controller.signal)
       .then((itinerary) => {
-        addRoad(id, itinerary.geometry, COLORS.road);
+        addRoad(id, itinerary.geometry, COLORS.road, 4);
         box = itinerary.box;
         line.textContent = `De ${address.label}, il y a ${formatDistance(itinerary.distance)} en ${formatDuration(itinerary.duration)}`;
       })
@@ -213,11 +213,11 @@ async function calculate(): Promise<void> {
       log,
     });
     for (const [id, methodCoord] of byMethod)
-      addPoint(id, methodCoord, METHODS[id].color);
+      addPoint(id, methodCoord, METHODS[id].color, 5);
     log(`On se retrouve à [${coord[0]}, ${coord[1]}]`, true);
 
     log("Je cherche la ville la plus proche du point.", true);
-    addPoint("result", coord, COLORS.result);
+    addPoint("result", coord, COLORS.result, 9);
 
     const city = await findNearestCity(coord);
     if (!city) {
@@ -226,7 +226,7 @@ async function calculate(): Promise<void> {
       );
     } else {
       log(`On se retrouve donc à ${city.name}`);
-      addPoint("result", city.coord, COLORS.result);
+      addPoint("result", city.coord, COLORS.result, 9);
       drawRoutesToMeetingPoint(city.coord, addresses);
       fitTo(boundingBox([...addresses.map((a) => a.coord), city.coord]));
     }
