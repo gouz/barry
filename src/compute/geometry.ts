@@ -52,23 +52,13 @@ export function pairs<T>(items: readonly T[]): [T, T][] {
   return result;
 }
 
-export function formatDuration(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds / 60) % 60);
-  return `${hours}h${String(minutes).padStart(2, "0")}`;
-}
-
-export function formatDistance(meters: number): string {
-  return `${(Math.round((100 * meters) / 1000) / 100).toLocaleString("fr-FR")} km`;
-}
-
 const EARTH_RADIUS = 6_371_000;
 
 /**
  * Distance orthodromique (« à vol d'oiseau ») entre deux points, en mètres.
  *
- * Sert à classer les paires de villes sans interroger l'IGN : seules les mieux
- * classées méritent un vrai calcul d'itinéraire.
+ * Sert à classer les paires de villes sans interroger le service d'itinéraires :
+ * seules les mieux classées méritent un vrai calcul d'itinéraire.
  */
 export function haversine(a: Coord, b: Coord): number {
   const toRad = Math.PI / 180;

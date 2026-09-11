@@ -1,5 +1,3 @@
-import type { Suggestion } from "../api/complete.ts";
-import { geocode } from "../api/geocode.ts";
 import { COLORS } from "../config.ts";
 import { addPoint, removePoint } from "../map/map.ts";
 import {
@@ -8,13 +6,26 @@ import {
   getAddress,
   locatedAddresses,
 } from "../state.ts";
-import type { Coord } from "../types.ts";
+import type { CompleteFn, Coord, GeocodeFn, Suggestion } from "../types.ts";
 import { el, show } from "./dom.ts";
 import { attachSuggest, type Suggest } from "./suggest.ts";
 
+/** Ce que le formulaire doit savoir du monde extérieur : ses services et sa langue. */
+export interface AddressesOptions {
+  /** Prévient qu'une ligne a été résolue, vidée ou retirée. */
+  onChange: () => void;
+  geocode: GeocodeFn;
+  complete: CompleteFn;
+  /** Repli quand le service ne dit pas pourquoi l'adresse reste introuvable. */
+  notFound: string;
+}
+
 let wrapper: HTMLElement;
 let template: HTMLTemplateElement;
-let onChange: () => void;
+let config: AddressesOptions;
+const onChange = () => {
+  config.onChange();
+};
 
 /** Dernier libellé effectivement géocodé, pour ne pas rejouer la requête à chaque blur. */
 const resolved = new Map<string, string>();
@@ -24,10 +35,10 @@ const pending = new Map<string, { label: string; task: Promise<void> }>();
 /** Autocomplétion de chaque ligne, pour la couper quand la ligne disparaît. */
 const suggests = new Map<string, Suggest>();
 
-export function initAddresses(notifyChange: () => void): void {
+export function initAddresses(options: AddressesOptions): void {
   wrapper = el("addresses-wrapper");
   template = el<HTMLTemplateElement>("address-template");
-  onChange = notifyChange;
+  config = options;
 }
 
 export function addRow(focus = false): HTMLInputElement {
@@ -52,10 +63,15 @@ export function addRow(focus = false): HTMLInputElement {
   input.setAttribute("aria-autocomplete", "list");
   input.setAttribute("aria-controls", list.id);
   input.setAttribute("aria-expanded", "false");
-  const suggest = attachSuggest(input, list, (picked) => {
-    adopt(address.id, input, picked);
-    advance(input);
-  });
+  const suggest = attachSuggest(
+    input,
+    list,
+    (picked) => {
+      adopt(address.id, input, picked);
+      advance(input);
+    },
+    config.complete,
+  );
   suggests.set(address.id, suggest);
 
   input.addEventListener("blur", () => {
@@ -208,14 +224,13 @@ async function locate(
 
   setPending(id, true);
   try {
-    settle(id, input, label, await geocode(label));
+    settle(id, input, label, await config.geocode(label));
   } catch (error) {
     resolved.delete(id);
     address.coord = null;
     removePoint(id);
     input.setAttribute("aria-invalid", "true");
-    input.title =
-      error instanceof Error ? error.message : "Adresse introuvable";
+    input.title = error instanceof Error ? error.message : config.notFound;
     onChange();
   } finally {
     setPending(id, false);

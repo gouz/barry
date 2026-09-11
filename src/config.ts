@@ -38,8 +38,18 @@ export const COLORS = {
   halo: "#fbf9f5",
 } as const;
 
-/** Cadre couvrant la France métropolitaine, en `[[lat, lon], [lat, lon]]`. */
+/**
+ * Cadres de départ des cartes, en `[[lat, lon], [lat, lon]]`.
+ *
+ * Les latitudes du monde s'arrêtent avant les pôles : la projection Mercator y
+ * étire le fond de carte jusqu'à l'infini.
+ */
 export const FRANCE_BOX = [
   [51.31133241804094, -4.369239747680932],
   [42.14745185055437, 8.623599144082085],
+] as const;
+
+export const WORLD_BOX = [
+  [72, -168],
+  [-55, 178],
 ] as const;

@@ -141,6 +141,24 @@
   p {
     @apply text-[0.75rem] leading-snug text-ink-2;
   }
+
+  /* Un lien dans une note reste du texte : il se signale par un filet, pas par
+     une couleur qui découperait la phrase. */
+  a {
+    @apply underline decoration-vermilion underline-offset-2 transition-colors;
+
+    &:hover {
+      @apply text-vermilion;
+    }
+  }
+}
+
+/*
+ * Précision sous un réglage : ce que le service sait faire, et ce qu'il ne sait
+ * pas. Assez discrète pour ne pas concurrencer l'interrupteur.
+ */
+.note {
+  @apply pt-1.5 text-[0.75rem] leading-snug text-ink-3;
 }
 
 /* Ligne d'état du réseau, sous le bouton de calcul. */

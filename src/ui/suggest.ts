@@ -1,4 +1,4 @@
-import { complete, type Suggestion } from "../api/complete.ts";
+import type { CompleteFn, Suggestion } from "../types.ts";
 import { show } from "./dom.ts";
 
 /**
@@ -7,11 +7,14 @@ import { show } from "./dom.ts";
  * Motif ARIA « combobox » : le champ garde le focus du début à la fin, la
  * liste n'est qu'un affichage piloté par `aria-activedescendant`. C'est ce qui
  * permet au clavier et au doigt de se comporter pareil sans code séparé.
+ *
+ * Le service de complétion est reçu en paramètre : la liste ne sait pas si elle
+ * interroge l'IGN ou Photon.
  */
 
 /** En deçà, toutes les villes de France répondent : la liste n'apprend rien. */
 const MIN_CHARS = 3;
-/** Le temps d'une frappe rapide : on n'interroge pas l'IGN à chaque lettre. */
+/** Le temps d'une frappe rapide : on n'interroge pas le service à chaque lettre. */
 const DEBOUNCE = 220;
 
 export interface Suggest {
@@ -31,6 +34,7 @@ export function attachSuggest(
   input: HTMLInputElement,
   list: HTMLElement,
   onPick: (suggestion: Suggestion) => void,
+  complete: CompleteFn,
 ): Suggest {
   let items: Suggestion[] = [];
   let active = -1;

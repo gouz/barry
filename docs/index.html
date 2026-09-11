@@ -17,6 +17,8 @@
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./site.webmanifest" />
     <link rel="preconnect" href="https://data.geopf.fr" crossorigin />
+    <link rel="alternate" hreflang="fr" href="https://barry.gouz.dev/" />
+    <link rel="alternate" hreflang="en" href="https://barry.gouz.dev/world/" />
     <title>Barry — le point de rencontre équitable</title>
     <!-- Matomo -->
     <script>
@@ -33,8 +35,9 @@
       })();
     </script>
     <!-- End Matomo Code -->
-    <script type="module" crossorigin src="/assets/index-Bw7R6u8J.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DmpzyKxp.css">
+    <script type="module" crossorigin src="/assets/main-DYH79o_y.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/permalink-Pibjb2Ze.js">
+    <link rel="stylesheet" crossorigin href="/assets/permalink-DgCVqhOg.css">
   </head>
   <body>
     <div id="app">
@@ -213,7 +216,10 @@
 
         <aside id="rappel" class="notice mx-4 my-3">
           <span class="label eyebrow">Note</span>
-          <p>Pour le moment, le calcul ne fonctionne qu'en France.</p>
+          <p>
+            Le calcul s'appuie sur les données de l'IGN : il ne fonctionne qu'en France. Ailleurs,
+            passez par <a href="/world/">la version monde</a>, en anglais.
+          </p>
         </aside>
 
         <section class="section" id="log">
@@ -257,6 +263,7 @@
           >
           <a href="https://github.com/gouz/barry" target="_blank" rel="noopener">Source</a>
           <a href="https://gouz.dev" target="_blank" rel="noopener">gouz.dev</a>
+          <a href="/world/">World</a>
         </footer>
       </div>
 

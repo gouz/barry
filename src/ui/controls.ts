@@ -1,7 +1,12 @@
 import { settings } from "../state.ts";
-import { el, show } from "./dom.ts";
+import { el, maybe, show } from "./dom.ts";
 
-/** Les interrupteurs qui déterminent le calcul, et donc à verrouiller pendant. */
+/**
+ * Les interrupteurs qui déterminent le calcul, et donc à verrouiller pendant.
+ *
+ * Seul le premier est présent partout : la page monde ne propose ni le mode de
+ * transport ni l'évitement des autoroutes, qu'OSRM ne sait pas honorer.
+ */
 const CALC_TOGGLES = [
   "toggleCalcMode",
   "toggleCalcTransport",
@@ -33,13 +38,13 @@ export function initControls(): void {
     settings.mode = mode.checked ? "distance" : "time";
   });
 
-  const transport = el<HTMLInputElement>("toggleCalcTransport");
-  transport.addEventListener("change", () => {
+  const transport = maybe<HTMLInputElement>("toggleCalcTransport");
+  transport?.addEventListener("change", () => {
     settings.transport = transport.checked ? "pedestrian" : "car";
   });
 
-  const avoidMotorways = el<HTMLInputElement>("toggleAvoidMotorways");
-  avoidMotorways.addEventListener("change", () => {
+  const avoidMotorways = maybe<HTMLInputElement>("toggleAvoidMotorways");
+  avoidMotorways?.addEventListener("change", () => {
     settings.avoidMotorways = avoidMotorways.checked;
   });
 
@@ -65,15 +70,18 @@ export function initControls(): void {
  * calcul.
  */
 export function lockControls(locked: boolean): void {
-  for (const id of CALC_TOGGLES) el<HTMLInputElement>(id).disabled = locked;
+  for (const id of CALC_TOGGLES) {
+    const toggle = maybe<HTMLInputElement>(id);
+    if (toggle) toggle.disabled = locked;
+  }
   el("configuration").setAttribute("aria-disabled", String(locked));
 }
 
 /** Reflète l'état dans les interrupteurs (au chargement d'un permalien). */
 export function syncControls(): void {
   el<HTMLInputElement>("toggleCalcMode").checked = settings.mode === "distance";
-  el<HTMLInputElement>("toggleCalcTransport").checked =
-    settings.transport === "pedestrian";
-  el<HTMLInputElement>("toggleAvoidMotorways").checked =
-    settings.avoidMotorways;
+  const transport = maybe<HTMLInputElement>("toggleCalcTransport");
+  if (transport) transport.checked = settings.transport === "pedestrian";
+  const avoidMotorways = maybe<HTMLInputElement>("toggleAvoidMotorways");
+  if (avoidMotorways) avoidMotorways.checked = settings.avoidMotorways;
 }

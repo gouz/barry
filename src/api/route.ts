@@ -1,12 +1,11 @@
 import type {
   Box,
-  CalcMode,
   Coord,
   GeoJSONLineString,
   Route,
-  Transport,
+  RouteOptions,
 } from "../types.ts";
-import { GeoplateformeError, getJSON } from "./client.ts";
+import { getJSON, ServiceError } from "./client.ts";
 
 interface RouteResponse {
   distance: number;
@@ -23,22 +22,12 @@ interface RouteResponse {
   }[];
 }
 
-export interface RouteOptions {
-  mode: CalcMode;
-  transport: Transport;
-  /**
-   * Exclure les autoroutes de l'itinéraire.
-   *
-   * L'API Géoplateforme ne sait pas contraindre sur le péage : les seules
-   * valeurs acceptées pour `waytype` sont `autoroute`, `tunnel` et `pont`.
-   * Bannir l'autoroute est l'approximation la plus proche, la quasi-totalité
-   * des péages français s'y trouvant.
-   */
-  avoidMotorways: boolean;
-  /** Demander le détail des tronçons (plus lourd : à réserver au trajet retenu). */
-  withSteps?: boolean;
-}
-
+/**
+ * L'API Géoplateforme ne sait pas contraindre sur le péage : les seules valeurs
+ * acceptées pour `waytype` sont `autoroute`, `tunnel` et `pont`. Bannir
+ * l'autoroute est l'approximation la plus proche, la quasi-totalité des péages
+ * français s'y trouvant.
+ */
 const NO_MOTORWAY = JSON.stringify({
   constraintType: "banned",
   key: "waytype",
@@ -66,6 +55,7 @@ export async function route(
   if (avoidMotorways) params.constraints = NO_MOTORWAY;
 
   const data = await getJSON<RouteResponse>(
+    "route",
     "/navigation/itineraire",
     params,
     signal,
@@ -89,7 +79,7 @@ export async function route(
   );
 
   if (withSteps && steps.length === 0) {
-    throw new GeoplateformeError("Itinéraire renvoyé sans détail de tronçons");
+    throw new ServiceError("Itinéraire renvoyé sans détail de tronçons");
   }
 
   return {

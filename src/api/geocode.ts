@@ -1,5 +1,5 @@
 import type { City, Coord } from "../types.ts";
-import { GeoplateformeError, getJSON } from "./client.ts";
+import { getJSON, ServiceError } from "./client.ts";
 
 interface GeocodeFeature {
   geometry: { coordinates: [number, number] };
@@ -21,14 +21,14 @@ export async function geocode(
   signal?: AbortSignal,
 ): Promise<Coord> {
   const { features } = await getJSON<FeatureCollection>(
+    "geocode",
     "/geocodage/search",
     { q: address, index: "address", limit: 1 },
     signal,
   );
 
   const first = features[0];
-  if (!first)
-    throw new GeoplateformeError(`Adresse introuvable : « ${address} »`);
+  if (!first) throw new ServiceError(`Adresse introuvable : « ${address} »`);
   const [lon, lat] = first.geometry.coordinates;
   return [lon, lat];
 }
@@ -46,6 +46,7 @@ export async function findNearestCity(
 ): Promise<City | null> {
   const [lon, lat] = point;
   const { features } = await getJSON<FeatureCollection>(
+    "geocode",
     "/geocodage/reverse",
     { lon, lat, index: "poi", limit: 20 },
     signal,

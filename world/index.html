@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f2eee5" />
+    <meta
+      name="description"
+      content="Barry finds the fairest meeting point between several cities or addresses, anywhere in the world."
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preconnect" href="https://photon.komoot.io" crossorigin />
+    <link rel="preconnect" href="https://router.project-osrm.org" crossorigin />
+    <link rel="alternate" hreflang="fr" href="https://barry.gouz.dev/" />
+    <link rel="alternate" hreflang="en" href="https://barry.gouz.dev/world/" />
+    <title>Barry — the fair meeting point</title>
+    <!-- Matomo -->
+    <script>
+      window._paq = window._paq || [];
+      var _paq = window._paq;
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (() => {
+        var u="//matomo.gouz.dev/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '5']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <div id="app">
+      <div id="sidebar" class="scroll-slim">
+        <header id="brand">
+          <svg
+            class="mark"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <circle cx="12" cy="12" r="6.5" />
+            <path d="M12 1.5v5M12 17.5v5M1.5 12h5M17.5 12h5" />
+            <circle cx="12" cy="12" r="1.75" fill="currentColor" stroke="none" />
+          </svg>
+          <div>
+            <h1>Barry</h1>
+            <p class="tagline">What if we met halfway?</p>
+          </div>
+        </header>
+
+        <section class="section" id="welcome">
+          <header>
+            <span class="index eyebrow">01</span>
+            <h2 class="eyebrow">Method</h2>
+            <button
+              type="button"
+              id="toggleWelcome"
+              class="fold"
+              aria-expanded="false"
+              aria-controls="welcome-body"
+              aria-label="Show or hide the method"
+            ></button>
+          </header>
+          <div id="welcome-body">
+            <p>Three points are computed, weighted, then averaged.</p>
+            <ul class="legend">
+              <li>
+                <span class="key long"></span>
+                <span class="text"
+                  >The halfway mark, by time or by distance, on the longest trip between all the
+                  cities</span
+                >
+                <span class="weight eyebrow">×13</span>
+              </li>
+              <li>
+                <span class="key avg"></span>
+                <span class="text">The average of the cities' coordinates</span>
+                <span class="weight eyebrow">×2</span>
+              </li>
+              <li>
+                <span class="key center"></span>
+                <span class="text">The centre of the frame holding every city</span>
+                <span class="weight eyebrow">×1</span>
+              </li>
+            </ul>
+            <p>
+              Their average gives the point<span class="bullet result"></span>: the best
+              approximation of a place that is fair to everyone's journey.
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <header>
+            <span class="index eyebrow">02</span>
+            <h2 class="eyebrow">Settings</h2>
+            <button
+              type="button"
+              id="toggleConfiguration"
+              class="fold"
+              aria-expanded="false"
+              aria-controls="configuration"
+              aria-label="Show or hide the settings"
+            ></button>
+          </header>
+          <div id="configuration">
+            <div class="switch-row">
+              <span class="switch-title">Halfway by</span>
+              <span class="switch-off">time</span>
+              <div class="toggle">
+                <input id="toggleCalcMode" type="checkbox" />
+                <label for="toggleCalcMode"
+                  ><span class="sr-only">Halfway measured by distance</span></label
+                >
+              </div>
+              <span class="switch-on">distance</span>
+            </div>
+            <p class="note">
+              Worldwide routing is by car only, always along the fastest roads.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="addresses">
+          <header>
+            <span class="index eyebrow">03</span>
+            <h2 class="eyebrow">Starting points</h2>
+            <button
+              type="button"
+              id="toggleAddresses"
+              class="fold"
+              aria-expanded="true"
+              aria-controls="addresses-body"
+              aria-label="Show or hide the starting points"
+            ></button>
+          </header>
+
+          <div id="addresses-body">
+            <div id="addresses-wrapper"></div>
+            <p id="addresses-hint" class="eyebrow">
+              <span class="hint-keyboard"><kbd>Enter</kbd> confirms and opens the next line</span>
+              <span class="hint-touch">+ adds a city, − removes it</span>
+            </p>
+          </div>
+
+          <div class="actions">
+            <button id="calculate" type="button" class="btn-primary hide">
+              <svg
+                id="spinner"
+                aria-hidden="true"
+                class="hide"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span>Find the meeting point</span>
+            </button>
+            <div id="status" class="hide" role="status" aria-live="polite">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span id="status-text"></span>
+            </div>
+          </div>
+        </section>
+
+        <aside id="rappel" class="notice mx-4 my-3">
+          <span class="label eyebrow">Note</span>
+          <p>
+            Every city must be reachable by road from the others: Tokyo and Paris share no road, and
+            Barry will say so rather than invent a route. For France,
+            <a href="/">the French edition</a> uses the IGN data and adds walking and
+            motorway options.
+          </p>
+        </aside>
+
+        <section class="section" id="log">
+          <header>
+            <span class="index eyebrow">04</span>
+            <h2 class="eyebrow">Log</h2>
+            <button
+              type="button"
+              id="toggleLog"
+              class="fold"
+              aria-expanded="true"
+              aria-controls="log-body"
+              aria-label="Show or hide the log"
+            ></button>
+          </header>
+          <div id="log-body">
+            <div class="switch-row">
+              <span class="switch-title">Level of detail</span>
+              <span class="switch-off">plain</span>
+              <div class="toggle">
+                <input id="toggleLogMode" type="checkbox" />
+                <label for="toggleLogMode"><span class="sr-only">Detailed log</span></label>
+              </div>
+              <span class="switch-on">full</span>
+            </div>
+            <div id="log-content" class="scroll-slim"></div>
+          </div>
+        </section>
+
+        <div id="dock" class="actions">
+          <button id="newsearch" type="button" class="btn-ghost hide">New search</button>
+        </div>
+
+        <footer id="credits" class="eyebrow">
+          <a href="https://openlayers.org/" target="_blank" rel="noopener">OpenLayers</a>
+          <a href="https://photon.komoot.io/" target="_blank" rel="noopener">Photon</a>
+          <a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM</a>
+          <a href="https://github.com/gouz/barry" target="_blank" rel="noopener">Source</a>
+          <a href="/">Français</a>
+        </footer>
+      </div>
+
+      <div id="map"></div>
+
+      <hr
+        id="grip"
+        aria-orientation="horizontal"
+        aria-label="Adjust the height of the map"
+        aria-valuemin="20"
+        aria-valuemax="78"
+        aria-valuenow="42"
+        tabindex="0"
+      />
+    </div>
+
+    <template id="address-template">
+      <div class="address">
+        <div class="field">
+          <input
+            type="text"
+            placeholder="City or postal address"
+            aria-label="City or postal address"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+          <svg
+            class="spinner"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          <div
+            class="suggestions scroll-slim hide"
+            role="listbox"
+            aria-label="Suggestions"
+          ></div>
+        </div>
+        <button type="button" class="minus hide" aria-label="Remove this address"></button>
+        <button type="button" class="plus" aria-label="Add an address"></button>
+      </div>
+    </template>
+    <script type="module" src="/src/main-world.ts"></script>
+  </body>
+</html>

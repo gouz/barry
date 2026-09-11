@@ -1,6 +1,13 @@
 import { METHODS } from "../config.ts";
+import type { Texts } from "../i18n/texts.ts";
 import type { Address } from "../state.ts";
-import type { CalcMode, Coord, MethodId, Transport } from "../types.ts";
+import type {
+  CalcMode,
+  Coord,
+  MethodId,
+  RouteFn,
+  Transport,
+} from "../types.ts";
 import { averageCoord, boxCenter } from "./geometry.ts";
 import { longMiddle } from "./longMiddle.ts";
 
@@ -10,6 +17,9 @@ export interface MeetingPointOptions {
   mode: CalcMode;
   transport: Transport;
   avoidMotorways: boolean;
+  /** Fournisseur d'itinéraires : l'IGN en France, OSRM dans le monde. */
+  route: RouteFn;
+  texts: Texts;
   log: (message: string, detailed?: boolean) => void;
 }
 
@@ -41,11 +51,8 @@ export async function meetingPoint(
     };
   }
 
-  options.log("Je fais la moyenne des coordonnées des villes.", true);
-  options.log(
-    "Je détermine les latitudes et longitudes minimales et maximales pour définir un cadre et je calcule le centre du cadre.",
-    true,
-  );
+  options.log(options.texts.averaging, true);
+  options.log(options.texts.framing, true);
 
   const byMethod = new Map<MethodId, Coord>([
     ["longMiddle", longMiddleCoord],
@@ -53,10 +60,7 @@ export async function meetingPoint(
     ["center", boxCenter(coords)],
   ]);
 
-  options.log(
-    "J'ai fini les différents calculs, je prend maintenant la moyenne des coordonnées.",
-    true,
-  );
+  options.log(options.texts.weighting, true);
 
   let lon = 0;
   let lat = 0;

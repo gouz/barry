@@ -1,12 +1,7 @@
-import { route } from "../api/route.ts";
+import type { Texts } from "../i18n/texts.ts";
 import type { Address } from "../state.ts";
-import type { CalcMode, Coord, Route, Transport } from "../types.ts";
-import {
-  formatDistance,
-  formatDuration,
-  haversine,
-  pairs,
-} from "./geometry.ts";
+import type { CalcMode, Coord, Route, RouteFn, Transport } from "../types.ts";
+import { haversine, pairs } from "./geometry.ts";
 
 type Located = Address & { coord: Coord };
 
@@ -14,6 +9,9 @@ export interface LongMiddleOptions {
   mode: CalcMode;
   transport: Transport;
   avoidMotorways: boolean;
+  /** Fournisseur d'itinéraires : l'IGN en France, OSRM dans le monde. */
+  route: RouteFn;
+  texts: Texts;
   log: (message: string, detailed?: boolean) => void;
 }
 
@@ -34,8 +32,8 @@ const cost = (r: Route, mode: CalcMode) =>
  * Restreint les paires à celles susceptibles de porter le plus long trajet.
  *
  * Le classement à vol d'oiseau est gratuit et très corrélé au trajet routier :
- * plutôt que d'interroger l'IGN sur les n·(n−1)/2 paires, on ne garde que les
- * plus étirées. Le nombre d'appels devient constant au lieu de quadratique.
+ * plutôt que d'interroger le service sur les n·(n−1)/2 paires, on ne garde que
+ * les plus étirées. Le nombre d'appels devient constant au lieu de quadratique.
  */
 function narrow(all: readonly [Located, Located][]): [Located, Located][] {
   if (all.length <= CANDIDATES) return [...all];
@@ -61,7 +59,7 @@ function narrow(all: readonly [Located, Located][]): [Located, Located][] {
  */
 export async function longMiddle(
   addresses: readonly Located[],
-  { mode, transport, avoidMotorways, log }: LongMiddleOptions,
+  { mode, transport, avoidMotorways, route, texts, log }: LongMiddleOptions,
 ): Promise<Coord> {
   const all = pairs(addresses);
   const combinations = narrow(all);
@@ -69,11 +67,9 @@ export async function longMiddle(
   // Annoncé sans repli dans le journal détaillé : le résultat repose sur un
   // échantillon de paires, l'utilisateur doit le savoir sans avoir à déplier.
   if (combinations.length < all.length) {
-    log(
-      `Je ne calcule pas les ${all.length} trajets possibles : le plus long relie forcément deux des villes les plus éloignées, je n'étudie donc que les ${combinations.length} paires les plus étirées à vol d'oiseau.`,
-    );
+    log(texts.narrowing(all.length, combinations.length));
   } else {
-    log("Je calcule les chemins entre toutes les villes.", true);
+    log(texts.allPairs, true);
   }
 
   const routes = await Promise.all(
@@ -92,7 +88,12 @@ export async function longMiddle(
     // biome-ignore lint/style/noNonNullAssertion: même longueur que `routes`
     const [from, to] = combinations[index]!;
     log(
-      `Entre « ${from.label} » et « ${to.label} » il y a ${formatDistance(current.distance)} en ${formatDuration(current.duration)}`,
+      texts.pair(
+        from.label,
+        to.label,
+        texts.distance(current.distance),
+        texts.duration(current.duration),
+      ),
       true,
     );
     // biome-ignore lint/style/noNonNullAssertion: `best` est un index valide
@@ -101,15 +102,12 @@ export async function longMiddle(
 
   // biome-ignore lint/style/noNonNullAssertion: même longueur que `routes`
   const [from, to] = combinations[best]!;
-  log(
-    `Le trajet le plus long (en ${mode === "time" ? "temps" : "distance"}) est donc entre « ${from.label} » et « ${to.label} »`,
-    true,
-  );
+  log(texts.longest(from.label, to.label, mode), true);
 
-  log("Je calcule le point à mi-temps.", true);
+  log(texts.middleComputing, true);
   // biome-ignore lint/style/noNonNullAssertion: `best` est un index valide
   const point = midpointOf(routes[best]!, mode);
-  log("Le point est trouvé.", true);
+  log(texts.middleFound, true);
   return point;
 }
 

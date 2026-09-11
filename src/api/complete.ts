@@ -1,4 +1,4 @@
-import type { Coord } from "../types.ts";
+import type { Suggestion } from "../types.ts";
 import { getJSON } from "./client.ts";
 
 /**
@@ -23,19 +23,6 @@ const LIMIT = 7;
  * éloignées.
  */
 const SAME_PLACE = 0.05;
-
-export interface Suggestion {
-  /** Texte réinjecté dans le champ, et clé d'unicité de la liste. */
-  readonly label: string;
-  /** Tête de ligne : le nom propre du lieu. */
-  readonly name: string;
-  /** Second plan : code postal et commune, quand la proposition en a. */
-  readonly detail: string;
-  /** Nature du lieu en un mot, pour distinguer la commune du lieu-dit homonyme. */
-  readonly kind: string;
-  /** Position déjà connue, à reprendre telle quelle. */
-  readonly coord: Coord;
-}
 
 interface CompletionResult {
   x?: number;
@@ -72,6 +59,7 @@ export async function complete(
   signal?: AbortSignal,
 ): Promise<Suggestion[]> {
   const { results } = await getJSON<CompletionResponse>(
+    "geocode",
     "/geocodage/completion",
     {
       text,

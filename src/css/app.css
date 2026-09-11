@@ -13,6 +13,7 @@
 
 @source "../**/*.ts";
 @source "../../index.html";
+@source "../../world/index.html";
 
 @layer base {
   html {

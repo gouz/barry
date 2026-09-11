@@ -2,16 +2,13 @@ import "./css/app.css";
 import "ol/ol.css";
 
 import { type Activity, onActivity, onWait } from "./api/client.ts";
-import { findNearestCity } from "./api/geocode.ts";
+import { complete } from "./api/complete.ts";
+import { findNearestCity, geocode } from "./api/geocode.ts";
 import { route } from "./api/route.ts";
-import {
-  boundingBox,
-  formatDistance,
-  formatDuration,
-  haversine,
-} from "./compute/geometry.ts";
+import { boundingBox, haversine } from "./compute/geometry.ts";
 import { meetingPoint } from "./compute/meetingPoint.ts";
-import { COLORS, METHODS } from "./config.ts";
+import { COLORS, FRANCE_BOX, METHODS } from "./config.ts";
+import { FR } from "./i18n/fr.ts";
 import {
   addPoint,
   addRoad,
@@ -148,7 +145,7 @@ function drawRoutesToMeetingPoint(
     );
 
     const line = log(
-      `De ${address.label}, environ ${formatDistance(haversine(address.coord, target))} à vol d'oiseau, je calcule le trajet…`,
+      `De ${address.label}, environ ${FR.distance(haversine(address.coord, target))} à vol d'oiseau, je calcule le trajet…`,
     );
     line.classList.add("route-link");
 
@@ -160,11 +157,11 @@ function drawRoutesToMeetingPoint(
       .then((itinerary) => {
         addRoad(id, itinerary.geometry, COLORS.road, 4);
         box = itinerary.box;
-        line.textContent = `De ${address.label}, il y a ${formatDistance(itinerary.distance)} en ${formatDuration(itinerary.duration)}`;
+        line.textContent = `De ${address.label}, il y a ${FR.distance(itinerary.distance)} en ${FR.duration(itinerary.duration)}`;
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
-        line.textContent = `De ${address.label}, environ ${formatDistance(haversine(address.coord, target))} à vol d'oiseau (trajet indisponible)`;
+        line.textContent = `De ${address.label}, environ ${FR.distance(haversine(address.coord, target))} à vol d'oiseau (trajet indisponible)`;
         line.title =
           error instanceof Error ? error.message : "Trajet indisponible";
       });
@@ -215,6 +212,8 @@ async function calculate(): Promise<void> {
   try {
     const { coord, byMethod } = await meetingPoint(addresses, {
       ...settings,
+      route,
+      texts: FR,
       log,
     });
     for (const [id, methodCoord] of byMethod)
@@ -268,12 +267,17 @@ function newSearch(): void {
 }
 
 async function bootstrap(): Promise<void> {
-  initMap(el("map"));
+  initMap(el("map"), FRANCE_BOX);
   initLayout();
   initLog();
   onActivity(renderActivity);
   initControls();
-  initAddresses(refreshCalculateButton);
+  initAddresses({
+    onChange: refreshCalculateButton,
+    geocode,
+    complete,
+    notFound: FR.notFound,
+  });
 
   calculateButton.addEventListener("click", () => {
     void calculate();

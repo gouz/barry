@@ -14,7 +14,7 @@ import Fill from "ol/style/Fill.js";
 import Stroke from "ol/style/Stroke.js";
 import Style from "ol/style/Style.js";
 import View from "ol/View.js";
-import { COLORS, FRANCE_BOX } from "../config.ts";
+import { COLORS } from "../config.ts";
 import type { Box, Coord, GeoJSONLineString } from "../types.ts";
 
 /**
@@ -30,9 +30,13 @@ const HIDDEN: Style[] = [];
 
 const geojson = new GeoJSON();
 let map: Map | undefined;
+/** Cadre de repli de {@link fitTo} : le territoire couvert par la page. */
+let home: Box;
 
-export function initMap(target: HTMLElement): Map {
+export function initMap(target: HTMLElement, homeBox: Box): Map {
   useGeographic();
+  home = homeBox;
+  const [[latA, lonA], [latB, lonB]] = homeBox;
   map = new Map({
     target,
     layers: [
@@ -40,7 +44,7 @@ export function initMap(target: HTMLElement): Map {
       new VectorLayer({ source: roadSource }),
       new VectorLayer({ source: pointSource }),
     ],
-    view: new View({ center: [2.213749, 46.927638], zoom: 2 }),
+    view: new View({ center: [(lonA + lonB) / 2, (latA + latB) / 2], zoom: 2 }),
   });
   return map;
 }
@@ -156,7 +160,7 @@ export function refreshMapSize(): void {
   map?.updateSize();
 }
 
-export function fitTo(box: Box = FRANCE_BOX): void {
+export function fitTo(box: Box = home): void {
   const [[latA, lonA], [latB, lonB]] = box;
   const size = requireMap().getSize();
   const [width, height] = size ?? [];
